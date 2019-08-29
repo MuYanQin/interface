@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.qin.dao.PomeDao">
+    <select id="findPomeById"  resultType="cn.qin.vo.PomeVo">
+        select
+            pome.*,
+            author.name as authorName
+        from pome
+        left join author on author.author_id = pome.author_id
+        where  pome.pome_id = #{pomeId};
+    </select>
+
+</mapper>

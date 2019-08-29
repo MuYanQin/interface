@@ -1,0 +1,71 @@
+server:
+  port: 8084
+
+logging:
+  level:
+    com:
+      muyanqin:
+                cn: debug
+
+spring:
+  http:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://127.0.0.1:3306/appInterface?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  #设置这个以后再Mapper配置文件中在parameterType 的值就不用写成全路径名了
+  type-aliases-package: cn.qin.entity
+  #配置xml的路径
+  #在classpath后面的 * 必不可少，缺少型号的话后面的通配符不起作用。
+  #表示可以表示任意多级目录。
+  mapper-locations: classpath*:mapper/**/*.xml
+  #配置驼峰下划线
+  configuration:
+    mapUnderscoreToCamelCase: true
+    jdbc-type-for-null: varchar
+    #xml里面的字段含义#{}
+    variables:
+      delete_exist: '0'
+      delete_not_exist: '1'
+      parent_code: '0'
+
+mapper:
+  #通用mapper路径
+  mappers: cn.qin.base.dao.BaseDao
+  not-empty: false
+  before: true
+  identity: MYSQL
+
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+page:
+  pageSize: 10
+
+
+hystrix:
+  command:
+     default:
+      execution:
+         isolation:
+          thread:
+             timeoutInMilliseconds: 600000 #缺省为1000
+  threadpool:
+    default:
+     coreSize: 50 #缺省为10
+
+#类似iOS  define 配置路径
+file:
+
