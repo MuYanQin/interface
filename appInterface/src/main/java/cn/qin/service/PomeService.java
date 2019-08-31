@@ -1,6 +1,8 @@
 package cn.qin.service;
 
+import cn.qin.dao.repository.AuthorRepository;
 import cn.qin.dao.repository.PomeRepository;
+import cn.qin.entity.Author;
 import cn.qin.entity.Pome;
 import cn.qin.util.HttpClientUtil;
 import cn.qin.util.SqlUtil;
@@ -21,32 +23,57 @@ public class PomeService {
     @Autowired
     private PomeRepository pomeRepository;
 
+    @Autowired
+    private AuthorRepository authorRepository;
 
     public PomeVo findPomeById(String pomeId){
-
+        for (int i = 300; i < 330; i++) {
+            findAndInsertData(""+i);
+        }
         return  pomeRepository.findPomeById(pomeId);
     }
 
     private Pome findAndInsertData(String detailId){
         Pome pome = new Pome();
-        //76399063a860b360  鸡鸡
+        //极速数据
+        //鸡鸡 76399063a860b360
         //我 a8d949a2591c8d0f
         //花 c064ed1f4ff90141
+        //唐诗 tangshi
+        //宋词 songci
+        //元曲 yuanqu
         String string = "https://api.jisuapi.com/tangshi/detail?";
-        String param = "appkey=c064ed1f4ff90141&detailid=" + detailId;
+        String param = "appkey=76399063a860b360&detailid=" + detailId;
         String text = string + param;
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
         if (jsonObject.getString("status").equals("0")){
+
             JSONObject result = jsonObject.getJSONObject("result");
+
+            Example example = SqlUtil.newExample(Author.class);
+            example.createCriteria().andEqualTo("name",result.getString("author"));
+            Author author = authorRepository.selectOneByExample(example);
+            if (author == null){
+                author = new Author();
+                String authorid = UUIDUtils.getUUID();
+                author.setAuthorId(authorid);
+                author.setName(result.getString("author"));
+                authorRepository.insert(author);
+            }
+
             pome.setPomeId(UUIDUtils.getUUID());
             pome.setName(result.getString("title"));
             pome.setContent(findText(result.getString("content")));
-
             pome.setDetailId(result.getString("detailid"));
             pome.setAppreciation(findText(result.getString("appreciation")));
             pome.setExplanation(findText(result.getString("explanation")));
+            pome.setType("1");
+            pome.setAuthorId(author.getAuthorId());
             pomeRepository.insert(pome);
+
+
+
         }
         return pome;
     }
