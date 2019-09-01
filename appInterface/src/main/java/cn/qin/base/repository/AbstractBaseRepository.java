@@ -314,7 +314,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	public List<K> selectListByExample(Example example) {
         if(ArrayUtils.isNullOrLengthZero(example.getOredCriteria()))
             example.createCriteria();
-		SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
+		//SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
 		return baseDao.selectByExample(example);
 	}
 
