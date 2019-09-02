@@ -50,7 +50,6 @@ public class SqlUtil {
     public static void setOrderByCreateTimeAsc(Example example){
         if(example != null)
             example.setOrderByClause(createTimeAsc());
-
     }
 
     public static void setOrderByCreateTimeDesc(Example example){

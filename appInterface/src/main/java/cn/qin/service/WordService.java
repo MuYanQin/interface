@@ -49,11 +49,10 @@ public class WordService {
     public   void findAndInsertWordData(){
 
         Example example = SqlUtil.newExample(Word.class);
-        //example.createCriteria().andIsNull("pinyin");
-        example.createCriteria().andEqualTo("word","好");
+        example.createCriteria().andIsNull("pinyin");
         List<Word> wordList = wordRepository.selectListByExample(example);
         if (ArrayUtils.isNotNullAndLengthNotZero(wordList)){
-//            List<Word> words = wordList.subList(0,100);
+            List<Word> words = wordList.subList(0,100);
             for (Word word : wordList) {
                 findWordData(word);
             }
@@ -62,7 +61,10 @@ public class WordService {
     }
 
     private void findWordData(Word word){
-        String text = "https://api.jisuapi.com/zidian/word?appkey=76399063a860b360&word=" + word.getWord();
+        //鸡鸡 76399063a860b360
+        //我 a8d949a2591c8d0f
+        //花 c064ed1f4ff90141
+        String text = "https://api.jisuapi.com/zidian/word?appkey=c064ed1f4ff90141&word=" + word.getWord();
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
         if (jsonObject.getString("status").equals("0")){
@@ -77,11 +79,14 @@ public class WordService {
                     word.setPinyin(object.getString("pinyin"));
                     word.setContent(object.getString("content"));
                     word.setBishun(result.getString("bishun"));
+                    word.setPy(object.getString("pinyin"));
+
                     wordRepository.updateByPrimaryKeySelective(word);
                 }else {
                     Word wordAdd = new Word();
                     BeanUtils.copyProperties(word,wordAdd);
                     wordAdd.setWordId(UUIDUtils.getUUID());
+                    wordAdd.setPy(object.getString("pinyin"));
                     wordAdd.setPinyin(object.getString("pinyin"));
                     wordAdd.setContent(object.getString("content"));
                     wordAdd.setBishun(result.getString("bishun"));
@@ -96,7 +101,7 @@ public class WordService {
         Pome pome = new Pome();
         //聚合数据
         //wo 4ceace1b57595e7e10d2bdf6d3d8459c
-        //hua  3d77403b636cd67b98d4fba306817d4b
+        //hua 3d77403b636cd67b98d4fba306817d4b
         String string = "http://v.juhe.cn/xhzd/querypy?";
         String param = "dtype=&page=&pagesize=50&isjijie=&isxiangjie=&key=3d77403b636cd67b98d4fba306817d4b&word=" + spell;
         String text = string + param;
@@ -110,15 +115,20 @@ public class WordService {
 
             for (int i = 0; i < array.size(); i++) {
                 JSONObject object =  (JSONObject)array.getJSONObject(i);
-                Word word = new Word();
-                word.setWordId(UUIDUtils.getUUID());
-                word.setWord(object.getString("zi"));
-                word.setInitial(spellE.getPinyinKey());
-                word.setPy(spellE.getPinyin());
-                word.setBushou(object.getString("bushou"));
-                word.setBihua(object.getString("bihua"));
-                word.setSpell(object.getString("pinyin"));
-                wordRepository.insert(word);
+
+                Example example = SqlUtil.newExample(Word.class);
+                example.createCriteria().andEqualTo("word",object.getString("zi"));
+                List<Word> wordList = wordRepository.selectListByExample(example);
+                if (ArrayUtils.isNullOrLengthZero(wordList)){
+                    Word word = new Word();
+                    word.setWordId(UUIDUtils.getUUID());
+                    word.setWord(object.getString("zi"));
+                    word.setInitial(spellE.getPinyinKey());
+                    word.setBushou(object.getString("bushou"));
+                    word.setBihua(object.getString("bihua"));
+                    word.setSpell(object.getString("pinyin"));
+                    wordRepository.insert(word);
+                }
             }
             if (array.size()==50){
                 spellE.setType("1");
