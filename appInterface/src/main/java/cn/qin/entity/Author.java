@@ -13,4 +13,5 @@ public class Author extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select REPLACE(uuid(),'-','')")
     private String authorId;
     private String name;
+    private String intro;
 }

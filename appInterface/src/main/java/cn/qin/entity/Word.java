@@ -22,4 +22,6 @@ public class Word extends BaseEntity {
     private String content;
     private String py;
 
+
+
 }

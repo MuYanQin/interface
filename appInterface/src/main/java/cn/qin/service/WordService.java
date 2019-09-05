@@ -34,11 +34,11 @@ public class WordService {
     public Word findWordById(String wordId){
 
         Example example = SqlUtil.newExample(Spell.class);
-        example.createCriteria().andEqualTo("selectKey","1");
+        example.createCriteria().andEqualTo("type","2");
         List<Spell> spellList = spellRepository.selectListByExample(example);
         if (ArrayUtils.isNotNullAndLengthNotZero(spellList)){
-            List<Spell> spells = spellList.subList(0,100);
-            for (Spell spell : spells) {
+//            List<Spell> spells = spellList.subList(0,100);
+            for (Spell spell : spellList) {
                 findAndInsertData(spell.getPinyin(),spell);
 
             }
@@ -53,7 +53,7 @@ public class WordService {
         List<Word> wordList = wordRepository.selectListByExample(example);
         if (ArrayUtils.isNotNullAndLengthNotZero(wordList)){
             List<Word> words = wordList.subList(0,100);
-            for (Word word : wordList) {
+            for (Word word : words) {
                 findWordData(word);
             }
         }
@@ -64,7 +64,7 @@ public class WordService {
         //鸡鸡 76399063a860b360
         //我 a8d949a2591c8d0f
         //花 c064ed1f4ff90141
-        String text = "https://api.jisuapi.com/zidian/word?appkey=c064ed1f4ff90141&word=" + word.getWord();
+        String text = "https://api.jisuapi.com/zidian/word?appkey=76399063a860b360&word=" + word.getWord();
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
         if (jsonObject.getString("status").equals("0")){
@@ -77,7 +77,11 @@ public class WordService {
                 JSONObject object =  (JSONObject)array.getJSONObject(i);
                 if (i ==0){
                     word.setPinyin(object.getString("pinyin"));
-                    word.setContent(object.getString("content"));
+                    if (object.getString("content").contains("<p")){
+                        word.setContent(findText(object.getString("content")));
+                    }else {
+                        word.setContent(object.getString("content"));
+                    }
                     word.setBishun(result.getString("bishun"));
                     word.setPy(object.getString("pinyin"));
 
@@ -88,7 +92,11 @@ public class WordService {
                     wordAdd.setWordId(UUIDUtils.getUUID());
                     wordAdd.setPy(object.getString("pinyin"));
                     wordAdd.setPinyin(object.getString("pinyin"));
-                    wordAdd.setContent(object.getString("content"));
+                    if (object.getString("content").contains("<p")){
+                        wordAdd.setContent(findText(object.getString("content")));
+                    }else {
+                        wordAdd.setContent(object.getString("content"));
+                    }
                     wordAdd.setBishun(result.getString("bishun"));
                     wordRepository.insert(wordAdd);
                 }
@@ -102,8 +110,9 @@ public class WordService {
         //聚合数据
         //wo 4ceace1b57595e7e10d2bdf6d3d8459c
         //hua 3d77403b636cd67b98d4fba306817d4b
+        //鸡鸡 f47037e4c2f39b937a77c7b5766ea4a0
         String string = "http://v.juhe.cn/xhzd/querypy?";
-        String param = "dtype=&page=&pagesize=50&isjijie=&isxiangjie=&key=3d77403b636cd67b98d4fba306817d4b&word=" + spell;
+        String param = "dtype=&page=2&pagesize=50&isjijie=&isxiangjie=&key=f47037e4c2f39b937a77c7b5766ea4a0&word=" + spell;
         String text = string + param;
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
@@ -131,9 +140,9 @@ public class WordService {
                 }
             }
             if (array.size()==50){
-                spellE.setType("1");
+                spellE.setType("3");
             }
-            spellE.setSelectKey("2");
+            spellE.setSelectKey("4");
             spellE.setPaixu(spellE.getSpellId());
             spellRepository.updateByPrimaryKeySelective(spellE);
         }

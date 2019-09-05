@@ -66,7 +66,6 @@ public class PomeService {
             pome.setPomeId(UUIDUtils.getUUID());
             pome.setName(result.getString("title"));
             pome.setContent(findText(result.getString("content")));
-            pome.setDetailId(result.getString("detailid"));
             pome.setAppreciation(findText(result.getString("appreciation")));
             pome.setExplanation(findText(result.getString("explanation")));
             pome.setType("1");

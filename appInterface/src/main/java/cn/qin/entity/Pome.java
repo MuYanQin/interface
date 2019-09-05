@@ -13,7 +13,6 @@ public class Pome extends BaseEntity {
     private String pomeId;
     private String name;
     private String type;
-    private String detailId;
     private String content;
     private String explanation;
     private String appreciation;
