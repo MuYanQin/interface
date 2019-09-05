@@ -24,14 +24,16 @@ import java.util.Date;
 public abstract class BaseVo<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @JsonIgnore
-    @JsonFormat(pattern = DateUtils.formatStr_yyyyMMddHHmmssSSS)
     protected Date createTime;
+
     @JsonIgnore
     protected String creator;
+
     @JsonIgnore
-    @JsonFormat(pattern = DateUtils.formatStr_yyyyMMddHHmmssSSS)
     protected Date updateTime;
+
     @JsonIgnore
     protected String updater;
 

@@ -9,7 +9,42 @@
             idiom.idiom,
             idiom.spell
         from idiom
-        where  idiom.abbreviation LIKE #{searchText} or idiom.idiom like #{searchText};
+        where  idiom.abbreviation LIKE #{searchText} or idiom.idiom like #{searchText}
     </select>
+
+    <select id="findRandomForSize"  resultType="cn.qin.vo.IdiomSearchVo">
+        select
+            idiom.idiom_id,
+            idiom.idiom,
+            idiom.spell
+        from idiom
+        ORDER BY RAND() LIMIT #{size}
+    </select>
+
+    <select id="findIdiomListByInitial"  resultMap="selectIdiomList">
+        SELECT
+            tag
+        FROM idiom
+        GROUP BY tag
+        ORDER BY tag ASC
+    </select>
+
+    <resultMap id="selectIdiomList" type="cn.qin.vo.IdiomListVo">
+        <result property="initial" column="tag" javaType="java.lang.String"/>
+        <collection property="idioms"  ofType="cn.qin.vo.IdiomSearchVo"
+                    javaType="java.util.ArrayList" select="fildIdiomSearchList"
+                    column="tag"/>
+    </resultMap>
+
+    <select id="fildIdiomSearchList"  resultType="cn.qin.vo.IdiomSearchVo" >
+        select
+            idiom.idiom_id,
+            idiom.idiom,
+            idiom.spell
+        from idiom
+        where idiom.tag = #{tag} LIMIT 100
+    </select>
+
+
 
 </mapper>
