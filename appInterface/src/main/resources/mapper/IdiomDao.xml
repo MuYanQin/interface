@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.qin.dao.IdiomDao">
-    <select id="findIdiomBySearchText"  resultType="cn.qin.vo.IdiomSearchVo">
+    <select id="findIdiomBySearchText"  resultType="cn.qin.vo.idiomVo.IdiomSearchVo">
         select
             idiom.idiom_id,
             idiom.idiom,
@@ -12,7 +12,7 @@
         where  idiom.abbreviation LIKE #{searchText} or idiom.idiom like #{searchText}
     </select>
 
-    <select id="findRandomForSize"  resultType="cn.qin.vo.IdiomSearchVo">
+    <select id="findRandomForSize"  resultType="cn.qin.vo.idiomVo.IdiomSearchVo">
         select
             idiom.idiom_id,
             idiom.idiom,
@@ -29,14 +29,14 @@
         ORDER BY tag ASC
     </select>
 
-    <resultMap id="selectIdiomList" type="cn.qin.vo.IdiomListVo">
+    <resultMap id="selectIdiomList" type="cn.qin.vo.idiomVo.IdiomListVo">
         <result property="initial" column="tag" javaType="java.lang.String"/>
-        <collection property="idioms"  ofType="cn.qin.vo.IdiomSearchVo"
+        <collection property="idioms"  ofType="cn.qin.vo.idiomVo.IdiomSearchVo"
                     javaType="java.util.ArrayList" select="fildIdiomSearchList"
                     column="tag"/>
     </resultMap>
 
-    <select id="fildIdiomSearchList"  resultType="cn.qin.vo.IdiomSearchVo" >
+    <select id="fildIdiomSearchList"  resultType="cn.qin.vo.idiomVo.IdiomSearchVo" >
         select
             idiom.idiom_id,
             idiom.idiom,

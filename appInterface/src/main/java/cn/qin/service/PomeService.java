@@ -26,6 +26,11 @@ public class PomeService {
     @Autowired
     private AuthorRepository authorRepository;
 
+
+    /**
+     * @Title:获取诗词的详情
+     * @param pomeId 获取条数 默认15条
+     */
     public PomeVo findPomeById(String pomeId){
         for (int i = 300; i < 330; i++) {
             findAndInsertData(""+i);

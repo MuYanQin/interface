@@ -1,12 +1,10 @@
 package cn.qin.dao.repository;
 
-import cn.qin.base.dao.BaseDao;
 import cn.qin.base.repository.AbstractBaseRepository;
 import cn.qin.dao.IdiomDao;
 import cn.qin.entity.Idiom;
-import cn.qin.vo.IdiomListVo;
-import cn.qin.vo.IdiomSearchVo;
-import org.apache.ibatis.annotations.Param;
+import cn.qin.vo.idiomVo.IdiomListVo;
+import cn.qin.vo.idiomVo.IdiomSearchVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

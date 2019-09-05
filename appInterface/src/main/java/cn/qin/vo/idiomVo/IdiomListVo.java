@@ -1,4 +1,4 @@
-package cn.qin.vo;
+package cn.qin.vo.idiomVo;
 
 import lombok.Data;
 

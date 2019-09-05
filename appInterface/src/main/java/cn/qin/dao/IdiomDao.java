@@ -2,8 +2,8 @@ package cn.qin.dao;
 
 import cn.qin.base.dao.BaseDao;
 import cn.qin.entity.Idiom;
-import cn.qin.vo.IdiomListVo;
-import cn.qin.vo.IdiomSearchVo;
+import cn.qin.vo.idiomVo.IdiomListVo;
+import cn.qin.vo.idiomVo.IdiomSearchVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
