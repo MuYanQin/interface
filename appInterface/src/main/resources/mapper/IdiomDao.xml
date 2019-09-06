@@ -43,9 +43,8 @@
             idiom.idiom,
             idiom.spell
         from idiom
-        where idiom.tag = #{tag}  LIMIT #{size}
-
-
+        where  idiom.tag = #{tag}
+        ORDER BY RAND() LIMIT #{size}
     </select>
 
 

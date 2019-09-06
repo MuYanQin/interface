@@ -89,12 +89,15 @@ public abstract class BaseVo<T> implements Serializable {
         this.pageIndex = pageIndex;
     }
 
+    @JsonIgnore
     public PageQuery getPageQuery(){
         PageQuery pageQuery = new PageQuery();
         pageQuery.setPageFlag(pageFlag);
         pageQuery.setPageIndex(pageIndex);
         return pageQuery;
     }
+
+
     /**
      * @Fields : 每页显示条数
      */

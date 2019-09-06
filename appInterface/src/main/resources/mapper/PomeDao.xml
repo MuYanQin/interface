@@ -44,10 +44,19 @@
         pome.pome_id,
         pome.name,
         pome.author_id,
-        author.name
+        author.name as authorName
         from pome
         left join author on author.author_id = pome.author_id
         ORDER BY RAND() LIMIT #{size}
+    </select>
+
+    <select id="findPomeDaily"  resultType="cn.qin.vo.pomeVo.PomeVo">
+        select
+            pome.*,
+            author.name as authorName
+        from pome
+        left join author on author.author_id = pome.author_id
+        ORDER BY RAND() LIMIT 1
     </select>
 
 </mapper>

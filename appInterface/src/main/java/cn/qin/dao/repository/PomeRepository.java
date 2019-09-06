@@ -27,4 +27,8 @@ public class PomeRepository extends AbstractBaseRepository<PomeDao, Pome> {
     public List<PomeSearchVo> findRandomPomeForSize(@Param("size") int size){
         return pomeDao.findRandomPomeForSize(size);
     }
+
+    public PomeVo findPomeDaily(){
+        return pomeDao.findPomeDaily();
+    }
 }

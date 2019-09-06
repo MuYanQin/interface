@@ -18,4 +18,6 @@ public interface PomeDao extends BaseDao<Pome> {
 
 
     List<PomeSearchVo> findRandomPomeForSize(@Param("size") int size);
+
+    PomeVo findPomeDaily();
 }

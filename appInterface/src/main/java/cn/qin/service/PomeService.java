@@ -72,5 +72,11 @@ public class PomeService {
         }
         return pomeRepository.findRandomPomeForSize(siz);
     }
-
+    /**
+     * @Title:每日一首
+     * @param
+     */
+    public PomeVo findPomeDaily(){
+        return  pomeRepository.findPomeDaily();
+    }
 }

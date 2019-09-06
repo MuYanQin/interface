@@ -52,5 +52,12 @@ public class PomeController {
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findRandomPomeForSize(size)), HttpStatus.OK);
     }
 
-
+    /**
+     * @Title:每日一首
+     * @param
+     */
+    @RequestMapping(value = "findPomeDaily",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findPomeDaily(){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeDaily()), HttpStatus.OK);
+    }
 }
