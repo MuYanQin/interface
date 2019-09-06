@@ -8,6 +8,7 @@ import cn.qin.util.HttpClientUtil;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
 import cn.qin.util.UUIDUtils;
+import cn.qin.vo.pomeVo.PomeSearchVo;
 import cn.qin.vo.pomeVo.PomeVo;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
@@ -31,12 +32,31 @@ public class PomeService {
 
 
     /**
+     * @Title:搜索诗词
+     * @param searchText 参数
+     */
+    public List<PomeSearchVo> findPomeBySearchText(String searchText){
+        if (StringUtils.isTrimBlank(searchText)){
+            throw new RuntimeException("搜索内容不能为空");
+        }
+        String text = searchText;
+        searchText = SqlUtil.likePattern(searchText);
+
+        return pomeRepository.findPomeBySearchText(searchText,text);
+    }
+
+    /**
      * @Title:获取诗词的详情
      * @param pomeId 诗词的ID
      */
     public PomeVo findPomeDetailById(String pomeId){
         return  pomeRepository.findPomeDetailById(pomeId);
     }
+
+    /**
+     * @Title:分页获取诗词
+     * @param pomeVo 参数 authorName 作者
+     */
     public List<Pome> findPomeListByPage(PomeVo pomeVo){
         if (StringUtils.isNotTrimBlank(pomeVo.getAuthorName())){
             pomeVo.setAuthorName(SqlUtil.likePattern(pomeVo.getAuthorName()));
@@ -45,14 +65,5 @@ public class PomeService {
         }
         PageInfo pageInfo = pomeRepository.selectListVoByPage("findPomeListByPage",pomeVo,pomeVo.getPageIndex());
         return pageInfo.getList();
-    }
-    private  String findText(String text){
-        text = text.replaceAll("</p>","\n");
-        text = text.replaceAll("<br />","\n");
-        text = text.replaceAll("\\&[a-zA-Z]{1,10};", "").replaceAll(
-                "<[^>]*>", "");
-        text = text.replaceAll("[(/>)<]", "").trim();
-
-        return  text;
     }
 }

@@ -24,4 +24,19 @@
         </if>
     </select>
 
+    <select id="findPomeBySearchText"  resultType="cn.qin.vo.pomeVo.PomeSearchVo">
+        select
+        pome.pome_id,
+        pome.name,
+        pome.author_id,
+        author.name
+        from pome
+        left join author on author.author_id = pome.author_id
+        where  1=1
+        <if test="searchText != null">
+            AND pome.name like #{searchText}
+            order by INSTR(pome.name,#{text})
+        </if>
+    </select>
+
 </mapper>

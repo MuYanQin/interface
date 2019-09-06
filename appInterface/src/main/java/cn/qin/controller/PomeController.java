@@ -14,6 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public class PomeController {
     @Autowired
     private PomeService pomeService;
+
+    /**
+     * @Title:搜索诗词
+     * @param searchText 参数
+     */
+    @RequestMapping(value = "findPomeBySearchText",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findPomeBySearchText(@RequestParam("searchText") String searchText){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeBySearchText(searchText)), HttpStatus.OK);
+    }
+
     /**
      * @Title:
      * @Description: 根据id获取古诗
@@ -31,5 +41,7 @@ public class PomeController {
     public ResponseEntity<RestResponse> findPomeByPage(@RequestBody PomeVo pomeVo){
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeListByPage(pomeVo)), HttpStatus.OK);
     }
+
+
 
 }
