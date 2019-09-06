@@ -48,4 +48,13 @@ public class IdiomController {
     public ResponseEntity<RestResponse> findAllIdiomList(String size){
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findAllIdiomList(size)), HttpStatus.OK);
     }
+
+    /**
+     * @Title:每日一首
+     * @param
+     */
+    @RequestMapping(value = "findIdiomDaily",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findIdiomDaily(){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findIdiomDaily()), HttpStatus.OK);
+    }
 }

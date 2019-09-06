@@ -6,6 +6,7 @@ import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
 import cn.qin.vo.idiomVo.IdiomListVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
+import cn.qin.vo.pomeVo.PomeVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,4 +68,11 @@ public class IdiomService {
 
     //findIdiomListByInitial
 
+    /**
+     * @Title:每日一首
+     * @param
+     */
+    public Idiom findIdiomDaily(){
+        return  idiomRepository.findIdiomDaily();
+    }
 }

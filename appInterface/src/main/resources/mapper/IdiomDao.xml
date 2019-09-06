@@ -47,6 +47,11 @@
         ORDER BY RAND() LIMIT #{size}
     </select>
 
-
+    <select id="findIdiomDaily" resultType="cn.qin.entity.Idiom">
+        select
+            idiom.*
+        from idiom
+        ORDER BY RAND() LIMIT 1
+</select>
 
 </mapper>

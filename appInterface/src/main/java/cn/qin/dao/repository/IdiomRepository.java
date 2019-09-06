@@ -30,4 +30,8 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
     public List<IdiomSearchVo> fildIdiomSearchList(String tag){
         return idiomDao.fildIdiomSearchList(tag);
     }
+
+    public Idiom findIdiomDaily(){
+        return idiomDao.findIdiomDaily();
+    };
 }
