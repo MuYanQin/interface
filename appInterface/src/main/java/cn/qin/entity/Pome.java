@@ -12,9 +12,10 @@ public class Pome extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select REPLACE(uuid(),'-','')")
     private String pomeId;
     private String name;
-    private String type;
-    private String content;
-    private String explanation;
-    private String appreciation;
+    private String type;//1、唐诗。2、宋词 3、元曲
+    private String content;//内容
+    private String explanation;//名词解释
+    private String appreciation;//赏析
     private String authorId;
+    private String translation;//翻译
 }

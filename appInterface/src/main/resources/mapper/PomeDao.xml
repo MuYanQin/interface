@@ -3,13 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.qin.dao.PomeDao">
-    <select id="findPomeById"  resultType="cn.qin.vo.PomeVo">
+    <select id="findPomeDetailById"  resultType="cn.qin.vo.pomeVo.PomeVo">
         select
             pome.*,
             author.name as authorName
         from pome
         left join author on author.author_id = pome.author_id
         where  pome.pome_id = #{pomeId};
+    </select>
+
+    <select id="findPomeListByPage"  parameterType="java.lang.String" resultType="cn.qin.vo.pomeVo.PomeVo">
+        select
+            pome.*,
+            author.name as authorName
+        from pome
+        left join author on author.author_id = pome.author_id
+        where  1=1
+        <if test="pomeVo.authorName != null">
+            AND author.name like #{pomeVo.authorName}
+        </if>
     </select>
 
 </mapper>

@@ -23,8 +23,8 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
      return  idiomDao.findRandomForSize(size);
     }
 
-    public List<IdiomListVo> findIdiomListByInitial(){
-        return idiomDao.findIdiomListByInitial();
+    public List<IdiomListVo> findAllIdiomList(String size){
+        return idiomDao.findAllIdiomList(size);
     }
 
     public List<IdiomSearchVo> fildIdiomSearchList(String tag){

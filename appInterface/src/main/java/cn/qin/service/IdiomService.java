@@ -58,21 +58,14 @@ public class IdiomService {
 
     /**
      * @Title:根据首字母获取列表
-     * @param initial 首字母 为空 则获取全部(a-z的每条 前100条) 不为空则按initial获取
+     * @param size 首字母 获取全部(a-z的每条 前size条  0全查)
      */
-    public List<IdiomListVo> findIdiomListByInitial(String initial){
+    public List<IdiomListVo> findAllIdiomList(String size){
 
-        List<IdiomListVo> idiomListVos = new ArrayList<>();
-        if (StringUtils.isTrimBlank(initial)){
-            idiomListVos = idiomRepository.findIdiomListByInitial();
-        }else {
-            initial = initial.toLowerCase();
-            IdiomListVo idiomListVo = new IdiomListVo();
-            idiomListVo.setInitial(initial);
-            idiomListVo.setIdioms(idiomRepository.fildIdiomSearchList(initial));
-            idiomListVos.add(idiomListVo);
-        }
+        List<IdiomListVo> idiomListVos = idiomRepository.findAllIdiomList(size);
         return idiomListVos;
     }
+
+    //findIdiomListByInitial
 
 }

@@ -3,13 +3,11 @@ package cn.qin.controller;
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.service.PomeService;
+import cn.qin.vo.pomeVo.PomeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("pome")
@@ -20,18 +18,18 @@ public class PomeController {
      * @Title:
      * @Description: 根据id获取古诗
      */
-    @RequestMapping(value = "findPomeById",method = RequestMethod.GET)
+    @RequestMapping(value = "findPomeDetailById",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findPomeById(@RequestParam("pomeId") String pomeId){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeById(pomeId)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeDetailById(pomeId)), HttpStatus.OK);
     }
 
     /**
      * @Title:
      * @Description: 根据id获取古诗
      */
-    @RequestMapping(value = "findPomeByPage",method = RequestMethod.GET)
-    public ResponseEntity<RestResponse> findPomeByPage(@RequestParam("pageIndex") String pageIndex){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeByPage(pageIndex)), HttpStatus.OK);
+    @RequestMapping(value = "findPomeListByPage",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> findPomeByPage(@RequestBody PomeVo pomeVo){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeListByPage(pomeVo)), HttpStatus.OK);
     }
 
 }

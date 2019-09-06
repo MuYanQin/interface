@@ -42,10 +42,10 @@ public class IdiomController {
 
     /**
      * @Title:根据首字母获取列表
-     * @param initial 首字母 为空 则获取全部(a-z的每条 前100条) 不为空则按initial获取
+     * @param size 首字母 获取全部(a-z的每条 前size条  size不传 全查  建议传size否侧数据太多加载较慢)
      */
-    @RequestMapping(value = "findIdiomListByInitial",method = RequestMethod.GET)
-    public ResponseEntity<RestResponse> findIdiomListByInitial(@RequestParam("initial") String initial){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findIdiomListByInitial(initial)), HttpStatus.OK);
+    @RequestMapping(value = "findAllIdiomList",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findAllIdiomList(String size){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findAllIdiomList(size)), HttpStatus.OK);
     }
 }

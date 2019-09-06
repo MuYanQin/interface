@@ -2,7 +2,6 @@ package cn.qin.service;
 
 import cn.qin.dao.repository.SpellRepository;
 import cn.qin.dao.repository.WordRepository;
-import cn.qin.entity.Author;
 import cn.qin.entity.Pome;
 import cn.qin.entity.Spell;
 import cn.qin.entity.Word;
@@ -10,10 +9,8 @@ import cn.qin.util.ArrayUtils;
 import cn.qin.util.HttpClientUtil;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.UUIDUtils;
-import cn.qin.vo.PomeVo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +31,7 @@ public class WordService {
     public Word findWordById(String wordId){
 
         Example example = SqlUtil.newExample(Spell.class);
-        example.createCriteria().andEqualTo("type","2");
+        example.createCriteria().andEqualTo("type","7");
         List<Spell> spellList = spellRepository.selectListByExample(example);
         if (ArrayUtils.isNotNullAndLengthNotZero(spellList)){
 //            List<Spell> spells = spellList.subList(0,100);
@@ -64,7 +61,7 @@ public class WordService {
         //鸡鸡 76399063a860b360
         //我 a8d949a2591c8d0f
         //花 c064ed1f4ff90141
-        String text = "https://api.jisuapi.com/zidian/word?appkey=76399063a860b360&word=" + word.getWord();
+        String text = "https://api.jisuapi.com/zidian/word?appkey=a8d949a2591c8d0f&word=" + word.getWord();
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
         if (jsonObject.getString("status").equals("0")){
@@ -112,7 +109,7 @@ public class WordService {
         //hua 3d77403b636cd67b98d4fba306817d4b
         //鸡鸡 f47037e4c2f39b937a77c7b5766ea4a0
         String string = "http://v.juhe.cn/xhzd/querypy?";
-        String param = "dtype=&page=2&pagesize=50&isjijie=&isxiangjie=&key=f47037e4c2f39b937a77c7b5766ea4a0&word=" + spell;
+        String param = "dtype=&page=7&pagesize=50&isjijie=&isxiangjie=&key=4ceace1b57595e7e10d2bdf6d3d8459c&word=" + spell;
         String text = string + param;
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
@@ -140,9 +137,8 @@ public class WordService {
                 }
             }
             if (array.size()==50){
-                spellE.setType("3");
+                spellE.setType("8");
             }
-            spellE.setSelectKey("4");
             spellE.setPaixu(spellE.getSpellId());
             spellRepository.updateByPrimaryKeySelective(spellE);
         }

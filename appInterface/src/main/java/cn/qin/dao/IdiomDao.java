@@ -14,7 +14,7 @@ public interface IdiomDao extends BaseDao<Idiom> {
 
     List<IdiomSearchVo> findRandomForSize(@Param("size") int size);
 
-    List<IdiomListVo> findIdiomListByInitial();
+    List<IdiomListVo> findAllIdiomList(@Param("size") String size);
 
     List<IdiomSearchVo> fildIdiomSearchList(@Param("tag") String tag);
 
