@@ -39,4 +39,15 @@
         </if>
     </select>
 
+    <select id="findRandomPomeForSize"  resultType="cn.qin.vo.pomeVo.PomeSearchVo">
+        select
+        pome.pome_id,
+        pome.name,
+        pome.author_id,
+        author.name
+        from pome
+        left join author on author.author_id = pome.author_id
+        ORDER BY RAND() LIMIT #{size}
+    </select>
+
 </mapper>

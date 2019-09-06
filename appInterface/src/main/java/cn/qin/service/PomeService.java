@@ -2,22 +2,16 @@ package cn.qin.service;
 
 import cn.qin.dao.repository.AuthorRepository;
 import cn.qin.dao.repository.PomeRepository;
-import cn.qin.entity.Author;
 import cn.qin.entity.Pome;
-import cn.qin.util.HttpClientUtil;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
-import cn.qin.util.UUIDUtils;
+import cn.qin.vo.idiomVo.IdiomSearchVo;
 import cn.qin.vo.pomeVo.PomeSearchVo;
 import cn.qin.vo.pomeVo.PomeVo;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.jdbc.SQL;
-import org.hibernate.annotations.SQLUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -32,38 +26,51 @@ public class PomeService {
 
 
     /**
-     * @Title:搜索诗词
      * @param searchText 参数
+     * @Title:搜索诗词
      */
-    public List<PomeSearchVo> findPomeBySearchText(String searchText){
-        if (StringUtils.isTrimBlank(searchText)){
+    public List<PomeSearchVo> findPomeBySearchText(String searchText) {
+        if (StringUtils.isTrimBlank(searchText)) {
             throw new RuntimeException("搜索内容不能为空");
         }
         String text = searchText;
         searchText = SqlUtil.likePattern(searchText);
 
-        return pomeRepository.findPomeBySearchText(searchText,text);
+        return pomeRepository.findPomeBySearchText(searchText, text);
     }
 
     /**
-     * @Title:获取诗词的详情
      * @param pomeId 诗词的ID
+     * @Title:获取诗词的详情
      */
-    public PomeVo findPomeDetailById(String pomeId){
-        return  pomeRepository.findPomeDetailById(pomeId);
+    public PomeVo findPomeDetailById(String pomeId) {
+        return pomeRepository.findPomeDetailById(pomeId);
     }
 
     /**
-     * @Title:分页获取诗词
      * @param pomeVo 参数 authorName 作者
+     * @Title:分页获取诗词
      */
-    public List<Pome> findPomeListByPage(PomeVo pomeVo){
-        if (StringUtils.isNotTrimBlank(pomeVo.getAuthorName())){
+    public List<Pome> findPomeListByPage(PomeVo pomeVo) {
+        if (StringUtils.isNotTrimBlank(pomeVo.getAuthorName())) {
             pomeVo.setAuthorName(SqlUtil.likePattern(pomeVo.getAuthorName()));
-        }else {
+        } else {
             pomeVo.setAuthorName(null);
         }
-        PageInfo pageInfo = pomeRepository.selectListVoByPage("findPomeListByPage",pomeVo,pomeVo.getPageIndex());
+        PageInfo pageInfo = pomeRepository.selectListVoByPage("findPomeListByPage", pomeVo, pomeVo.getPageQuery());
         return pageInfo.getList();
     }
+
+    /**
+     * @param size 获取条数 默认15条
+     * @Title:随机获取诗文
+     */
+    public List<PomeSearchVo> findRandomPomeForSize(String size) {
+        int siz = 15;
+        if (StringUtils.isNotTrimBlank(size)) {
+            siz = Integer.parseInt(size);
+        }
+        return pomeRepository.findRandomPomeForSize(siz);
+    }
+
 }

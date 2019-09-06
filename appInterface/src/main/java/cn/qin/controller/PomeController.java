@@ -25,8 +25,8 @@ public class PomeController {
     }
 
     /**
-     * @Title:
-     * @Description: 根据id获取古诗
+     * @Title:根据id获取古诗
+     * @Description:
      */
     @RequestMapping(value = "findPomeDetailById",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findPomeById(@RequestParam("pomeId") String pomeId){
@@ -34,14 +34,23 @@ public class PomeController {
     }
 
     /**
-     * @Title:
-     * @Description: 根据id获取古诗
+     * @Title:获取诗文列表
+     * @param
      */
     @RequestMapping(value = "findPomeListByPage",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> findPomeByPage(@RequestBody PomeVo pomeVo){
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeListByPage(pomeVo)), HttpStatus.OK);
     }
 
+
+    /**
+     * @Title:随机获取诗文
+     * @param
+     */
+    @RequestMapping(value = "findRandomPomeForSize",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findRandomPomeForSize(String size){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findRandomPomeForSize(size)), HttpStatus.OK);
+    }
 
 
 }

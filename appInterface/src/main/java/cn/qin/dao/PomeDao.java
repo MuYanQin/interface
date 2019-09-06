@@ -15,4 +15,7 @@ public interface PomeDao extends BaseDao<Pome> {
     List<PomeVo> findPomeListByPage(@Param("pomeVo") PomeVo pomeVo);
 
     List<PomeSearchVo> findPomeBySearchText(@Param("searchText") String searchText,@Param("text") String text);
+
+
+    List<PomeSearchVo> findRandomPomeForSize(@Param("size") int size);
 }

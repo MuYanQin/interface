@@ -6,6 +6,7 @@ import cn.qin.util.EntityUtils;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,21 +57,6 @@ public abstract class BaseVo<T> implements Serializable {
         return null;
     }
 
-
-    /**
-     * @Fields : 当前页数
-     */
-    @JsonIgnore
-    private Integer currenPage;
-
-
-    /**
-     * @Fields : 每页显示条数
-     */
-    @JsonIgnore
-    private Integer pageSize = 10;
-
-
     @JsonIgnore
     @JSONField(serialize = false)
     public  BaseVo<T> getBaseVo(){
@@ -81,9 +67,39 @@ public abstract class BaseVo<T> implements Serializable {
      * @Fields  :  是否分页 null、0:分页 , 1:不分页
      * @author qiaomengnan
      */
-    @JsonIgnore
     private String pageFlag;
+    @JsonIgnore
+    public String getPageFlag() {
+        return pageFlag;
+    }
+    @JsonProperty
+    public void setPageFlag(String pageFlag) {
+        this.pageFlag = pageFlag;
+    }
 
+
+    private String pageIndex;
+    @JsonIgnore
+    public String getPageIndex() {
+        return pageIndex;
+    }
+
+    @JsonProperty
+    public void setPageIndex(String pageIndex) {
+        this.pageIndex = pageIndex;
+    }
+
+    public PageQuery getPageQuery(){
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setPageFlag(pageFlag);
+        pageQuery.setPageIndex(pageIndex);
+        return pageQuery;
+    }
+    /**
+     * @Fields : 每页显示条数
+     */
+    @JsonIgnore
+    private Integer pageSize = 10;
 
     /**
      * @Fields  :  是否需要合计

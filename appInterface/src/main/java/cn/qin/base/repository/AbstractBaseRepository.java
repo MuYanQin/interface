@@ -1,9 +1,11 @@
 package cn.qin.base.repository;
 
 
-import cn.qin.constancts.MarkedWordsConstants;
 import cn.qin.base.dao.BaseDao;
 import cn.qin.base.entity.BaseEntity;
+import cn.qin.base.vo.PageQuery;
+import cn.qin.constancts.MarkedWordsConstants;
+import cn.qin.enums.PageFlagEnums;
 import cn.qin.util.ArrayUtils;
 import cn.qin.util.ReflectUtils;
 import cn.qin.util.SqlUtil;
@@ -350,21 +352,39 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/12 04:40:51
 	 */
-	public  PageInfo<K> selectListVoByPage(String methodName,Object param,String pageIndex){
-		PageInfo pageInfo = PageHelper.startPage(new Integer(pageIndex),10)
-				.doSelectPageInfo(new ISelect() {
-					@Override
-					public void doSelect() {
-						try {
-							Method method = baseDao.getClass().getDeclaredMethod(methodName, param.getClass());
-							method.invoke(baseDao, param);
-						}catch (Exception ex){
-							log.error(ex.getMessage());
-							ex.printStackTrace();
-							throw  new RuntimeException("查询失败");
+	public  PageInfo<K> selectListVoByPage(String methodName, Object param, PageQuery pageQuery){
+		PageInfo pageInfo = new PageInfo();
+
+		if (PageFlagEnums.NOT_PAGE.getFlag().equals(pageQuery.getPageFlag())){
+			try {
+				Method method = baseDao.getClass().getDeclaredMethod(methodName, param.getClass());
+				Object result = method.invoke(baseDao, param);
+
+				if(result != null) {
+					List results = (List) result;
+					pageInfo.setList(results);
+				}
+			}catch (Exception ex){
+				log.error(ex.getMessage());
+				ex.printStackTrace();
+				throw  new RuntimeException("查询失败");
+			}
+		}else {
+			pageInfo = PageHelper.startPage(new Integer(pageQuery.getPageIndex()),10)
+					.doSelectPageInfo(new ISelect() {
+						@Override
+						public void doSelect() {
+							try {
+								Method method = baseDao.getClass().getDeclaredMethod(methodName, param.getClass());
+								method.invoke(baseDao, param);
+							}catch (Exception ex){
+								log.error(ex.getMessage());
+								ex.printStackTrace();
+								throw  new RuntimeException("查询失败");
+							}
 						}
-					}
-				});
+					});
+		}
 		return pageInfo;
 	}
 
