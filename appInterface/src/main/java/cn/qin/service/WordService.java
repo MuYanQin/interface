@@ -5,10 +5,7 @@ import cn.qin.dao.repository.WordRepository;
 import cn.qin.entity.Pome;
 import cn.qin.entity.Spell;
 import cn.qin.entity.Word;
-import cn.qin.util.ArrayUtils;
-import cn.qin.util.HttpClientUtil;
-import cn.qin.util.SqlUtil;
-import cn.qin.util.UUIDUtils;
+import cn.qin.util.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -54,14 +51,13 @@ public class WordService {
                 findWordData(word);
             }
         }
-
     }
 
     private void findWordData(Word word){
         //鸡鸡 76399063a860b360
         //我 a8d949a2591c8d0f
         //花 c064ed1f4ff90141
-        String text = "https://api.jisuapi.com/zidian/word?appkey=a8d949a2591c8d0f&word=" + word.getWord();
+        String text = "https://api.jisuapi.com/zidian/word?appkey=c064ed1f4ff90141&word=" + word.getWord();
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
         if (jsonObject.getString("status").equals("0")){
