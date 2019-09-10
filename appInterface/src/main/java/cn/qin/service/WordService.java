@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -27,27 +28,21 @@ public class WordService {
 
     public Word findWordById(String wordId){
 
-        Example example = SqlUtil.newExample(Spell.class);
-        example.createCriteria().andEqualTo("type","7");
-        List<Spell> spellList = spellRepository.selectListByExample(example);
-        if (ArrayUtils.isNotNullAndLengthNotZero(spellList)){
-//            List<Spell> spells = spellList.subList(0,100);
-            for (Spell spell : spellList) {
-                findAndInsertData(spell.getPinyin(),spell);
+        findAndInsertData("",null);
 
-            }
-        }
         return null;
     }
 
     public   void findAndInsertWordData(){
-
+        List<String> list = Arrays.asList("秦","慕","乔");
         Example example = SqlUtil.newExample(Word.class);
-        example.createCriteria().andIsNull("pinyin");
+        example.createCriteria().andIsNull("pinyin").andIn("word",list);
         List<Word> wordList = wordRepository.selectListByExample(example);
         if (ArrayUtils.isNotNullAndLengthNotZero(wordList)){
-            List<Word> words = wordList.subList(0,100);
-            for (Word word : words) {
+            if (wordList.size()>100){
+                wordList  = wordList.subList(0,100);
+            }
+            for (Word word : wordList) {
                 findWordData(word);
             }
         }
@@ -105,7 +100,7 @@ public class WordService {
         //hua 3d77403b636cd67b98d4fba306817d4b
         //鸡鸡 f47037e4c2f39b937a77c7b5766ea4a0
         String string = "http://v.juhe.cn/xhzd/querypy?";
-        String param = "dtype=&page=7&pagesize=50&isjijie=&isxiangjie=&key=4ceace1b57595e7e10d2bdf6d3d8459c&word=" + spell;
+        String param = "dtype=&page=1&pagesize=50&isjijie=&isxiangjie=&key=f47037e4c2f39b937a77c7b5766ea4a0&word=" + "nv";
         String text = string + param;
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
@@ -125,18 +120,18 @@ public class WordService {
                     Word word = new Word();
                     word.setWordId(UUIDUtils.getUUID());
                     word.setWord(object.getString("zi"));
-                    word.setInitial(spellE.getPinyinKey());
+//                    word.setInitial(spellE.getPinyinKey());
                     word.setBushou(object.getString("bushou"));
                     word.setBihua(object.getString("bihua"));
                     word.setSpell(object.getString("pinyin"));
                     wordRepository.insert(word);
                 }
             }
-            if (array.size()==50){
-                spellE.setType("8");
-            }
-            spellE.setPaixu(spellE.getSpellId());
-            spellRepository.updateByPrimaryKeySelective(spellE);
+//            if (array.size()==50){
+//                spellE.setType("8");
+//            }
+//            spellE.setPaixu(spellE.getSpellId());
+//            spellRepository.updateByPrimaryKeySelective(spellE);
         }
         return pome;
     }
