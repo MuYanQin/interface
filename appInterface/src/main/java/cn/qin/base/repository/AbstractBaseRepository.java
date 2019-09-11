@@ -330,14 +330,28 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/01/09 04:49:17
 	 */
-	public PageInfo<K> selectListVoByPage(Example example,String pageIndex){
-		PageInfo<K> pageInfo = PageHelper.startPage(new Integer(pageIndex),10)
-				.doSelectPageInfo(new ISelect() {
-					@Override
-					public void doSelect() {
-						baseDao.selectByExample(example);
-					}
-				});
+	public PageInfo<K> selectListVoByPage(Example example,PageQuery pageQuery){
+
+		PageInfo pageInfo = new PageInfo();
+		if (PageFlagEnums.NOT_PAGE.getFlag().equals(pageQuery.getPageFlag())) {
+
+			//不分页则全部查询
+			List<K> results = baseDao.selectByExample(example);
+			pageInfo.setList(results);
+
+		}else {
+			if (StringUtils.isTrimBlank(pageQuery.getPageSize())){
+				pageQuery.setPageSize("15");
+			}
+			 pageInfo = PageHelper.startPage(new Integer(pageQuery.getPageIndex()),new Integer(pageQuery.getPageSize()))
+					.doSelectPageInfo(new ISelect() {
+						@Override
+						public void doSelect() {
+							baseDao.selectByExample(example);
+						}
+					});
+		}
+
 		return pageInfo;
 	}
 
@@ -370,7 +384,10 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 				throw  new RuntimeException("查询失败");
 			}
 		}else {
-			pageInfo = PageHelper.startPage(new Integer(pageQuery.getPageIndex()),10)
+			if (StringUtils.isTrimBlank(pageQuery.getPageSize())){
+				pageQuery.setPageSize("15");
+			}
+			pageInfo = PageHelper.startPage(new Integer(pageQuery.getPageIndex()),new Integer(pageQuery.getPageSize()))
 					.doSelectPageInfo(new ISelect() {
 						@Override
 						public void doSelect() {

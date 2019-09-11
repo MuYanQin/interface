@@ -21,6 +21,8 @@ public class Word extends BaseEntity {
     private String pinyin;
     private String content;
     private String py;
+    private String delFlag;
+
 
 
 

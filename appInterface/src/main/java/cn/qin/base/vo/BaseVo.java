@@ -94,15 +94,25 @@ public abstract class BaseVo<T> implements Serializable {
         PageQuery pageQuery = new PageQuery();
         pageQuery.setPageFlag(pageFlag);
         pageQuery.setPageIndex(pageIndex);
+        pageQuery.setPageSize(pageSize);
         return pageQuery;
     }
-
 
     /**
      * @Fields : 每页显示条数
      */
+    private String pageSize;
     @JsonIgnore
-    private Integer pageSize = 10;
+
+    public String getPageSize() {
+        return pageSize;
+    }
+    @JsonProperty
+    public void setPageSize(String pageSize) {
+        this.pageSize = pageSize;
+    }
+
+
 
     /**
      * @Fields  :  是否需要合计

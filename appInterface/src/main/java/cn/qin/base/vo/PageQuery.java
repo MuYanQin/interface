@@ -6,4 +6,5 @@ import lombok.Data;
 public class PageQuery {
     private String pageIndex;
     private String pageFlag;
+    private String pageSize;
 }

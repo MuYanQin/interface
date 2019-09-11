@@ -4,6 +4,7 @@ import cn.qin.base.dao.BaseDao;
 import cn.qin.entity.Idiom;
 import cn.qin.vo.idiomVo.IdiomListVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
+import cn.qin.vo.idiomVo.IdiomVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,8 +15,8 @@ public interface IdiomDao extends BaseDao<Idiom> {
 
     List<IdiomSearchVo> findRandomForSize(@Param("size") int size);
 
-    List<IdiomListVo> findAllIdiomList(@Param("size") String size);
+    List<IdiomListVo> findAllIdiomList(@Param("idiomVo") IdiomVo idiomVo);
 
-    List<IdiomSearchVo> fildIdiomSearchList(@Param("tag") String tag);
+
     Idiom findIdiomDaily();
 }

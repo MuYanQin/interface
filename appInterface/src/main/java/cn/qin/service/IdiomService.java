@@ -6,12 +6,18 @@ import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
 import cn.qin.vo.idiomVo.IdiomListVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
+import cn.qin.vo.idiomVo.IdiomVo;
 import cn.qin.vo.pomeVo.PomeVo;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -58,16 +64,33 @@ public class IdiomService {
 
     /**
      * @Title:根据首字母获取列表
-     * @param size 首字母 获取全部(a-z的每条 前size条  0全查)
+     * @param idiomVo
      */
-    public List<IdiomListVo> findAllIdiomList(String size){
-
-        List<IdiomListVo> idiomListVos = idiomRepository.findAllIdiomList(size);
+    public List<IdiomListVo> findAllIdiomList(IdiomVo idiomVo){
+        if (StringUtils.isTrimBlank(idiomVo.getPageSize())){
+            idiomVo.setPageSize(null);
+        }
+        List<IdiomListVo> idiomListVos = idiomRepository.findAllIdiomList(idiomVo);
         return idiomListVos;
     }
 
-    //findIdiomListByInitial
-
+    /**
+     * @Title:根据Tag获取列表
+     * @param idiomVo
+     */
+    public Map findIdiomListByTag(IdiomVo idiomVo){
+        if (StringUtils.isTrimBlank(idiomVo.getTag())){
+            throw  new RuntimeException("条件不能为空");
+        }
+        Map map = new HashMap();
+        Example example = SqlUtil.newExample(Idiom.class);
+        example.createCriteria().andEqualTo("tag",idiomVo.getTag());
+        PageInfo pageInfo = idiomRepository.selectListVoByPage(example,idiomVo.getPageQuery());
+        map.put("list",pageInfo.getList());
+        map.put("totalCount",pageInfo.getTotal());
+        map.put("totalPage",pageInfo.getPages());
+        return map;
+    }
     /**
      * @Title:每日一首
      * @param

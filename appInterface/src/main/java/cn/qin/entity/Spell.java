@@ -14,8 +14,10 @@ public class Spell extends BaseEntity {
     private String spellId;
     private String pinyin;
     private String pinyinKey;
-    private String selectKey;
     private String type;
-    private String paixu;
+    private String bushou;
+    private String bihua;
+    private String totalPage;
+
 
 }
