@@ -63,12 +63,12 @@ public class IdiomService {
     }
 
     /**
-     * @Title:根据首字母获取列表
+     * @Title:获取列表 全部获取内容太多 影响速度故默认100条
      * @param idiomVo
      */
     public List<IdiomListVo> findAllIdiomList(IdiomVo idiomVo){
         if (StringUtils.isTrimBlank(idiomVo.getPageSize())){
-            idiomVo.setPageSize(null);
+            idiomVo.setPageSize("100");
         }
         List<IdiomListVo> idiomListVos = idiomRepository.findAllIdiomList(idiomVo);
         return idiomListVos;

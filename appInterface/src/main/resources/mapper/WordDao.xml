@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.qin.dao.WordDao">
+    <select id="findSpellList"  resultMap="selectSpellByGroup">
+        SELECT
+            spell.pinyin_key
+        FROM
+	        spell
+	    WHERE type = '1'
+        GROUP BY
+	        spell.pinyin_key
+    </select>
+    <resultMap id="selectSpellByGroup" type="cn.qin.vo.spellVo.SpellVo">
+        <result property="pinyinKey" column="pinyin_key" javaType="java.lang.String"/>
+        <collection property="spellVos"  ofType="cn.qin.vo.spellVo.SpellVo"
+                    javaType="java.util.ArrayList" select="findListByPinyinKey"
+                    column="pinyin_key"/>
+    </resultMap>
+    <select id="findListByPinyinKey" resultType="cn.qin.vo.spellVo.SpellVo">
+        select
+            spell.pinyin_key,
+            spell.pinyin,
+            spell.spell_id
+        from spell
+        where pinyin_key = #{pinyinKey}
+    </select>
+
+    <select id="findRadicalsList"  resultMap="selectRadicalsByGroup">
+        SELECT
+            spell.bihua
+        FROM
+	        spell
+	    WHERE type = '2'
+        GROUP BY  spell.bihua
+	    order by spell.bihua asc
+    </select>
+
+    <resultMap id="selectRadicalsByGroup" type="cn.qin.vo.spellVo.RadicalsVo">
+        <result property="bihua" column="bihua" javaType="java.lang.Integer"/>
+        <collection property="radicalsVos"  ofType="cn.qin.vo.spellVo.RadicalsVo"
+                    javaType="java.util.ArrayList" select="findListByBuShou"
+                    column="bihua"/>
+    </resultMap>
+    <select id="findListByBuShou" resultType="cn.qin.vo.spellVo.RadicalsVo">
+        select
+            spell.bihua,
+            spell.bushou,
+            spell.spell_id
+        from spell
+        where bihua = #{bihua}
+    </select>
+</mapper>

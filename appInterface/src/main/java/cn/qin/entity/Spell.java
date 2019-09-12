@@ -16,7 +16,7 @@ public class Spell extends BaseEntity {
     private String pinyinKey;
     private String type;
     private String bushou;
-    private String bihua;
+    private Integer bihua;
     private String totalPage;
 
 

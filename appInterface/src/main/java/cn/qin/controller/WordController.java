@@ -33,4 +33,21 @@ public class WordController {
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(ResponseEnums.SUCCESS.getMark()), HttpStatus.OK);
     }
 
+    /**
+     * @Title:获取拼音列表
+     * @param
+     */
+    @RequestMapping(value = "findSpellList",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findSpellList(){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(wordService.findSpellList()), HttpStatus.OK);
+    }
+    /**
+     * @Title:获取部首列表
+     * @param
+     */
+    @RequestMapping(value = "findRadicalsList",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findRadicalsList(){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(wordService.findRadicalsList()), HttpStatus.OK);
+    }
+
 }

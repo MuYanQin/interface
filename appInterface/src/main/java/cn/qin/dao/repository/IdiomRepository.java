@@ -34,7 +34,7 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
      * @param idiomVo
      */
     public List<IdiomListVo> findAllIdiomList(IdiomVo idiomVo){
-        return idiomDao.findAllIdiomList(idiomVo);
+        return idiomDao.findAllIdiomList(new Integer(idiomVo.getPageSize()));
     }
 
     /**

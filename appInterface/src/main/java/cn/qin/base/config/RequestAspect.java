@@ -113,6 +113,15 @@ public class RequestAspect {
                 paramMap.put(parameterNames[i], args[i]);
             }
         }
+        //时间戳
+        String timestamp = request.getHeader("timestamp");
+        paramMap.put("timestamp",timestamp);
+        //终端标志
+        String deviceType = request.getHeader("deviceType");
+        paramMap.put("deviceType",deviceType);
+        //用户id
+        String userId = request.getHeader("userId");
+        paramMap.put("userId",userId);
         return paramMap;
     }
 }

@@ -21,10 +21,10 @@
         ORDER BY RAND() LIMIT #{size}
     </select>
 
-    <select id="findIdiomList"  resultMap="selectIdiomList">
+    <select id="findAllIdiomList"  resultMap="selectIdiomList">
         SELECT
             tag,
-            #{size} as sizet
+            #{pageSize} as sizet
         FROM idiom
         GROUP BY tag
         ORDER BY tag ASC
@@ -43,7 +43,7 @@
             idiom.idiom,
             idiom.spell
         from idiom
-        where  idiom.tag = #{tag}
+        where  idiom.tag = #{tag} LIMIT  #{size}
     </select>
 
     <select id="findIdiomDaily" resultType="cn.qin.entity.Idiom">
