@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashMap;
+
 @RestController
 @RequestMapping("word")
 public class WordController {
@@ -50,4 +52,12 @@ public class WordController {
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(wordService.findRadicalsList()), HttpStatus.OK);
     }
 
+    /**
+     * @Title:根据部首获取汉字列表
+     * @param
+     */
+    @RequestMapping(value = "findWordListByBuShou",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findWordListByBuShou(@RequestParam("bushou") String bushou){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(wordService.findWordListByBuShou(bushou)), HttpStatus.OK);
+    }
 }

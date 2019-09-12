@@ -8,6 +8,7 @@ import cn.qin.entity.Word;
 import cn.qin.util.*;
 import cn.qin.vo.spellVo.RadicalsVo;
 import cn.qin.vo.spellVo.SpellVo;
+import cn.qin.vo.wordVo.WordVo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -188,12 +189,24 @@ public class WordService {
      */
     public LinkedHashMap<String,Object> findRadicalsList(){
         List<RadicalsVo> radicalsVos  = wordRepository.findRadicalsList();
-        Map<String,Object> map = new HashMap<>();
         LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
         if (ArrayUtils.isNotNullAndLengthNotZero(radicalsVos)){
             for (RadicalsVo radicalsVo:radicalsVos) {
-                map.put(radicalsVo.getBihua()+"",radicalsVo.getRadicalsVos());
                 linkedHashMap.put(radicalsVo.getBihua()+"",radicalsVo.getRadicalsVos());
+            }
+        }
+        return linkedHashMap;
+    }
+    /**
+     * @Title:根据部首获取汉字列表
+     * @param
+     */
+    public LinkedHashMap<String,Object> findWordListByBuShou(String bushou){
+        List<WordVo> wordVos  = wordRepository.findWordListByBuShou(bushou);
+        LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
+        if (ArrayUtils.isNotNullAndLengthNotZero(wordVos)){
+            for (WordVo wordVo:wordVos) {
+                linkedHashMap.put(wordVo.getBihua()+"",wordVo.getWordVos());
             }
         }
         return linkedHashMap;

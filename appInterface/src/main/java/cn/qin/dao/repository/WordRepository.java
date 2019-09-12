@@ -5,6 +5,7 @@ import cn.qin.dao.WordDao;
 import cn.qin.entity.Word;
 import cn.qin.vo.spellVo.RadicalsVo;
 import cn.qin.vo.spellVo.SpellVo;
+import cn.qin.vo.wordVo.WordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +22,9 @@ public class WordRepository extends AbstractBaseRepository<WordDao, Word> {
 
     public List<RadicalsVo> findRadicalsList(){
         return wordDao.findRadicalsList();
+    }
+
+    public List<WordVo> findWordListByBuShou(String bushou){
+        return wordDao.findWordListByBuShou(bushou);
     }
 }

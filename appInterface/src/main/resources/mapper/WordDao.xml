@@ -8,7 +8,7 @@
             spell.pinyin_key
         FROM
 	        spell
-	    WHERE type = '1'
+	    WHERE spell.type = '1'
         GROUP BY
 	        spell.pinyin_key
     </select>
@@ -27,12 +27,14 @@
         where pinyin_key = #{pinyinKey}
     </select>
 
+
+
     <select id="findRadicalsList"  resultMap="selectRadicalsByGroup">
         SELECT
             spell.bihua
         FROM
 	        spell
-	    WHERE type = '2'
+	    WHERE spell.type = '2'
         GROUP BY  spell.bihua
 	    order by spell.bihua asc
     </select>
@@ -50,5 +52,35 @@
             spell.spell_id
         from spell
         where bihua = #{bihua}
+    </select>
+
+
+    <select id="findWordListByBuShou"  resultMap="selectWordListByBuShouMap">
+        SELECT
+            #{bushou} as bushou,
+            word.bihua as bihua
+        FROM
+	        word
+	    WHERE word.bushou = #{bushou}
+        GROUP BY  word.bihua
+	    order by word.bihua asc
+    </select>
+    <resultMap id="selectWordListByBuShouMap" type="cn.qin.vo.wordVo.WordVo">
+        <result property="bushou" column="bushou" javaType="java.lang.String"/>
+        <result property="bihua" column="bihua" javaType="java.lang.Integer"/>
+        <collection property="wordVos"  ofType="cn.qin.vo.wordVo.WordVo"
+                    javaType="java.util.ArrayList" select="selectWordListByBuShou"
+                    column="{bihua=bihua,bushou=bushou}"/>
+    </resultMap>
+    <select id="selectWordListByBuShou" resultType="cn.qin.vo.wordVo.WordVo">
+        SELECT
+            word.word_id,
+            word.word,
+            word.pinyin
+        FROM
+	        word
+	    WHERE word.bushou = #{bushou}
+	    and word.bihua = #{bihua}
+
     </select>
 </mapper>

@@ -14,7 +14,7 @@ public class Word extends BaseEntity {
     private String wordId;
     private String word;
     private String bushou;
-    private String bihua;
+    private Integer bihua;
     private String initial;
     private String spell;
     private String bishun;
