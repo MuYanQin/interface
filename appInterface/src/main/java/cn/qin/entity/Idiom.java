@@ -13,7 +13,6 @@ public class Idiom  extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select REPLACE(uuid(),'-','')")
     @Id
     private String idiomId;
-
     private String idiom;//成语
     private String spell;//拼音
     private String decipher;//解释

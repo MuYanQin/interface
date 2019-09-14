@@ -16,5 +16,4 @@ public class User  extends BaseEntity {
     private String phone;
     private String nickName;
     private String pwd;
-    private String delFlag;
 }

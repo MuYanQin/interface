@@ -2,18 +2,17 @@ package cn.qin.base.config;
 
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.constancts.SystemConstants;
-import cn.qin.enums.DeleteFlags;
+import cn.qin.entity.User;
+import cn.qin.service.UserService;
 import com.alibaba.fastjson.JSON;
-import com.google.gson.JsonObject;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
@@ -29,8 +28,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
-import java.security.MessageDigest;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by huzongcheng on 2017/4/6.
@@ -38,6 +38,9 @@ import java.util.*;
 @Aspect
 @Component
 public class RequestAspect {
+
+    @Autowired
+    private UserService userService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestAspect.class);
 
@@ -69,6 +72,10 @@ public class RequestAspect {
                 String encodeString = DigestUtils.md5DigestAsHex(base64.getBytes());
                 if (!signature.equals(encodeString)){
                     return new ResponseEntity<>(RestResponseGenerator.genFailResponse("鉴权失败！"), HttpStatus.BAD_REQUEST);
+                }
+                User user = userService.findUserInfoById(map.get("userId").toString());
+                if (user == null){
+                    return new ResponseEntity<>(RestResponseGenerator.genFailResponse("用户不存在！"), HttpStatus.BAD_REQUEST);
                 }
             }
             return (ResponseEntity) joinPoint.proceed();

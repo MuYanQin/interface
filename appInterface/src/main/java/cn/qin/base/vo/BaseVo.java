@@ -30,13 +30,8 @@ public abstract class BaseVo<T> implements Serializable {
     protected Date createTime;
 
     @JsonIgnore
-    protected String creator;
-
-    @JsonIgnore
     protected Date updateTime;
 
-    @JsonIgnore
-    protected String updater;
 
     @JsonIgnore
     protected Integer delFlag;
