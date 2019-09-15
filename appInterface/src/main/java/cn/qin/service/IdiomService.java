@@ -85,7 +85,7 @@ public class IdiomService {
         Map map = new HashMap();
         Example example = SqlUtil.newExample(Idiom.class);
         example.createCriteria().andEqualTo("tag",idiomVo.getTag());
-        PageInfo pageInfo = idiomRepository.selectListVoByPage(example,idiomVo.getPageQuery());
+        PageInfo pageInfo = idiomRepository.selectListVoByPage("findIdiomListByTag",idiomVo,idiomVo.getPageQuery());
         map.put("list",pageInfo.getList());
         map.put("totalCount",pageInfo.getTotal());
         map.put("totalPage",pageInfo.getPages());

@@ -17,6 +17,7 @@ public interface IdiomDao extends BaseDao<Idiom> {
 
     List<IdiomListVo> findAllIdiomList(@Param("pageSize") int pageSize);
 
+    List<IdiomSearchVo> findIdiomListByTag(@Param("idiomVo") IdiomVo idiomVo);
 
     Idiom findIdiomDaily();
 }

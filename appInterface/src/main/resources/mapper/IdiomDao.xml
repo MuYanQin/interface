@@ -46,11 +46,18 @@
         where  idiom.tag = #{tag} LIMIT  #{size}
     </select>
 
+    <select id="findIdiomListByTag" resultType="cn.qin.vo.idiomVo.IdiomSearchVo">
+        select
+            idiom.*
+        from idiom
+        where idiom.tag = #{idiomVo.tag}
+    </select>
+
     <select id="findIdiomDaily" resultType="cn.qin.entity.Idiom">
         select
             idiom.*
         from idiom
         ORDER BY RAND() LIMIT 1
-</select>
+    </select>
 
 </mapper>
