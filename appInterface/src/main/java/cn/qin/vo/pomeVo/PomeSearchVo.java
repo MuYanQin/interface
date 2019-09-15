@@ -8,4 +8,5 @@ public class PomeSearchVo {
     private String authorName;
     private String pomeId;
     private String name;
+
 }

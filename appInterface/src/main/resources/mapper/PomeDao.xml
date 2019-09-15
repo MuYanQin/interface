@@ -3,6 +3,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.qin.dao.PomeDao">
+
+    <select id="findPomeBySearchText"  resultType="cn.qin.vo.pomeVo.PomeSearchVo">
+        select
+        pome.pome_id,
+        pome.name,
+        pome.author_id,
+        author.name as  authorName
+        from pome
+        left join author on author.author_id = pome.author_id
+        where  1=1
+        AND pome.name like #{searchText} or author.name like #{searchText}
+        order by INSTR(pome.name,#{text})
+    </select>
+
     <select id="findPomeDetailById"  resultType="cn.qin.vo.pomeVo.PomeVo">
         select
             pome.*,
@@ -24,20 +38,7 @@
         </if>
     </select>
 
-    <select id="findPomeBySearchText"  resultType="cn.qin.vo.pomeVo.PomeSearchVo">
-        select
-        pome.pome_id,
-        pome.name,
-        pome.author_id,
-        author.name
-        from pome
-        left join author on author.author_id = pome.author_id
-        where  1=1
-        <if test="searchText != null">
-            AND pome.name like #{searchText}
-            order by INSTR(pome.name,#{text})
-        </if>
-    </select>
+
 
     <select id="findRandomPomeForSize"  resultType="cn.qin.vo.pomeVo.PomeSearchVo">
         select
