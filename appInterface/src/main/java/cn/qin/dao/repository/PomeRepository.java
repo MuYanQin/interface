@@ -3,7 +3,9 @@ package cn.qin.dao.repository;
 import cn.qin.base.repository.AbstractBaseRepository;
 import cn.qin.dao.PomeDao;
 import cn.qin.entity.Pome;
+import cn.qin.vo.authorVo.AuthorVo;
 import cn.qin.vo.pomeVo.PomeSearchVo;
+import cn.qin.vo.pomeVo.PomeSerachList;
 import cn.qin.vo.pomeVo.PomeVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +22,19 @@ public class PomeRepository extends AbstractBaseRepository<PomeDao, Pome> {
         return pomeDao.findPomeDetailById(pomeId);
     }
 
-    public List<PomeSearchVo> findPomeBySearchText(String searchText,String text){
+    public PomeSerachList findPomeBySearchText(String searchText, String text){
         return  pomeDao.findPomeBySearchText(searchText,text);
     }
 
-    public List<PomeSearchVo> findRandomPomeForSize(@Param("size") int size){
+    public List<PomeSearchVo> findRandomPomeForSize(int size){
         return pomeDao.findRandomPomeForSize(size);
     }
 
     public PomeVo findPomeDaily(){
         return pomeDao.findPomeDaily();
+    }
+
+    public List<AuthorVo> selectAuthorHasPome(){
+        return  pomeDao.selectAuthorHasPome();
     }
 }

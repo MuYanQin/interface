@@ -50,22 +50,8 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/24 04:48:47
 	 */
-	public int insert(K entity) {
+	public int insertData(K entity) {
 		return baseDao.insert(entity);
-	}
-
-
-	/**
-	 * @Title:
-	 * @Description:   录入数据，只录入实体中属性不为null数据
-	 * @param entity
-	 * @return
-	 * @throws
-	 * @author qiaomengnan
-	 * @date 2018/02/24 04:49:22
-	 */
-	public int insertSelective(K entity) {
-		return baseDao.insertSelective(entity);
 	}
 
 	/**
@@ -77,7 +63,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/24 04:50:04
 	 */
-	public int updateByPrimaryKey(K entity) {
+	public int updateByPrimaryKeyData(K entity) {
 		return baseDao.updateByPrimaryKey(entity);
 	}
 
@@ -91,7 +77,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/24 04:50:31
 	 */
-	public int updateByPrimaryKeySelective(K entity) {
+	public int updateByPrimaryKeySelectiveData(K entity) {
 		return baseDao.updateByPrimaryKeySelective(entity);
 	}
 
@@ -106,10 +92,25 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/24 04:51:05
 	 */
-	public int updateByExample(K entity, Example example) {
+	public int updateByExampleData(K entity, Example example) {
 		checkUpdateExampleNullOrTrim(example);
 		SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
 		return baseDao.updateByExample(entity, example);
+	}
+	/**
+	 * @Title:
+	 * @Description:   根据组合条件更新实体,只更新实体中属性不为null的数据
+	 * @param entity
+	 * @param example
+	 * @return
+	 * @throws
+	 * @author qiaomengnan
+	 * @date 2018/02/24 04:51:33
+	 */
+	public int updateByExampleSelectiveData(K entity, Example example) {
+		checkUpdateExampleNullOrTrim(example);
+		SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
+		return baseDao.updateByExampleSelective(entity, example);
 	}
 
 	/**
@@ -122,26 +123,12 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/24 04:51:05
 	 */
-	public int updateByExample(K entity, Example example, boolean exclusive) {
+	public int updateByExampleData(K entity, Example example, boolean exclusive) {
 		checkUpdateExampleNullOrTrim(example);
-		return updateByExample(entity, example);
+		return updateByExampleData(entity, example);
 	}
 
-	/**
-	 * @Title:
-	 * @Description:   根据组合条件更新实体,只更新实体中属性不为null的数据
-	 * @param entity
-	 * @param example
-	 * @return
-	 * @throws
-	 * @author qiaomengnan
-	 * @date 2018/02/24 04:51:33
-	 */
-	public int updateByExampleSelective(K entity, Example example) {
-		checkUpdateExampleNullOrTrim(example);
-		SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
-		return baseDao.updateByExampleSelective(entity, example);
-	}
+
 
 
 	/**
@@ -179,20 +166,6 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 
 	/**
 	 * @Title:
-	 * @Description:   根据主键删除数据 虚拟删除
-	 * @param entity
-	 * @return
-	 * @throws
-	 * @author qiaomengnan
-	 * @date 2018/02/24 04:52:13
-	 */
-	public int delete(K entity) {
-		entity.setDelFlag(DeleteFlags.NOT_EXIST.getFlag());
-		return baseDao.updateByPrimaryKeySelective(entity);
-	}
-
-	/**
-	 * @Title:
 	 * @Description:  根据组合条件虚拟删除数据
 	 * @param example
 	 * @param example
@@ -201,12 +174,24 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/24 04:52:29
 	 */
-	public int deleteByExample(Example example,K entity){
+	public int deleteExampleData(Example example,K entity){
 		checkUpdateExampleNullOrTrim(example);
 		SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
 		return baseDao.updateByExampleSelective(entity,example);
 	}
-
+	/**
+	 * @Title:
+	 * @Description:   根据主键删除数据 虚拟删除
+	 * @param entity
+	 * @return
+	 * @throws
+	 * @author qiaomengnan
+	 * @date 2018/02/24 04:52:13
+	 */
+	public int deleteData(K entity) {
+		entity.setDelFlag(DeleteFlags.NOT_EXIST.getFlag());
+		return baseDao.updateByPrimaryKeySelective(entity);
+	}
 	/**
 	 * @Title:
 	 * @Description:  虚拟删除 根据id删除
@@ -217,7 +202,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/24 03:50:19
 	 */
-	public int deleteByIds(List ids,K entity){
+	public int deleteDataList(List ids,K entity){
 		if(ArrayUtils.isNotNullAndLengthNotZero(ids)) {
 			Class clazz = (Class<K>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[1];
 			List<EntityColumn> pkColumnList = new ArrayList<>(EntityHelper.getPKColumns(clazz));
@@ -388,6 +373,9 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 		}else {
 			if (StringUtils.isTrimBlank(pageQuery.getPageSize())){
 				pageQuery.setPageSize("15");
+			}
+			if(StringUtils.isTrimBlank(pageQuery.getPageIndex())){
+				pageQuery.setPageIndex("1");
 			}
 			pageInfo = PageHelper.startPage(new Integer(pageQuery.getPageIndex()),new Integer(pageQuery.getPageSize()))
 					.doSelectPageInfo(new ISelect() {

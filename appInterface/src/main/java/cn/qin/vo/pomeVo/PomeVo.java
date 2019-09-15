@@ -13,6 +13,7 @@ public class PomeVo extends BaseVo<Pome> {
     private String content;
     private String explanation;
     private String appreciation;
+    private String translation;//翻译
     private String authorId;
     private String authorName;
 

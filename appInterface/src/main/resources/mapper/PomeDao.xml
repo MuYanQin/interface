@@ -4,17 +4,35 @@
 
 <mapper namespace="cn.qin.dao.PomeDao">
 
-    <select id="findPomeBySearchText"  resultType="cn.qin.vo.pomeVo.PomeSearchVo">
+    <select id="findPomeBySearchText"  resultMap="findSearchMap">
         select
-        pome.pome_id,
-        pome.name,
-        pome.author_id,
-        author.name as  authorName
+        #{searchText} as searchText,
+        #{text} as text
+    </select>
+    <resultMap id="findSearchMap" type="cn.qin.vo.pomeVo.PomeSerachList">
+
+        <collection property="authorList"  ofType="cn.qin.vo.pomeVo.PomeSearchVo"
+                    javaType="java.util.ArrayList" select="fildSearchAuthorList"
+                    column="{searchText=searchText,text=text}"/>
+        <collection property="pomeList"  ofType="cn.qin.vo.pomeVo.PomeSearchVo"
+                    javaType="java.util.ArrayList" select="fildSearchPomeList"
+                    column="{searchText=searchText,text=text}"/>
+    </resultMap>
+    <select id="fildSearchAuthorList" resultType="cn.qin.vo.pomeVo.PomeSearchVo">
+        select
+        author.name as itemName,
+        author.author_id as itemId
+        from author
+        where  author.name like #{searchText}
+        order by INSTR(author.name,#{text}) asc
+    </select>
+    <select id="fildSearchPomeList" resultType="cn.qin.vo.pomeVo.PomeSearchVo">
+        select
+        pome.name as itemName,
+        pome.pome_id as itemId
         from pome
-        left join author on author.author_id = pome.author_id
-        where  1=1
-        AND pome.name like #{searchText} or author.name like #{searchText}
-        order by INSTR(pome.name,#{text})
+        where  pome.name like #{searchText}
+        order by INSTR(pome.name,#{text}) asc
     </select>
 
     <select id="findPomeDetailById"  resultType="cn.qin.vo.pomeVo.PomeVo">
@@ -28,7 +46,9 @@
 
     <select id="findPomeListByPage"  parameterType="java.lang.String" resultType="cn.qin.vo.pomeVo.PomeVo">
         select
-            pome.*,
+            pome.name,
+            pome.pome_id,
+            pome.type,
             author.name as authorName
         from pome
         left join author on author.author_id = pome.author_id
@@ -40,11 +60,12 @@
 
 
 
-    <select id="findRandomPomeForSize"  resultType="cn.qin.vo.pomeVo.PomeSearchVo">
+    <select id="findRandomPomeForSize"  resultType="cn.qin.vo.pomeVo.PomeVo">
         select
         pome.pome_id,
         pome.name,
         pome.author_id,
+        pome.type,
         author.name as authorName
         from pome
         left join author on author.author_id = pome.author_id
@@ -60,4 +81,16 @@
         ORDER BY RAND() LIMIT 1
     </select>
 
+    <select id="selectAuthorHasPome" resultType="cn.qin.vo.authorVo.AuthorVo">
+        SELECT
+        author.author_id,
+        author.`name`,
+        COUNT(author.`name`) as count
+        FROM
+        author
+        LEFT JOIN pome ON pome.author_id =  author.author_id
+        WHERE pome.`name` IS NOT null
+        GROUP BY author.`name`
+        ORDER BY COUNT(author.`name`) DESC
+    </select>
 </mapper>

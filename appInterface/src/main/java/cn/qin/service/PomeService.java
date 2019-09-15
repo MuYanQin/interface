@@ -5,7 +5,9 @@ import cn.qin.dao.repository.PomeRepository;
 import cn.qin.entity.Pome;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
+import cn.qin.vo.authorVo.AuthorVo;
 import cn.qin.vo.pomeVo.PomeSearchVo;
+import cn.qin.vo.pomeVo.PomeSerachList;
 import cn.qin.vo.pomeVo.PomeVo;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +30,7 @@ public class PomeService {
      * @param searchText 参数
      * @Title:搜索诗词
      */
-    public List<PomeSearchVo> findPomeBySearchText(String searchText) {
+    public PomeSerachList findPomeBySearchText(String searchText) {
         if (StringUtils.isTrimBlank(searchText)) {
             throw new RuntimeException("搜索内容不能为空");
         }
@@ -47,8 +49,8 @@ public class PomeService {
     }
 
     /**
-     * @param pomeVo 参数 authorName 作者
      * @Title:分页获取诗词
+     * @param pomeVo 参数 authorName 作者
      */
     public List<Pome> findPomeListByPage(PomeVo pomeVo) {
         if (StringUtils.isNotTrimBlank(pomeVo.getAuthorName())) {
@@ -80,7 +82,10 @@ public class PomeService {
     }
 
     /**
-     * @Title:
+     * @Title:获取有作品的诗人
      * @param
      */
+    public List<AuthorVo> selectAuthorHasPome(){
+        return pomeRepository.selectAuthorHasPome();
+    }
 }

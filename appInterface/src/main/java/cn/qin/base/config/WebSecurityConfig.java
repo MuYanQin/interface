@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     //spring boot 自带的鉴权 这里设置 放行
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
-                "/pome/**","/word/**","/idiom/**","/user/**");
+                "/pome/**","/word/**","/idiom/**","/user/**","/collection/**");
 
     }
 

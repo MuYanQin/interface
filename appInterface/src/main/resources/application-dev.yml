@@ -37,6 +37,7 @@ mybatis:
       delete_not_exist: '1'
       parent_code: '0'
 
+
 mapper:
   #通用mapper路径
   mappers: cn.qin.base.dao.BaseDao

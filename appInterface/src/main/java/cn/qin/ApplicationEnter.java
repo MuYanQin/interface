@@ -1,5 +1,6 @@
 package cn.qin;
 
+import cn.qin.constancts.FrameworkConstants;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableFeignClients
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableJpaAuditing
-@MapperScan(basePackages = "cn.qin.dao")
+@MapperScan(basePackages = FrameworkConstants.MAPPER_SCAN)
 public class ApplicationEnter {
     public static void main(String[] args) {
         SpringApplication.run(ApplicationEnter.class,args);

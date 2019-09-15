@@ -3,11 +3,14 @@ package cn.qin.controller;
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.service.PomeService;
+import cn.qin.vo.authorVo.AuthorVo;
 import cn.qin.vo.pomeVo.PomeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("pome")
@@ -59,5 +62,14 @@ public class PomeController {
     @RequestMapping(value = "findPomeDaily",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findPomeDaily(){
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeDaily()), HttpStatus.OK);
+    }
+
+    /**
+     * @Title:获取有作品的诗人
+     * @param
+     */
+    @RequestMapping(value = "selectAuthorHasPome",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> selectAuthorHasPome(){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.selectAuthorHasPome()), HttpStatus.OK);
     }
 }
