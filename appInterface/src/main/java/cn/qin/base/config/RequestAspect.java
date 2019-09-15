@@ -73,7 +73,13 @@ public class RequestAspect {
                 if (!signature.equals(encodeString)){
                     return new ResponseEntity<>(RestResponseGenerator.genFailResponse("鉴权失败！"), HttpStatus.BAD_REQUEST);
                 }
-                User user = userService.findUserInfoById(map.get("userId").toString());
+                User user = null;
+                try {
+                    user = userService.findUserInfoById(map.get("userId").toString());
+                }catch (Exception e){
+
+                }
+
                 if (user == null){
                     return new ResponseEntity<>(RestResponseGenerator.genFailResponse("用户不存在！"), HttpStatus.BAD_REQUEST);
                 }

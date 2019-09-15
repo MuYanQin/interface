@@ -8,18 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Data
-public class Word extends BaseEntity {
+public class CollectionData extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY,generator = "select REPLACE(uuid(),'-','')")
-    private String wordId;
-    private String word;
-    private String bushou;
-    private Integer bihua;
-    private String initial;
-    private String spell;
-    private String bishun;
-    private String pinyin;
-    private String content;
-    private String py;
-
+    private String collectionId;
+    private String objectId;
+    private String userId;
+    private String type;//1成语2诗文3名句4文字
 }

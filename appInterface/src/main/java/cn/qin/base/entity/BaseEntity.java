@@ -8,9 +8,9 @@ import java.util.Date;
 @Data
 public class BaseEntity {
     @JsonIgnore
-    private String delFlag;
+    private Integer delFlag;
     @JsonIgnore
-    private Date createDate;
+    private Date createTime;
     @JsonIgnore
     protected Date updateTime;
 

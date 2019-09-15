@@ -2,9 +2,8 @@ package cn.qin.service;
 
 import cn.qin.dao.repository.SpellRepository;
 import cn.qin.dao.repository.WordRepository;
-import cn.qin.entity.Pome;
-import cn.qin.entity.Spell;
 import cn.qin.entity.Word;
+import cn.qin.enums.DeleteFlags;
 import cn.qin.util.*;
 import cn.qin.vo.spellVo.RadicalsVo;
 import cn.qin.vo.spellVo.SpellVo;
@@ -17,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -41,11 +43,11 @@ public class WordService {
 
     public   void findAndInsertWordData(){
         Example example = SqlUtil.newExample(Word.class);
-        example.createCriteria().andIsNull("pinyin").andIsNull("delFlag");
+        example.createCriteria().andIsNull("pinyin");
         List<Word> wordList = wordRepository.selectListByExample(example);
         if (ArrayUtils.isNotNullAndLengthNotZero(wordList)){
-            if (wordList.size()>100){
-                wordList  = wordList.subList(0,100);
+            if (wordList.size()>550){
+                wordList  = wordList.subList(0,550);
             }
             for (Word word : wordList) {
                 findWordData(word);
@@ -57,11 +59,11 @@ public class WordService {
         //鸡鸡 76399063a860b360
         //我 a8d949a2591c8d0f
         //花 c064ed1f4ff90141
-        String text = "https://api.jisuapi.com/zidian/word?appkey=c064ed1f4ff90141&word=" + word.getWord();
+        String text = "https://api.jisuapi.com/zidian/word?appkey=a8d949a2591c8d0f&word=" + word.getWord();
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
         if (StringUtils.isTrimBlank(respon)){
-            word.setDelFlag("5");
+            word.setDelFlag(5);
             wordRepository.updateByPrimaryKeySelective(word);
             return;
         }
@@ -70,7 +72,13 @@ public class WordService {
 
             JSONObject result = jsonObject.getJSONObject("result");
             JSONArray array = result.getJSONArray("explain");
+            if (array.size()==0){
+                word.setBishun(result.getString("bishun"));
+                word.setPy(result.getString("pinyin"));
+                word.setDelFlag(DeleteFlags.NOT_EXIST.getFlag());
+                wordRepository.updateByPrimaryKeySelective(word);
 
+            }
             for (int i = 0; i < array.size(); i++) {
                 JSONObject object =  (JSONObject)array.getJSONObject(i);
                 if (i ==0){
@@ -101,7 +109,7 @@ public class WordService {
             }
 
         }else if (jsonObject.getString("status").equals("203")){
-            word.setDelFlag("1");
+            word.setDelFlag(1);
             wordRepository.updateByPrimaryKeySelective(word);
 
         }

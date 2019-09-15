@@ -5,6 +5,7 @@ import cn.qin.base.dao.BaseDao;
 import cn.qin.base.entity.BaseEntity;
 import cn.qin.base.vo.PageQuery;
 import cn.qin.constancts.MarkedWordsConstants;
+import cn.qin.enums.DeleteFlags;
 import cn.qin.enums.PageFlagEnums;
 import cn.qin.util.ArrayUtils;
 import cn.qin.util.ReflectUtils;
@@ -186,6 +187,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @date 2018/02/24 04:52:13
 	 */
 	public int delete(K entity) {
+		entity.setDelFlag(DeleteFlags.NOT_EXIST.getFlag());
 		return baseDao.updateByPrimaryKeySelective(entity);
 	}
 
@@ -276,7 +278,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	public K selectOneByExample(Example example) {
 	    if(ArrayUtils.isNullOrLengthZero(example.getOredCriteria()))
 	        example.createCriteria();
-		//SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
+		SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
 		List results = baseDao.selectByExample(example);
 		if (ArrayUtils.isNotNullAndLengthNotZero(results))
 			return (K) results.get(0);
@@ -295,12 +297,12 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	public K selectByPrimaryKey(Object id){
 		Object result = baseDao.selectByPrimaryKey(id);
 		//instanceof 严格来说是Java中的一个双目运算符，用来测试一个对象是否为一个类的实例，用法为
-		/**if(result instanceof BaseEntity){
+		if(result instanceof BaseEntity){
 			BaseEntity entity = (BaseEntity)result;
 			//如果状态是删除 则返回空回去
 			if(DeleteFlags.NOT_EXIST.getFlag().equals(entity.getDelFlag()))
 				return null;
-		}*/
+		}
 		return (K)result;
 	}
 
@@ -316,7 +318,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	public List<K> selectListByExample(Example example) {
         if(ArrayUtils.isNullOrLengthZero(example.getOredCriteria()))
             example.createCriteria();
-		//SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
+		SqlUtil.andEqualToDeleteExist(example.getOredCriteria());
 		return baseDao.selectByExample(example);
 	}
 
