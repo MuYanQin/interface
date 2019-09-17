@@ -76,8 +76,7 @@ public class RequestAspect {
                 }
                 User user = null;
                 try {
-                    String userId = AESCipher.aesEncryptString(map.get("userId").toString());
-                    user = userService.findUserInfoById(userId);
+                    user = userService.findUserInfoById(map.get(SystemConstants.USERID).toString());
                 }catch (Exception e){
 
                 }

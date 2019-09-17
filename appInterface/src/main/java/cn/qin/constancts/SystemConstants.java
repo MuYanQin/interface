@@ -8,4 +8,6 @@ public class SystemConstants {
      */
     public static final String ENABLE_ENCRYPT = "0";
 
+    public static final String USERID = "userId";
+
 }
