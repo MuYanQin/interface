@@ -4,6 +4,7 @@ import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.constancts.SystemConstants;
 import cn.qin.entity.User;
 import cn.qin.service.UserService;
+import cn.qin.util.AESCipher;
 import com.alibaba.fastjson.JSON;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -69,17 +70,17 @@ public class RequestAspect {
                 Map map = getFieldsName(joinPoint,request);
                 String signature = request.getHeader("signature");
                 String base64 =  Base64.getEncoder().encodeToString(JSON.toJSONString(map).getBytes("UTF-8"));
-                String encodeString = DigestUtils.md5DigestAsHex(base64.getBytes());
+                String encodeString = DigestUtils.md5DigestAsHex(DigestUtils.md5DigestAsHex(base64.getBytes()).getBytes());
                 if (!signature.equals(encodeString)){
                     return new ResponseEntity<>(RestResponseGenerator.genFailResponse("鉴权失败！"), HttpStatus.BAD_REQUEST);
                 }
                 User user = null;
                 try {
-                    user = userService.findUserInfoById(map.get("userId").toString());
+                    String userId = AESCipher.aesEncryptString(map.get("userId").toString());
+                    user = userService.findUserInfoById(userId);
                 }catch (Exception e){
 
                 }
-
                 if (user == null){
                     return new ResponseEntity<>(RestResponseGenerator.genFailResponse("用户不存在！"), HttpStatus.BAD_REQUEST);
                 }

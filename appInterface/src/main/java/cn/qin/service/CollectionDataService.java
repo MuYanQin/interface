@@ -30,7 +30,7 @@ public class CollectionDataService {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
         String userId = request.getHeader("userId");
-        if (StringUtils.isTrimBlank(userId)){
+        if (StringUtils.isTrimBlank(collectionData.getObjectId())){
             throw new RuntimeException("参数有误！");
         }
         collectionData.setUserId(userId);

@@ -18,11 +18,6 @@ public class UserService {
      * @param userId 用户ID
      */
     public User findUserInfoById(String userId) {
-        try{
-            userId = AESCipher.aesEncryptString(userId);
-        }catch (Exception e){
-        }
-
         return  repository.selectByPrimaryKey(userId);
     }
 }
