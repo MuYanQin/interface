@@ -8,17 +8,20 @@ logging:
                 cn: debug
 
 spring:
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://127.0.0.1:3306/appInterface?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   http:
     multipart:
       max-file-size: 30MB
       max-request-size: 30MB
+  jackson:
+    time-zone: Asia/Shanghai
 
-  datasource:
-    platform: mysql
-    url: jdbc:mysql://127.0.0.1:3306/appInterface?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
   #设置这个以后再Mapper配置文件中在parameterType 的值就不用写成全路径名了
@@ -36,7 +39,6 @@ mybatis:
       delete_exist: '0'
       delete_not_exist: '1'
       parent_code: '0'
-
 
 mapper:
   #通用mapper路径

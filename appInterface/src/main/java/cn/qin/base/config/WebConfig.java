@@ -3,6 +3,7 @@ package cn.qin.base.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.extern.log4j.Log4j;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.TimeZone;
 
 /**
  * Created by LEO on 2015/9/15.
@@ -28,12 +31,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public Gson gson(){
-        return new Gson();
-    }
-
-
-    @Bean
     RestTemplate restTemplate(){
 
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
@@ -41,7 +38,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
         return new RestTemplate(httpRequestFactory);
     }
-
     @Bean
     public FilterRegistrationBean parameterFilter(){
         FilterRegistrationBean registration = new FilterRegistrationBean();

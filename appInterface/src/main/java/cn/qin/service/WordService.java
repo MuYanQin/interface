@@ -64,7 +64,7 @@ public class WordService {
         JSONObject jsonObject = JSONObject.parseObject(respon);
         if (StringUtils.isTrimBlank(respon)){
             word.setDelFlag(5);
-            wordRepository.updateByPrimaryKeySelective(word);
+            wordRepository.updateByPrimaryKeySelectiveData(word);
             return;
         }
         if (jsonObject.getString("status").equals("0")){
@@ -76,7 +76,7 @@ public class WordService {
                 word.setBishun(result.getString("bishun"));
                 word.setPy(result.getString("pinyin"));
                 word.setDelFlag(DeleteFlags.NOT_EXIST.getFlag());
-                wordRepository.updateByPrimaryKeySelective(word);
+                wordRepository.updateByPrimaryKeySelectiveData(word);
 
             }
             for (int i = 0; i < array.size(); i++) {
@@ -91,7 +91,7 @@ public class WordService {
                     word.setBishun(result.getString("bishun"));
                     word.setPy(object.getString("pinyin"));
 
-                    wordRepository.updateByPrimaryKeySelective(word);
+                    wordRepository.updateByPrimaryKeySelectiveData(word);
                 }else {
                     Word wordAdd = new Word();
                     BeanUtils.copyProperties(word,wordAdd);
@@ -104,13 +104,13 @@ public class WordService {
                         wordAdd.setContent(object.getString("content"));
                     }
                     wordAdd.setBishun(result.getString("bishun"));
-                    wordRepository.insert(wordAdd);
+                    wordRepository.insertData(wordAdd);
                 }
             }
 
         }else if (jsonObject.getString("status").equals("203")){
             word.setDelFlag(1);
-            wordRepository.updateByPrimaryKeySelective(word);
+            wordRepository.updateByPrimaryKeySelectiveData(word);
 
         }
     }

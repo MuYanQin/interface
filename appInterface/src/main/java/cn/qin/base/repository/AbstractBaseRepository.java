@@ -224,7 +224,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/24 04:55:42
 	 */
-	public int deleteByIds(List ids,K entity,String primaryKey){
+	private int deleteByIds(List ids,K entity,String primaryKey){
 		if(ArrayUtils.isNotNullAndLengthNotZero(ids) && entity != null) {
 			Example example = SqlUtil.newExample(entity.getClass());
 			example.createCriteria().andIn(primaryKey, ids);

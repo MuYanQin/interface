@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @SpringBootApplication
 @EnableFeignClients
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableJpaAuditing
 @MapperScan(basePackages = FrameworkConstants.MAPPER_SCAN)
 public class ApplicationEnter {
     public static void main(String[] args) {

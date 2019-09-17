@@ -13,16 +13,16 @@ public class FrameworkConstants {
 
     //1、insertData
     //2、insertWordData
-    public static final String AOP_REPOSITORY_INSERT = "execution(* cn.qin.dao..*.insert*Data(..))";
+    public static final String AOP_REPOSITORY_INSERT = "execution(* cn.qin.base.repository..*.insert*Data(..))";
 
-    public static final String AOP_REPOSITORY_UPDATE = "execution(* cn.qin.dao..*.update*Data(..))";
+    public static final String AOP_REPOSITORY_UPDATE = "execution(* cn.qin.base..*.update*Data(..))";
 
-    public static final String AOP_REPOSITORY_DELETE = "execution(* cn.qin.daoa..*.delete*Data(..))";
+    public static final String AOP_REPOSITORY_DELETE = "execution(* cn.qin.base..*.delete*Data(..))";
 
-    public static final String AOP_REPOSITORY_INSERT_LIST = "execution(* cn.qin.dao..*.insert*DataList(..))";
+    public static final String AOP_REPOSITORY_INSERT_LIST = "execution(* cn.qin.base..*.insert*DataList(..))";
 
-    public static final String AOP_REPOSITORY_UPDATE_LIST = "execution(* cn.qin.dao..*.update*DataList(..))";
+    public static final String AOP_REPOSITORY_UPDATE_LIST = "execution(* cn.qin.base..*.update*DataList(..))";
 
-    public static final String AOP_REPOSITORY_DELETE_LIST = "execution(* cn.qin.dao..*.delete*DataList(..))";
+    public static final String AOP_REPOSITORY_DELETE_LIST = "execution(* cn.qin.base..*.delete*DataList(..))";
 
 }
