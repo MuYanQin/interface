@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -76,6 +77,7 @@ public class RequestAspect {
                 }
                 User user = null;
                 try {
+
                     user = userService.findUserInfoById(map.get(SystemConstants.USERID).toString());
                 }catch (Exception e){
 
@@ -135,6 +137,8 @@ public class RequestAspect {
         //用户id
         String userId = request.getHeader("userId");
         paramMap.put("userId",userId);
-        return paramMap;
+        Map<String, Object> result = new LinkedHashMap<>();
+        paramMap.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
+        return result;
     }
 }
