@@ -2,6 +2,7 @@ package cn.qin.service;
 
 import cn.qin.dao.repository.AuthorRepository;
 import cn.qin.dao.repository.PomeRepository;
+import cn.qin.entity.Author;
 import cn.qin.entity.Pome;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
@@ -87,5 +88,13 @@ public class PomeService {
      */
     public List<AuthorVo> selectAuthorHasPome(){
         return pomeRepository.selectAuthorHasPome();
+    }
+
+    /**
+     * @Title:获取诗人介绍
+     * @param
+     */
+    public Author findAuthorById(String authorId){
+        return authorRepository.selectByPrimaryKey(authorId);
     }
 }

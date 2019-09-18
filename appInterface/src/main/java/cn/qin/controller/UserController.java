@@ -17,7 +17,7 @@ public class UserController {
     private UserService userService;
     /**
      * @Title:获取用户的详情
-     * @param userId 用户ID
+     * @param
      */
     @RequestMapping(value = "findUserInfo",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findUserInfo(){
@@ -37,7 +37,7 @@ public class UserController {
      * @Title:登录接口
      * @param user
      */
-    @RequestMapping(value = "login",method = RequestMethod.GET)
+    @RequestMapping(value = "login",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> login(@RequestBody User user){
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(userService.login(user)), HttpStatus.OK);
     }

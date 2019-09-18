@@ -46,6 +46,11 @@ public class UserService {
         Example example = SqlUtil.newExample(User.class);
         example.createCriteria().andEqualTo("account",user.getAccount());
         User user1 = userRepository.selectOneByExample(example);
+        try {
+            user1.setUserId(AESCipher.aesEncryptString(user1.getUserId()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         if (user1 == null){
             throw new RuntimeException("账号不存在！");
         }

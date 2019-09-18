@@ -2,6 +2,7 @@ package cn.qin.controller;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
+import cn.qin.entity.Author;
 import cn.qin.service.PomeService;
 import cn.qin.vo.authorVo.AuthorVo;
 import cn.qin.vo.pomeVo.PomeVo;
@@ -17,6 +18,7 @@ import java.util.List;
 public class PomeController {
     @Autowired
     private PomeService pomeService;
+
 
     /**
      * @Title:搜索诗词
@@ -71,5 +73,14 @@ public class PomeController {
     @RequestMapping(value = "selectAuthorHasPome",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> selectAuthorHasPome(){
         return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.selectAuthorHasPome()), HttpStatus.OK);
+    }
+
+    /**
+     * @Title:获取诗人介绍
+     * @param
+     */
+    @RequestMapping(value = "findAuthorById",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findAuthorById(@RequestParam("authorId") String authorId){
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findAuthorById(authorId)), HttpStatus.OK);
     }
 }

@@ -7,7 +7,6 @@ import cn.qin.util.StringUtils;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * @author qiaomengnan
@@ -36,7 +35,6 @@ public class ParameterFilter implements Filter {
                     requestWrapper.addHeader(SystemConstants.USERID, userId);
                 }catch (Exception e){
                     e.printStackTrace();
-
                 }
             }
         }
