@@ -1,5 +1,7 @@
 package cn.qin.service;
 
+import cn.qin.base.response.RestResponse;
+import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.dao.repository.SpellRepository;
 import cn.qin.dao.repository.WordRepository;
 import cn.qin.entity.Word;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -130,7 +133,7 @@ public class WordService {
      * @Title:获取拼音列表
      * @param
      */
-    public Map findSpellList(){
+    public RestResponse<Map> findSpellList(){
         List<SpellVo> spellVos  = wordRepository.findSpellList();
         Map<String,Object> map = new HashMap<>();
         if (ArrayUtils.isNotNullAndLengthNotZero(spellVos)){
@@ -138,14 +141,14 @@ public class WordService {
                 map.put(spellVo.getPinyinKey(),spellVo.getSpellVos());
             }
         }
-        return map;
+        return RestResponseGenerator.genSuccessResponse(map);
     }
 
     /**
      * @Title:获取部首列表
      * @param
      */
-    public LinkedHashMap<String,Object> findRadicalsList(){
+    public RestResponse<LinkedHashMap<String,Object>> findRadicalsList(){
         List<RadicalsVo> radicalsVos  = wordRepository.findRadicalsList();
         LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
         if (ArrayUtils.isNotNullAndLengthNotZero(radicalsVos)){
@@ -153,13 +156,13 @@ public class WordService {
                 linkedHashMap.put(radicalsVo.getBihua()+"",radicalsVo.getRadicalsVos());
             }
         }
-        return linkedHashMap;
+        return RestResponseGenerator.genSuccessResponse(linkedHashMap);
     }
     /**
      * @Title:根据部首获取汉字列表
      * @param
      */
-    public LinkedHashMap<String,Object> findWordListByBuShou(String bushou){
+    public RestResponse<LinkedHashMap<String,Object>>  findWordListByBuShou(String bushou){
         List<WordVo> wordVos  = wordRepository.findWordListByBuShou(bushou);
         LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
         if (ArrayUtils.isNotNullAndLengthNotZero(wordVos)){
@@ -167,6 +170,6 @@ public class WordService {
                 linkedHashMap.put(wordVo.getBihua()+"",wordVo.getWordVos());
             }
         }
-        return linkedHashMap;
+        return RestResponseGenerator.genSuccessResponse(linkedHashMap);
     }
 }

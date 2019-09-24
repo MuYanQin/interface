@@ -25,8 +25,8 @@ public class CollectionDataController {
      */
     @RequestMapping(value = "saveCollection",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> saveCollection(@RequestBody CollectionData collectionData){
-        collectionDataService.saveCollection(collectionData);
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(ResponseEnums.SUCCESS.getMark()), HttpStatus.OK);
+
+        return new ResponseEntity<RestResponse>(collectionDataService.saveCollection(collectionData), HttpStatus.OK);
     }
 
 
@@ -36,7 +36,7 @@ public class CollectionDataController {
      */
     @RequestMapping(value = "findCollectionDataList",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> findCollectionDataList(@RequestBody CollectionDataVo collectionDataVo){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(collectionDataService.findCollectionDataList(collectionDataVo)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(collectionDataService.findCollectionDataList(collectionDataVo), HttpStatus.OK);
     }
 
     /**
@@ -45,8 +45,8 @@ public class CollectionDataController {
      */
     @RequestMapping(value = "deleteCollectionData",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> deleteCollectionData(@RequestParam("collectionId")String collectionId){
-        collectionDataService.deleteCollectionData(collectionId);
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(ResponseEnums.SUCCESS.getMark()), HttpStatus.OK);
+
+        return new ResponseEntity<RestResponse>(collectionDataService.deleteCollectionData(collectionId), HttpStatus.OK);
     }
 
 }

@@ -41,7 +41,7 @@ public class WordController {
      */
     @RequestMapping(value = "findSpellList",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findSpellList(){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(wordService.findSpellList()), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(wordService.findSpellList(), HttpStatus.OK);
     }
     /**
      * @Title:获取部首列表
@@ -49,7 +49,7 @@ public class WordController {
      */
     @RequestMapping(value = "findRadicalsList",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findRadicalsList(){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(wordService.findRadicalsList()), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(wordService.findRadicalsList(), HttpStatus.OK);
     }
 
     /**
@@ -58,6 +58,6 @@ public class WordController {
      */
     @RequestMapping(value = "findWordListByBuShou",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findWordListByBuShou(@RequestParam("bushou") String bushou){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(wordService.findWordListByBuShou(bushou)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(wordService.findWordListByBuShou(bushou), HttpStatus.OK);
     }
 }

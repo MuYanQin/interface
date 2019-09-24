@@ -26,7 +26,7 @@ public class PomeController {
      */
     @RequestMapping(value = "findPomeBySearchText",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findPomeBySearchText(@RequestParam("searchText") String searchText){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeBySearchText(searchText)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(pomeService.findPomeBySearchText(searchText), HttpStatus.OK);
     }
 
     /**
@@ -35,7 +35,7 @@ public class PomeController {
      */
     @RequestMapping(value = "findPomeDetailById",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findPomeById(@RequestParam("pomeId") String pomeId){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeDetailById(pomeId)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(pomeService.findPomeDetailById(pomeId), HttpStatus.OK);
     }
 
     /**
@@ -44,7 +44,7 @@ public class PomeController {
      */
     @RequestMapping(value = "findPomeListByPage",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> findPomeByPage(@RequestBody PomeVo pomeVo){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeListByPage(pomeVo)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(pomeService.findPomeListByPage(pomeVo), HttpStatus.OK);
     }
 
 
@@ -54,7 +54,7 @@ public class PomeController {
      */
     @RequestMapping(value = "findRandomPomeForSize",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findRandomPomeForSize(String size){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findRandomPomeForSize(size)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(pomeService.findRandomPomeForSize(size), HttpStatus.OK);
     }
 
     /**
@@ -63,7 +63,7 @@ public class PomeController {
      */
     @RequestMapping(value = "findPomeDaily",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findPomeDaily(){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findPomeDaily()), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(pomeService.findPomeDaily(), HttpStatus.OK);
     }
 
     /**
@@ -72,7 +72,7 @@ public class PomeController {
      */
     @RequestMapping(value = "selectAuthorHasPome",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> selectAuthorHasPome(){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.selectAuthorHasPome()), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(pomeService.selectAuthorHasPome(), HttpStatus.OK);
     }
 
     /**
@@ -81,6 +81,6 @@ public class PomeController {
      */
     @RequestMapping(value = "findAuthorById",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findAuthorById(@RequestParam("authorId") String authorId){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(pomeService.findAuthorById(authorId)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(pomeService.findAuthorById(authorId), HttpStatus.OK);
     }
 }

@@ -1,5 +1,7 @@
 package cn.qin.service;
 
+import cn.qin.base.response.RestResponse;
+import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.dao.repository.CollectionDataRepository;
 import cn.qin.entity.CollectionData;
 import cn.qin.enums.CollectionDataEnums;
@@ -27,23 +29,24 @@ public class CollectionDataService {
      * @Title:添加收藏
      * @param
      */
-    public void saveCollection(CollectionData collectionData){
+    public RestResponse saveCollection(CollectionData collectionData){
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
         String userId = request.getHeader("userId");
         if (StringUtils.isTrimBlank(collectionData.getObjectId())){
-            throw new RuntimeException("参数有误！");
+            return  RestResponseGenerator.genFailResponse("参数有误！");
         }
         collectionData.setUserId(userId);
         collectionDataRepository.insertData(collectionData);
+        return RestResponseGenerator.genSuccessResponse();
     }
     /**
      * @Title:获取收藏
      * @param
      */
-    public Map findCollectionDataList(CollectionDataVo collectionDataVo){
+    public RestResponse<Map> findCollectionDataList(CollectionDataVo collectionDataVo){
         if (StringUtils.isTrimBlank(collectionDataVo.getType())){
-            throw new RuntimeException("参数有误！");
+            return  RestResponseGenerator.genFailResponse("参数有误！");
         }
         Map map = new HashMap();
 
@@ -69,17 +72,18 @@ public class CollectionDataService {
         map.put("list",pageInfo.getList());
         map.put("totalCount",pageInfo.getTotal());
         map.put("totalPage",pageInfo.getPages());
-        return  map;
+        return  RestResponseGenerator.genSuccessResponse(map);
     }
 
     /**
      * @Title:取消收藏
      * @param
      */
-    public void deleteCollectionData(String collectionId){
+    public RestResponse deleteCollectionData(String collectionId){
         CollectionData collectionData = new CollectionData();
         collectionData.setCollectionId(collectionId);
         collectionDataRepository.deleteData(collectionData);
+        return RestResponseGenerator.genSuccessResponse();
     }
 
 }
