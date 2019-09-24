@@ -17,20 +17,19 @@ package cn.qin.base.response;
  */
 public enum ResponseEnums implements ResponseType{
 
-    SUCCESS("00000000","success","请求成功"),
-    FAILURE("99999999","failure","请求失败"),
-    ;
+    SUCCESS("200","success","请求成功"),
+    FAILURE("99999999","failure","请求失败");
 
 
     ResponseEnums(String code, String mark, String message) {
         this.code = code;
-        this.message = message;
+        this.msg = message;
         this.mark = mark;
     }
 
     private String code;
 
-    private String message;
+    private String msg;
 
     private String mark;
 
@@ -39,7 +38,7 @@ public enum ResponseEnums implements ResponseType{
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
     public String getMark(){return mark;}

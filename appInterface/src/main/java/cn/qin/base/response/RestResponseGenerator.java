@@ -39,7 +39,7 @@ public class RestResponseGenerator {
         RestResponse<T> result = RestResponse.newInstance();
         result.setCode(responseType.getCode());
         result.setData(data);
-        result.setMessage(message);
+        result.setMsg(message);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("generate rest result:{}", result);
         }

@@ -23,7 +23,7 @@ public class RestResponse<T> {
     /**
      * @Fields  : 响应消息
      */
-	private String message;
+	private String msg;
 	/**
 	 * @Fields  : 响应码
 	 */
@@ -42,6 +42,6 @@ public class RestResponse<T> {
 
 	@Override
 	public String toString() {
-		return "RestResponse{" + "code=" + code + ", message='" + message + '\'' + ", data=" + data + '}';
+		return "RestResponse{" + "code=" + code + ", message='" + msg + '\'' + ", data=" + data + '}';
 	}
 }
