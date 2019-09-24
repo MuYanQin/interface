@@ -20,7 +20,7 @@ public class IdiomController {
      */
     @RequestMapping(value = "findIdiomBySearchText",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findIdiomBySearchText(@RequestParam("searchText") String searchText){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findIdiomBySearchText(searchText)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(idiomService.findIdiomBySearchText(searchText), HttpStatus.OK);
     }
 
     /**
@@ -28,7 +28,7 @@ public class IdiomController {
      */
     @RequestMapping(value = "findRandomForSize",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findRandomForSize(String size){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findRandomForSize(size)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(idiomService.findRandomForSize(size), HttpStatus.OK);
     }
     /**
      * @Title:获取详情
@@ -36,7 +36,7 @@ public class IdiomController {
      */
     @RequestMapping(value = "findDetailById",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findDetailById(@RequestParam("idiomId") String idiomId){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findDetailById(idiomId)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(idiomService.findDetailById(idiomId), HttpStatus.OK);
     }
 
     /**
@@ -45,7 +45,7 @@ public class IdiomController {
      */
     @RequestMapping(value = "findAllIdiomList",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> findAllIdiomList(@RequestBody IdiomVo idiomVo){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findAllIdiomList(idiomVo)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(idiomService.findAllIdiomList(idiomVo), HttpStatus.OK);
     }
 
 
@@ -55,7 +55,7 @@ public class IdiomController {
      */
     @RequestMapping(value = "findIdiomListByTag",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> findIdiomListByTag(@RequestBody IdiomVo idiomVo){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findIdiomListByTag(idiomVo)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(idiomService.findIdiomListByTag(idiomVo), HttpStatus.OK);
     }
 
     /**
@@ -64,6 +64,6 @@ public class IdiomController {
      */
     @RequestMapping(value = "findIdiomDaily",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findIdiomDaily(){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(idiomService.findIdiomDaily()), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(idiomService.findIdiomDaily(), HttpStatus.OK);
     }
 }

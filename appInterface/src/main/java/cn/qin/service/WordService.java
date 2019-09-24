@@ -46,8 +46,8 @@ public class WordService {
         example.createCriteria().andIsNull("pinyin");
         List<Word> wordList = wordRepository.selectListByExample(example);
         if (ArrayUtils.isNotNullAndLengthNotZero(wordList)){
-            if (wordList.size()>100){
-                wordList  = wordList.subList(0,100);
+            if (wordList.size()>500){
+                wordList  = wordList.subList(0,500);
             }
             for (Word word : wordList) {
                 findWordData(word);
@@ -59,7 +59,7 @@ public class WordService {
         //鸡鸡 76399063a860b360
         //我 a8d949a2591c8d0f
         //花 c064ed1f4ff90141
-        String text = "https://api.jisuapi.com/zidian/word?appkey=c064ed1f4ff90141&word=" + word.getWord();
+        String text = "https://api.jisuapi.com/zidian/word?appkey=a8d949a2591c8d0f&word=" + word.getWord();
         String  respon =  HttpClientUtil.doGet(text);
         JSONObject jsonObject = JSONObject.parseObject(respon);
         if (StringUtils.isTrimBlank(respon)){

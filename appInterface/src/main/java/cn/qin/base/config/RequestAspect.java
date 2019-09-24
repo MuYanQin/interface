@@ -118,6 +118,9 @@ public class RequestAspect {
                 paramMap.put(parameterNames[i], args[i]);
             }
         }
+        //包名
+        String bundleId = request.getHeader("bundleId");
+        paramMap.put("bundleId",bundleId);
         //时间戳
         String timestamp = request.getHeader("timestamp");
         paramMap.put("timestamp",timestamp);

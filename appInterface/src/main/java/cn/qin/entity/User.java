@@ -19,6 +19,9 @@ public class User  extends BaseEntity {
     private String phone;//手机号
     private String nickName;//昵称
     private String pwd;//密码
+    private String bundleId;//包名
+    private String email;//邮箱
+
 
     @JsonIgnore
     public String getPwd() {

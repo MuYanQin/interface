@@ -21,7 +21,7 @@ public class UserController {
      */
     @RequestMapping(value = "findUserInfo",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findUserInfo(){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(userService.findUserInfo()), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(userService.findUserInfo(), HttpStatus.OK);
     }
 
     /**
@@ -30,7 +30,7 @@ public class UserController {
      */
     @RequestMapping(value = "register",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> register(@RequestBody User user){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(userService.register(user)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(userService.register(user), HttpStatus.OK);
     }
 
     /**
@@ -39,6 +39,6 @@ public class UserController {
      */
     @RequestMapping(value = "login",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> login(@RequestBody User user){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(userService.login(user)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(userService.login(user), HttpStatus.OK);
     }
 }
