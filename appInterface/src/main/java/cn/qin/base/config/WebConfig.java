@@ -49,7 +49,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         log.info("***************************parameterFilter初始化***************************");
         return registration;
     }
-
+    /**
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
@@ -60,7 +60,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 SerializerFeature.PrettyFormat);
         converters.add(converter);
     }
-
+    */
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

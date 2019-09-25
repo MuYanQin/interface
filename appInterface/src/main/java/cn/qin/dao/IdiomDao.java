@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface IdiomDao extends BaseDao<Idiom> {
 
+    IdiomVo findDetailById(@Param("idiomId") String idiomId,@Param("usrId") String usrId);
+
     List<IdiomSearchVo> findIdiomBySearchText(@Param("searchText") String searchText);
 
     List<IdiomSearchVo> findRandomForSize(@Param("size") int size);

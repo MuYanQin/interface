@@ -2,6 +2,8 @@ package cn.qin.service;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
+import cn.qin.constancts.SystemConstants;
+import cn.qin.dao.repository.CollectionDataRepository;
 import cn.qin.dao.repository.IdiomRepository;
 import cn.qin.entity.Idiom;
 import cn.qin.util.SqlUtil;
@@ -12,10 +14,15 @@ import cn.qin.vo.idiomVo.IdiomVo;
 import cn.qin.vo.pomeVo.PomeVo;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +35,8 @@ public class IdiomService {
     @Autowired
     private IdiomRepository idiomRepository;
 
+    @Autowired
+    private CollectionDataRepository collectionDataRepository;
 
     /**
      * @Title:搜索成语
@@ -61,9 +70,12 @@ public class IdiomService {
      * @Title:获取详情
      * @param idiomId ID
      */
-    public RestResponse<Idiom>  findDetailById(String idiomId){
-        Idiom idiom = idiomRepository.selectByPrimaryKey(idiomId);
-        return RestResponseGenerator.genSuccessResponse(idiom);
+    public RestResponse<IdiomVo>  findDetailById(String idiomId){
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
+        String userId = request.getHeader(SystemConstants.DEUSERID);
+        IdiomVo idiomVo = idiomRepository.findDetailById(idiomId,userId);
+        return RestResponseGenerator.genSuccessResponse(idiomVo);
     }
 
     /**

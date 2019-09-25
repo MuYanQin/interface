@@ -3,6 +3,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="cn.qin.dao.IdiomDao">
+
+
+    <select id="findDetailById" resultType="cn.qin.vo.idiomVo.IdiomVo">
+
+        select
+            idiom.*,
+            cdata.collection_id as collectionId
+        from idiom
+        left  join collection_data cdata on  cdata.object_id = idiom.idiom_id and  cdata.del_flag = 0
+        and cdata.user_id = #{usrId}
+        where idiom.del_flag = 0
+        and idiom.idiom_id = #{idiomId}
+
+    </select>
     <select id="findIdiomBySearchText"  resultType="cn.qin.vo.idiomVo.IdiomSearchVo">
         select
             idiom.idiom_id,

@@ -25,6 +25,15 @@ public class UserController {
     }
 
     /**
+     * @Title:重置密码
+     * @param user
+     */
+    @RequestMapping(value = "reset",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> reset(@RequestBody User user){
+        return new ResponseEntity<RestResponse>(userService.reset(user), HttpStatus.OK);
+    }
+
+    /**
      * @Title:注册接口
      * @param user
      */

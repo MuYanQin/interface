@@ -2,6 +2,7 @@ package cn.qin.service;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
+import cn.qin.constancts.SystemConstants;
 import cn.qin.dao.repository.UserRepository;
 import cn.qin.entity.User;
 import cn.qin.util.AESCipher;
@@ -30,7 +31,7 @@ public class UserService {
     public RestResponse<User> findUserInfo() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-        String userId = request.getHeader("userId");
+        String userId = request.getHeader(SystemConstants.DEUSERID);
         User user = userRepository.selectByPrimaryKey(userId);
         try {
             user.setUserId(AESCipher.aesEncryptString(user.getUserId()));
@@ -58,6 +59,35 @@ public class UserService {
         }catch (Exception e){
             e.printStackTrace();
         }
+        return RestResponseGenerator.genSuccessResponse(user1);
+    }
+
+    /**
+     * @Title:重置密码
+     * @param user
+     */
+    public RestResponse<User> reset(User user){
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
+        String bundleId = request.getHeader("bundleId");
+
+        Example example = SqlUtil.newExample(User.class);
+        example.createCriteria().andEqualTo("account",user.getAccount()).andEqualTo("bundleId",bundleId)
+        .andEqualTo("email",user.getEmail()).andEqualTo("nickName",user.getNickName());
+        User user1 = userRepository.selectOneByExample(example);
+        if (user1 == null){
+            return RestResponseGenerator.genFailResponse("账号不存在！");
+        }
+        if (!user1.getPwd().equals(user.getPwd())){
+            return RestResponseGenerator.genFailResponse("密码错误！");
+        }
+        try {
+            user1.setUserId(AESCipher.aesEncryptString(user1.getUserId()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        user1.setPwd(user.getPwd());
+        userRepository.updateByPrimaryKeyData(user1);
         return RestResponseGenerator.genSuccessResponse(user1);
     }
 

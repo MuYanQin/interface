@@ -17,6 +17,14 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
     @Autowired
     private IdiomDao idiomDao;
     /**
+     * @Title:根据ID获取详情
+     */
+    public IdiomVo findDetailById(String idiomId,String usrId){
+     return idiomDao.findDetailById(idiomId,usrId);
+    }
+
+
+    /**
      * @Title:搜索成语
      */
     public List<IdiomSearchVo> findIdiomBySearchText(String searchText){

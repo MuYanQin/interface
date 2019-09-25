@@ -2,10 +2,12 @@ package cn.qin.service;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
+import cn.qin.constancts.SystemConstants;
 import cn.qin.dao.repository.CollectionDataRepository;
 import cn.qin.entity.CollectionData;
 import cn.qin.enums.CollectionDataEnums;
 import cn.qin.util.StringUtils;
+import cn.qin.util.UUIDUtils;
 import cn.qin.vo.collectionData.CollectionDataVo;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -29,16 +31,18 @@ public class CollectionDataService {
      * @Title:添加收藏
      * @param
      */
-    public RestResponse saveCollection(CollectionData collectionData){
+    public RestResponse<String> saveCollection(CollectionData collectionData){
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-        String userId = request.getHeader("userId");
+        String userId = request.getHeader(SystemConstants.DEUSERID);
         if (StringUtils.isTrimBlank(collectionData.getObjectId())){
             return  RestResponseGenerator.genFailResponse("参数有误！");
         }
         collectionData.setUserId(userId);
+        String uuid = UUIDUtils.get20UUID();
+        collectionData.setCollectionId(uuid);
         collectionDataRepository.insertData(collectionData);
-        return RestResponseGenerator.genSuccessResponse();
+        return RestResponseGenerator.genSuccessResponse(uuid);
     }
     /**
      * @Title:获取收藏
@@ -52,7 +56,7 @@ public class CollectionDataService {
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-        String userId = request.getHeader("userId");
+        String userId = request.getHeader(SystemConstants.DEUSERID);
         collectionDataVo.setUserId(userId);
         String mothedStr = "";
         if (CollectionDataEnums.WORD.getFlag().equals(collectionDataVo.getType())){
@@ -79,9 +83,7 @@ public class CollectionDataService {
      * @Title:取消收藏
      * @param
      */
-    public RestResponse deleteCollectionData(String collectionId){
-        CollectionData collectionData = new CollectionData();
-        collectionData.setCollectionId(collectionId);
+    public RestResponse deleteCollectionData(CollectionData collectionData){
         collectionDataRepository.deleteData(collectionData);
         return RestResponseGenerator.genSuccessResponse();
     }

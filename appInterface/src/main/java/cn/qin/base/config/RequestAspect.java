@@ -5,6 +5,7 @@ import cn.qin.constancts.SystemConstants;
 import cn.qin.entity.User;
 import cn.qin.service.UserService;
 import cn.qin.util.AESCipher;
+import cn.qin.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -67,13 +68,15 @@ public class RequestAspect {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             String requestUri = request.getRequestURI().toString();//方法返回客户端发出请求时的完整URL。
-            if ("1".equals(SystemConstants.ENABLE_ENCRYPT)){
+            String deviceType = request.getHeader("deviceType");
+
+            if (StringUtils.isExits(deviceType)){
                 Map map = getFieldsName(joinPoint,request);
                 String signature = request.getHeader("signature");
                 String base64 =  Base64.getEncoder().encodeToString(JSON.toJSONString(map).getBytes("UTF-8"));
                 String encodeString = DigestUtils.md5DigestAsHex(DigestUtils.md5DigestAsHex(base64.getBytes()).getBytes());
                 if (!signature.equals(encodeString)){
-                    return new ResponseEntity<>(RestResponseGenerator.genFailResponse("鉴权失败！"), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(RestResponseGenerator.genFailResponse("鉴权失败！"), HttpStatus.OK);
                 }
             }
             return (ResponseEntity) joinPoint.proceed();

@@ -43,10 +43,10 @@ public class CollectionDataController {
      * @Title:取消收藏
      * @param
      */
-    @RequestMapping(value = "deleteCollectionData",method = RequestMethod.GET)
-    public ResponseEntity<RestResponse> deleteCollectionData(@RequestParam("collectionId")String collectionId){
+    @RequestMapping(value = "deleteCollectionData",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> deleteCollectionData(@RequestBody CollectionData collectionData){
 
-        return new ResponseEntity<RestResponse>(collectionDataService.deleteCollectionData(collectionId), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(collectionDataService.deleteCollectionData(collectionData), HttpStatus.OK);
     }
 
 }
