@@ -22,19 +22,12 @@ public class WordController {
     private WordService wordService;
     /**
      * @Title:
-     * @Description: 根据id获取古诗
+     * @Description:
      */
     @RequestMapping(value = "findWordById",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findWordById(@RequestParam("wordId") String wordId){
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(wordService.findWordById(wordId)), HttpStatus.OK);
+        return new ResponseEntity<RestResponse>(wordService.findWordById(wordId), HttpStatus.OK);
     }
-
-    @RequestMapping(value = "findAndInsertWordData",method = RequestMethod.GET)
-    public ResponseEntity<RestResponse> findAndInsertWordData(){
-        wordService.findAndInsertWordData();
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(ResponseEnums.SUCCESS.getMark()), HttpStatus.OK);
-    }
-
     /**
      * @Title:获取拼音列表
      * @param
@@ -59,5 +52,23 @@ public class WordController {
     @RequestMapping(value = "findWordListByBuShou",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findWordListByBuShou(@RequestParam("bushou") String bushou){
         return new ResponseEntity<RestResponse>(wordService.findWordListByBuShou(bushou), HttpStatus.OK);
+    }
+
+    /**
+     * @Title:根据拼音获取汉字列表
+     * @param
+     */
+    @RequestMapping(value = "findWordListBySpell",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findWordListBySpell(@RequestParam("spell") String spell){
+        return new ResponseEntity<RestResponse>(wordService.findWordListBySpell(spell), HttpStatus.OK);
+    }
+
+    /**
+     * @Title:根据文字获取相关文字信息
+     * @param
+     */
+    @RequestMapping(value = "findWordInfoByWord",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findWordInfoByWord(@RequestParam("word") String word){
+        return new ResponseEntity<RestResponse>(wordService.findWordInfoByWord(word), HttpStatus.OK);
     }
 }

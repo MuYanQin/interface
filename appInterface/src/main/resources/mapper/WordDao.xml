@@ -81,6 +81,81 @@
 	        word
 	    WHERE word.bushou = #{bushou}
 	    and word.bihua = #{bihua}
+	    and  word.del_flag = 0
 
     </select>
+
+    <select id="findWordListBySpell"  resultMap="selectWordListBySpellMap">
+        SELECT
+            #{spell} as spell,
+            word.bihua as bihua
+        FROM
+	        word
+	    WHERE word.spell = #{spell}
+        GROUP BY  word.bihua
+	    order by word.bihua asc
+    </select>
+    <resultMap id="selectWordListBySpellMap" type="cn.qin.vo.wordVo.WordVo">
+        <result property="bushou" column="bushou" javaType="java.lang.String"/>
+        <result property="bihua" column="bihua" javaType="java.lang.Integer"/>
+        <collection property="wordVos"  ofType="cn.qin.vo.wordVo.WordVo"
+                    javaType="java.util.ArrayList" select="selectWordListBySpell"
+                    column="{bihua=bihua,spell=spell}"/>
+    </resultMap>
+    <select id="selectWordListBySpell" resultType="cn.qin.vo.wordVo.WordVo">
+        SELECT
+            word.word_id,
+            word.word,
+            word.pinyin
+        FROM
+	        word
+	    WHERE word.spell = #{spell}
+	    and word.bihua = #{bihua}
+	    and  word.del_flag = 0
+    </select>
+
+    <select id="findWordInfoByWord" resultMap="findWordInfoByWordMap">
+        select word.*
+        from word
+        where del_flag = 0
+        and  word.word = #{word}
+    </select>
+    <resultMap id="findWordInfoByWordMap" type="cn.qin.vo.wordVo.WordInfoVo">
+        <result property="wordId" column="word_id" javaType="java.lang.String"/>
+        <result property="word" column="word" javaType="java.lang.String"/>
+        <result property="bushou" column="bushou" javaType="java.lang.String"/>
+        <result property="bihua" column="bihua" javaType="java.lang.Integer"/>
+        <result property="spell" column="spell" javaType="java.lang.String"/>
+        <result property="bishun" column="bishun" javaType="java.lang.String"/>
+        <result property="pinyin" column="pinyin" javaType="java.lang.String"/>
+        <result property="content" column="content" javaType="java.lang.String"/>
+        <result property="word" column="word" javaType="java.lang.String"/>
+        <collection property="ciyuList"  ofType="java.lang.String"
+                    javaType="java.util.ArrayList" select="selectciyiByWord"
+                    column="{word=word}"/>
+        <collection property="idiomList"  ofType="java.lang.String"
+                    javaType="java.util.ArrayList" select="selectIdiomByWord"
+                    column="{word=word}"/>
+    </resultMap>
+    <select id="selectciyiByWord" resultType="java.lang.String">
+        select
+        ci_yu.ci
+        from ci_yu
+        where ci_yu.del_flag = 0
+        and ci_yu.ci like CONCAT('%', #{word}, '%')
+        order by instr(ci_yu.ci,#{word})
+        LIMIT 5
+    </select>
+
+    <select id="selectIdiomByWord" resultType="java.lang.String">
+        select
+        idiom.idiom
+        from idiom
+        where idiom.del_flag = 0
+        and idiom.idiom like CONCAT('%', #{word}, '%')
+        order by instr(idiom.idiom,#{word})
+        LIMIT 5
+    </select>
+
+
 </mapper>

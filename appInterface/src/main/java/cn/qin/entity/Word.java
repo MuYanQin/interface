@@ -20,6 +20,5 @@ public class Word extends BaseEntity {
     private String bishun;
     private String pinyin;
     private String content;
-    private String py;
 
 }

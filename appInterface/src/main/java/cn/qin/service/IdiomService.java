@@ -109,8 +109,8 @@ public class IdiomService {
      * @Title:每日一首
      * @param
      */
-    public RestResponse<Idiom> findIdiomDaily(){
-        Idiom idiom = idiomRepository.findIdiomDaily();
-        return  RestResponseGenerator.genSuccessResponse(idiom);
+    public RestResponse<IdiomVo> findIdiomDaily(){
+        IdiomVo idiomVo = idiomRepository.findIdiomDaily();
+        return  RestResponseGenerator.genSuccessResponse(idiomVo);
     }
 }

@@ -4,6 +4,7 @@ import cn.qin.base.dao.BaseDao;
 import cn.qin.entity.Word;
 import cn.qin.vo.spellVo.RadicalsVo;
 import cn.qin.vo.spellVo.SpellVo;
+import cn.qin.vo.wordVo.WordInfoVo;
 import cn.qin.vo.wordVo.WordVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +18,7 @@ public interface WordDao extends BaseDao<Word> {
 
     List<WordVo> findWordListByBuShou(@Param("bushou")String bushou);
 
+    List<WordVo> findWordListBySpell(@Param("spell")String spell);
+
+    List<WordInfoVo> findWordInfoByWord(@Param("word")String word);
 }

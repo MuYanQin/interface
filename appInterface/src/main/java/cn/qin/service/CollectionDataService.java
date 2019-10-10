@@ -84,6 +84,9 @@ public class CollectionDataService {
      * @param
      */
     public RestResponse deleteCollectionData(CollectionData collectionData){
+        if (StringUtils.isTrimBlank(collectionData.getCollectionId())){
+            return RestResponseGenerator.genFailResponse("参数不能为空");
+        }
         collectionDataRepository.deleteData(collectionData);
         return RestResponseGenerator.genSuccessResponse();
     }

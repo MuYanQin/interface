@@ -67,10 +67,12 @@
         where idiom.tag = #{idiomVo.tag}
     </select>
 
-    <select id="findIdiomDaily" resultType="cn.qin.entity.Idiom">
+    <select id="findIdiomDaily" resultType="cn.qin.vo.idiomVo.IdiomVo">
         select
-            idiom.*
+            idiom.*,
+            cdata.collection_id as collectionId
         from idiom
+        left  join collection_data cdata on  cdata.object_id = idiom.idiom_id and  cdata.del_flag = 0
         ORDER BY RAND() LIMIT 1
     </select>
 

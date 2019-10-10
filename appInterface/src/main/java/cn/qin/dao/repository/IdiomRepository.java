@@ -49,7 +49,7 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
      * @Title:每日一首
      * @param
      */
-    public Idiom findIdiomDaily(){
+    public IdiomVo findIdiomDaily(){
         return idiomDao.findIdiomDaily();
     };
 }
