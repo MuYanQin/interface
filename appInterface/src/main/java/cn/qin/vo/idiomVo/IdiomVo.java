@@ -18,5 +18,5 @@ public class IdiomVo extends BaseVo<Idiom> {
     private String same;//同义词
     private String opposite;//反义词
     private String tag;//首字首拼
-    private String collectionId;//空为收藏
+    private String collectionId;
 }

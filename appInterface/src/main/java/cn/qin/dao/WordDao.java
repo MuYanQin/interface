@@ -20,5 +20,5 @@ public interface WordDao extends BaseDao<Word> {
 
     List<WordVo> findWordListBySpell(@Param("spell")String spell);
 
-    List<WordInfoVo> findWordInfoByWord(@Param("word")String word);
+    List<WordInfoVo> findWordInfoByWord(@Param("word")String word, @Param("userId")String userId);
 }

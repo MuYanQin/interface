@@ -33,7 +33,7 @@ public class WordRepository extends AbstractBaseRepository<WordDao, Word> {
     public List<WordVo> findWordListBySpell(String spell){
         return wordDao.findWordListBySpell(spell);
     }
-    public List<WordInfoVo> findWordInfoByWord(@Param("word")String word){
-        return wordDao.findWordInfoByWord(word);
+    public List<WordInfoVo> findWordInfoByWord(String word,String userId){
+        return wordDao.findWordInfoByWord(word,userId);
     }
 }

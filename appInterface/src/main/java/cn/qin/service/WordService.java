@@ -2,6 +2,7 @@ package cn.qin.service;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
+import cn.qin.constancts.SystemConstants;
 import cn.qin.dao.repository.SpellRepository;
 import cn.qin.dao.repository.WordRepository;
 import cn.qin.entity.Word;
@@ -17,8 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -117,8 +122,14 @@ public class WordService {
      * @Title:根据文字获取相关文字信息
      * @param
      */
-    public RestResponse<List<WordInfoVo>> findWordInfoByWord(String word){
-        List<WordInfoVo> wordInfoVoList = wordRepository.findWordInfoByWord(word);
-        return RestResponseGenerator.genSuccessResponse(wordInfoVoList);
+    public RestResponse<Map> findWordInfoByWord(String word){
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
+        String userId = request.getHeader(SystemConstants.DEUSERID);
+        Map map = new HashMap();
+        List<WordInfoVo> wordInfoVoList = wordRepository.findWordInfoByWord(word,userId);
+        map.put("wordInfoVoList",wordInfoVoList);
+        map.put("collectionId",wordInfoVoList.get(0).getCollectionId());
+        return RestResponseGenerator.genSuccessResponse(map);
     }
 }

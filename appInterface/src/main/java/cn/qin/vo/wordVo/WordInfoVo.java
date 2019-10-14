@@ -14,6 +14,8 @@ public class WordInfoVo {
     private String bishun;
     private String pinyin;
     private String content;
+    private String collectionId;//空为收藏
+
     private List<String> ciyuList;
     private List<String> idiomList;
 }
