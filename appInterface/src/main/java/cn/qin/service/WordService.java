@@ -3,11 +3,14 @@ package cn.qin.service;
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.constancts.SystemConstants;
+import cn.qin.dao.repository.CiYuRepository;
 import cn.qin.dao.repository.SpellRepository;
 import cn.qin.dao.repository.WordRepository;
+import cn.qin.entity.CiYu;
 import cn.qin.entity.Word;
 import cn.qin.enums.DeleteFlags;
 import cn.qin.util.*;
+import cn.qin.vo.idiomVo.IdiomVo;
 import cn.qin.vo.spellVo.RadicalsVo;
 import cn.qin.vo.spellVo.SpellVo;
 import cn.qin.vo.wordVo.WordInfoVo;
@@ -25,10 +28,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.Response;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -38,14 +38,53 @@ public class WordService {
 
     @Autowired
     private WordRepository wordRepository;
+    @Autowired
+    private CiYuRepository ciYuRepository;
     //聚合数据
     //wo 4ceace1b57595e7e10d2bdf6d3d8459c
     //hua 3d77403b636cd67b98d4fba306817d4b
     //鸡鸡 f47037e4c2f39b937a77c7b5766ea4a0
-    //极速
-    //鸡鸡 76399063a860b360
-    //我 a8d949a2591c8d0f
-    //花 c064ed1f4ff90141
+
+
+    public RestResponse insertciyuSpell(String word){
+        Example example = SqlUtil.newExample(CiYu.class);
+        if (StringUtils.isTrimBlank(word)){
+            example.createCriteria().andIsNull("spell");
+        }else {
+            example.createCriteria().andIsNull("spell").andLike("ci",SqlUtil.likePattern(word));
+        }
+        List<CiYu> ciYus = ciYuRepository.selectListByExample(example);
+        if (ciYus.size()>105){
+            ciYus = ciYus.subList(0,105);
+        }
+        for (CiYu ciYu:ciYus) {
+            findCiyuInfoBy(ciYu);
+        }
+        return  RestResponseGenerator.genSuccessResponse();
+    }
+    private void findCiyuInfoBy(CiYu ciyu){
+        //极速
+        //鸡鸡 76399063a860b360
+        //我 a8d949a2591c8d0f
+        //花 c064ed1f4ff90141
+        String text = "https://api.jisuapi.com/cidian/word?appkey=a8d949a2591c8d0f&word=" + ciyu.getCi();
+        String  respon =  HttpClientUtil.doGet(text);
+        JSONObject jsonObject = JSONObject.parseObject(respon);
+        if (StringUtils.isTrimBlank(respon)){
+            ciyu.setDelFlag(1);
+        }
+
+        if (jsonObject.getString("status").equals("0")) {
+
+            JSONObject result = jsonObject.getJSONObject("result");
+            ciyu.setSpell(result.getString("pinyin"));
+        }else {
+            ciyu.setDelFlag(1);
+        }
+        ciYuRepository.updateByPrimaryKeySelectiveData(ciyu);
+
+
+    }
 
     public RestResponse<Word> findWordById(String wordId){
         Word word = wordRepository.selectByPrimaryKey(wordId);
@@ -128,6 +167,21 @@ public class WordService {
         String userId = request.getHeader(SystemConstants.DEUSERID);
         Map map = new HashMap();
         List<WordInfoVo> wordInfoVoList = wordRepository.findWordInfoByWord(word,userId);
+
+        for (WordInfoVo wordInfoVo:wordInfoVoList) {
+            List<String> list = new ArrayList<>();
+            if (ArrayUtils.isNotNullAndLengthNotZero(wordInfoVo.getIdiomVos())){
+                for (IdiomVo idiomVo:wordInfoVo.getIdiomVos()) {
+                    int index = idiomVo.getIdiom().replace("，","").indexOf(word);
+                    String[] strings = idiomVo.getSpell().split(" ");
+                    if (strings[index].equals(wordInfoVo.getPinyin())){
+                        list.add(idiomVo.getIdiom());
+                    }
+                }
+            }
+            wordInfoVo.setIdiomList(list);
+        }
+
         map.put("wordInfoVoList",wordInfoVoList);
         map.put("collectionId",wordInfoVoList.get(0).getCollectionId());
         return RestResponseGenerator.genSuccessResponse(map);

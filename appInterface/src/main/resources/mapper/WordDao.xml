@@ -136,7 +136,7 @@
         <collection property="ciyuList"  ofType="java.lang.String"
                     javaType="java.util.ArrayList" select="selectciyiByWord"
                     column="{word=word}"/>
-        <collection property="idiomList"  ofType="java.lang.String"
+        <collection property="idiomVos"  ofType="cn.qin.vo.idiomVo.IdiomVo"
                     javaType="java.util.ArrayList" select="selectIdiomByWord"
                     column="{word=word,pinyin=pinyin}"/>
     </resultMap>
@@ -150,9 +150,10 @@
         LIMIT 5
     </select>
 
-    <select id="selectIdiomByWord" resultType="java.lang.String">
+    <select id="selectIdiomByWord" resultType="cn.qin.vo.idiomVo.IdiomVo">
         select
-        idiom.idiom
+        idiom.idiom,
+        idiom.spell
         from idiom
         where idiom.del_flag = 0
         and idiom.idiom like CONCAT('%', #{word}, '%')

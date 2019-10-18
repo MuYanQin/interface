@@ -20,6 +20,17 @@ import java.util.LinkedHashMap;
 public class WordController {
     @Autowired
     private WordService wordService;
+
+    /**
+     * @Title:
+     * @Description:
+     */
+    @RequestMapping(value = "insertciyuSpell",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> insertciyuSpell(@RequestParam("word") String word){
+        return new ResponseEntity<RestResponse>(wordService.insertciyuSpell(word), HttpStatus.OK);
+    }
+
+
     /**
      * @Title:
      * @Description:

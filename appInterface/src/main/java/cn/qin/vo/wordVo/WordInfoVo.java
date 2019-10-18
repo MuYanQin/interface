@@ -1,5 +1,7 @@
 package cn.qin.vo.wordVo;
 
+import cn.qin.vo.idiomVo.IdiomVo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.List;
@@ -18,4 +20,6 @@ public class WordInfoVo {
 
     private List<String> ciyuList;
     private List<String> idiomList;
+    @JsonIgnore
+    private List<IdiomVo> idiomVos;
 }
