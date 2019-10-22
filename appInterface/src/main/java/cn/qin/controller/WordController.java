@@ -5,16 +5,15 @@ import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.service.PomeService;
 import cn.qin.service.WordService;
+import cn.qin.vo.ciYuvo.CiYuVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
 
+@CrossOrigin
 @RestController
 @RequestMapping("word")
 public class WordController {
@@ -26,9 +25,23 @@ public class WordController {
      * @Description:
      */
     @RequestMapping(value = "insertciyuSpell",method = RequestMethod.GET)
-    public ResponseEntity<RestResponse> insertciyuSpell(@RequestParam("word") String word){
-        return new ResponseEntity<RestResponse>(wordService.insertciyuSpell(word), HttpStatus.OK);
+    public ResponseEntity<RestResponse> insertciyuSpell(){
+        wordService.insertciyuSpell();
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "findCiyuInfoBy",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> findCiyuInfoBy(@RequestBody CiYuVo ciYuVo){
+        wordService.findCiyuInfoBy(ciYuVo);
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "findCiyuInfoByBaudu",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findCiyuInfoByBaudu(){
+        wordService.findCiyuInfoByBaudu();
+        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(), HttpStatus.OK);
+    }
+
 
 
     /**

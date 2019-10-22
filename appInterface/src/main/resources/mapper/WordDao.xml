@@ -133,27 +133,31 @@
         <result property="pinyin" column="pinyin" javaType="java.lang.String"/>
         <result property="content" column="content" javaType="java.lang.String"/>
         <result property="word" column="word" javaType="java.lang.String"/>
-        <collection property="ciyuList"  ofType="java.lang.String"
+        <collection property="ciYuVos"  ofType="cn.qin.vo.ciYuvo.CiYuVo"
                     javaType="java.util.ArrayList" select="selectciyiByWord"
-                    column="{word=word}"/>
+                    column="{word=word,pinyin=pinyin}"/>
         <collection property="idiomVos"  ofType="cn.qin.vo.idiomVo.IdiomVo"
                     javaType="java.util.ArrayList" select="selectIdiomByWord"
                     column="{word=word,pinyin=pinyin}"/>
     </resultMap>
-    <select id="selectciyiByWord" resultType="java.lang.String">
+    <select id="selectciyiByWord" resultType="cn.qin.vo.ciYuvo.CiYuVo">
         select
-        ci_yu.ci
+        ci_yu.ci,
+        ci_yu.expl,
+        ci_yu.spell
         from ci_yu
         where ci_yu.del_flag = 0
+        and  ci_yu.spell like CONCAT('%', #{pinyin}, '%')
         and ci_yu.ci like CONCAT('%', #{word}, '%')
         order by instr(ci_yu.ci,#{word})
-        LIMIT 5
+        LIMIT 7
     </select>
 
     <select id="selectIdiomByWord" resultType="cn.qin.vo.idiomVo.IdiomVo">
         select
         idiom.idiom,
-        idiom.spell
+        idiom.spell,
+        idiom.decipher
         from idiom
         where idiom.del_flag = 0
         and idiom.idiom like CONCAT('%', #{word}, '%')

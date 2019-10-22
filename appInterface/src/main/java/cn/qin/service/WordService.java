@@ -2,6 +2,7 @@ package cn.qin.service;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
+import cn.qin.base.vo.PageQuery;
 import cn.qin.constancts.SystemConstants;
 import cn.qin.dao.repository.CiYuRepository;
 import cn.qin.dao.repository.SpellRepository;
@@ -10,6 +11,7 @@ import cn.qin.entity.CiYu;
 import cn.qin.entity.Word;
 import cn.qin.enums.DeleteFlags;
 import cn.qin.util.*;
+import cn.qin.vo.ciYuvo.CiYuVo;
 import cn.qin.vo.idiomVo.IdiomVo;
 import cn.qin.vo.spellVo.RadicalsVo;
 import cn.qin.vo.spellVo.SpellVo;
@@ -17,7 +19,12 @@ import cn.qin.vo.wordVo.WordInfoVo;
 import cn.qin.vo.wordVo.WordVo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,45 +53,91 @@ public class WordService {
     //鸡鸡 f47037e4c2f39b937a77c7b5766ea4a0
 
 
-    public RestResponse insertciyuSpell(String word){
+    public void insertciyuSpell(){
+        //1865
+        for (int i = 0; i < 1865; i++) {
+            String text = "https://hanyu.baidu.com/hanyu/ajax/search_list?wd=三字词语大全&pn="+i +"";
+            String  respon =  HttpClientUtil.doGet(text);
+            JSONObject jsonObject = JSONObject.parseObject(respon);
+            JSONArray array = jsonObject.getJSONArray("ret_array");
+            if (array.size()>0) {
+                for (int j = 0; j < array.size(); j++) {
+                    JSONObject object =  array.getJSONObject(j);
+                    CiYu  ciYu = new CiYu();
+                    JSONArray pinyinA = object.getJSONArray("pinyin");
+                    ciYu.setSpell(pinyinA.getString(0));
+                    JSONArray nameA = object.getJSONArray("name");
+                    ciYu.setCi(nameA.getString(0));
+                    JSONArray definitionA = object.getJSONArray("definition");
+                    String expl = "";
+                    for (int k = 0; k <definitionA.size() ; k++) {
+                        expl = expl + definitionA.getString(k);
+                    }
+                    ciYu.setExpl(expl);
+                    ciYuRepository.insertData(ciYu);
+                }
+            }
+        }
+
+    }
+    public void findCiyuInfoBy(CiYuVo ciYuVo){
+        if (ArrayUtils.isNotNullAndLengthNotZero(ciYuVo.getCiYuVoList())){
+            for (CiYuVo subci:ciYuVo.getCiYuVoList()) {
+                ciYuRepository.updateByPrimaryKeySelectiveData(subci.getEntity());
+            }
+        }
+    }
+
+    public void findCiyuInfoByBaudu(){
         Example example = SqlUtil.newExample(CiYu.class);
-        if (StringUtils.isTrimBlank(word)){
-            example.createCriteria().andIsNull("spell");
-        }else {
-            example.createCriteria().andIsNull("spell").andLike("ci",SqlUtil.likePattern(word));
+        example.createCriteria().andIsNull("createTime");
+        SqlUtil.andEqualToDeleteExist(example);
+        PageQuery pageQuery = new PageQuery();
+        pageQuery.setPageIndex("1");
+        pageQuery.setPageSize("70000");
+        PageInfo<CiYu> pageInfo =  ciYuRepository.selectListVoByPage(example,pageQuery);
+        boolean dele = false;
+        for (int i = 0; i < pageInfo.getList().size(); i++) {
+            CiYu ciYu = pageInfo.getList().get(i);
+            String text = "https://hanyu.baidu.com/s?wd="+ ciYu.getCi() +"&from=zici";
+            String  respon =  HttpClientUtil.doGet(text);
+            Document doc = Jsoup.parse(respon);//解析HTML字符串返回一个Document实现
+            Element elementById = doc.getElementById("basicmean-wrapper");
+            if (elementById ==null){
+                ciYu.setDelFlag(1);
+                ciYuRepository.updateByPrimaryKeyData(ciYu);
+            }else {
+                Elements elementsByClass = elementById.getElementsByTag("dl");
+                for (Element element : elementsByClass) {
+                    CiYu ciYu1 = new CiYu();
+                    Elements btEs = element.getElementsByTag("dt");
+                    Elements pEs =   element.getElementsByTag("p");
+                    if (btEs.size()>0 && pEs.size()>0){
+                        dele = true;
+
+                        String pinyin = element.getElementsByTag("dt").get(0).text();
+
+                        Elements elements = element.getElementsByTag("p");
+                        String expl = "";
+                        for (Element subE:elements) {
+                            expl = expl +subE.text() + "\n";
+                        }
+                        ciYu1.setCi(ciYu.getCi());
+                        ciYu1.setSpell(pinyin);
+                        ciYu1.setExpl(expl);
+                        ciYuRepository.insertData(ciYu1);
+                    }
+
+                }
+                if (dele){
+                    ciYuRepository.deleteData(ciYu);
+                }
+            }
         }
-        List<CiYu> ciYus = ciYuRepository.selectListByExample(example);
-        if (ciYus.size()>105){
-            ciYus = ciYus.subList(0,105);
-        }
-        for (CiYu ciYu:ciYus) {
-            findCiyuInfoBy(ciYu);
-        }
-        return  RestResponseGenerator.genSuccessResponse();
+
     }
-    private void findCiyuInfoBy(CiYu ciyu){
-        //极速
-        //鸡鸡 76399063a860b360
-        //我 a8d949a2591c8d0f
-        //花 c064ed1f4ff90141
-        String text = "https://api.jisuapi.com/cidian/word?appkey=a8d949a2591c8d0f&word=" + ciyu.getCi();
-        String  respon =  HttpClientUtil.doGet(text);
-        JSONObject jsonObject = JSONObject.parseObject(respon);
-        if (StringUtils.isTrimBlank(respon)){
-            ciyu.setDelFlag(1);
-        }
-
-        if (jsonObject.getString("status").equals("0")) {
-
-            JSONObject result = jsonObject.getJSONObject("result");
-            ciyu.setSpell(result.getString("pinyin"));
-        }else {
-            ciyu.setDelFlag(1);
-        }
-        ciYuRepository.updateByPrimaryKeySelectiveData(ciyu);
 
 
-    }
 
     public RestResponse<Word> findWordById(String wordId){
         Word word = wordRepository.selectByPrimaryKey(wordId);
@@ -169,21 +222,36 @@ public class WordService {
         List<WordInfoVo> wordInfoVoList = wordRepository.findWordInfoByWord(word,userId);
 
         for (WordInfoVo wordInfoVo:wordInfoVoList) {
-            List<String> list = new ArrayList<>();
+            List<IdiomVo> list = new ArrayList<>();
             if (ArrayUtils.isNotNullAndLengthNotZero(wordInfoVo.getIdiomVos())){
                 for (IdiomVo idiomVo:wordInfoVo.getIdiomVos()) {
                     int index = idiomVo.getIdiom().replace("，","").indexOf(word);
                     String[] strings = idiomVo.getSpell().split(" ");
                     if (strings[index].equals(wordInfoVo.getPinyin())){
-                        list.add(idiomVo.getIdiom());
+                        list.add(idiomVo);
                     }
                 }
             }
             wordInfoVo.setIdiomList(list);
+
+            if (ArrayUtils.isNotNullAndLengthNotZero(wordInfoVo.getCiYuVos())){
+                List<CiYuVo> ciYuVoList = new ArrayList<>();
+
+                for (CiYuVo ciYuVo:wordInfoVo.getCiYuVos()) {
+                    int index = ciYuVo.getCi().replace("，","").indexOf(word);
+                    String[] strings = ciYuVo.getSpell().split(" ");
+                    if (strings[index].equals(wordInfoVo.getPinyin())){
+                        ciYuVoList.add(ciYuVo);
+                    }
+                }
+                wordInfoVo.setCiyuList(ciYuVoList);
+            }
         }
 
         map.put("wordInfoVoList",wordInfoVoList);
         map.put("collectionId",wordInfoVoList.get(0).getCollectionId());
         return RestResponseGenerator.genSuccessResponse(map);
     }
+
+
 }

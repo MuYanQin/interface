@@ -318,7 +318,6 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @date 2018/01/09 04:49:17
 	 */
 	public PageInfo<K> selectListVoByPage(Example example,PageQuery pageQuery){
-
 		PageInfo pageInfo = new PageInfo();
 		if (PageFlagEnums.NOT_PAGE.getFlag().equals(pageQuery.getPageFlag())) {
 
