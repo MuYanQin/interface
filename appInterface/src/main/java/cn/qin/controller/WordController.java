@@ -19,31 +19,6 @@ import java.util.LinkedHashMap;
 public class WordController {
     @Autowired
     private WordService wordService;
-
-    /**
-     * @Title:
-     * @Description:
-     */
-    @RequestMapping(value = "insertciyuSpell",method = RequestMethod.GET)
-    public ResponseEntity<RestResponse> insertciyuSpell(){
-        wordService.insertciyuSpell();
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "findCiyuInfoBy",method = RequestMethod.POST)
-    public ResponseEntity<RestResponse> findCiyuInfoBy(@RequestBody CiYuVo ciYuVo){
-        wordService.findCiyuInfoBy(ciYuVo);
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "findCiyuInfoByBaudu",method = RequestMethod.GET)
-    public ResponseEntity<RestResponse> findCiyuInfoByBaudu(){
-        wordService.findCiyuInfoByBaudu();
-        return new ResponseEntity<RestResponse>(RestResponseGenerator.genSuccessResponse(), HttpStatus.OK);
-    }
-
-
-
     /**
      * @Title:
      * @Description:
