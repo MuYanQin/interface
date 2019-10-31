@@ -4,11 +4,14 @@ import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.entity.Idiom;
 import cn.qin.service.IdiomService;
+import cn.qin.vo.idiomVo.IdiomSearchVo;
 import cn.qin.vo.idiomVo.IdiomVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("idiom")
@@ -38,6 +41,15 @@ public class IdiomController {
     public ResponseEntity<RestResponse> findDetailById(@RequestParam("idiomId") String idiomId){
         return new ResponseEntity<RestResponse>(idiomService.findDetailById(idiomId), HttpStatus.OK);
     }
+    /**
+     * @Title:获取详情
+     * @param idiom 文字
+     */
+    @RequestMapping(value = "findDetailByIdiom",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findDetailByIdiom(@RequestParam("idiom") String idiom){
+        return new ResponseEntity<RestResponse>(idiomService.findDetailByIdiom(idiom), HttpStatus.OK);
+    }
+
 
     /**
      * @Title:获取全部列表
@@ -65,5 +77,14 @@ public class IdiomController {
     @RequestMapping(value = "findIdiomDaily",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findIdiomDaily(){
         return new ResponseEntity<RestResponse>(idiomService.findIdiomDaily(), HttpStatus.OK);
+    }
+
+    /**
+     * @param
+     * @Title:根据类型获取成语
+     */
+    @RequestMapping(value = "selectIdiomByType",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> selectIdiomByType(@RequestBody IdiomSearchVo idiomSearchVo){
+        return new ResponseEntity<RestResponse>(idiomService.selectIdiomByType(idiomSearchVo), HttpStatus.OK);
     }
 }

@@ -6,16 +6,16 @@
     <select id="seletWordList" resultType="cn.qin.vo.collectionData.CollectionDataVo">
         select
             cd.collection_id,
-            word.word_id as objectId,
             word.word as objectName,
-            word.pinyin as  content,
+            GROUP_CONCAT(word.pinyin) AS content,
             cd.create_time as collectionDate,
             '1' as type
         from collection_data cd
-        left join word on cd.object_id = word.word_id and word.del_flag = 0
+        left join word on cd.object_id = word.word and word.del_flag = 0
         where cd.del_flag = 0
         and cd.user_id = #{collectionDataVo.userId}
         and cd.type = 1
+        GROUP BY word.word
     </select>
 
     <select id="seletIdiomList" resultType="cn.qin.vo.collectionData.CollectionDataVo">

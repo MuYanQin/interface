@@ -23,6 +23,13 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
      return idiomDao.findDetailById(idiomId,usrId);
     }
 
+    /**
+     * @Title:根据文字获取详情
+     */
+    public IdiomVo findDetailByIdiom(String idiom,String usrId){
+        return idiomDao.findDetailByIdiom(idiom,usrId);
+    }
+
 
     /**
      * @Title:搜索成语
@@ -52,4 +59,13 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
     public IdiomVo findIdiomDaily(){
         return idiomDao.findIdiomDaily();
     };
+
+    /**
+     * @Title:根据类型获取成语
+     * @param
+     */
+    public List<IdiomSearchVo> selectIdiomByType(IdiomSearchVo idiomSearchVo){
+        return idiomDao.selectIdiomByType(idiomSearchVo);
+    }
+
 }

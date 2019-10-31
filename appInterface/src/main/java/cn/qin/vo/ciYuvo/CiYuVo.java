@@ -7,7 +7,6 @@ import lombok.Data;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.List;
 
 @Data
 public class CiYuVo extends BaseVo<CiYu> {
@@ -18,5 +17,4 @@ public class CiYuVo extends BaseVo<CiYu> {
     private String ci;
     private String expl;
     private String spell;
-    private List<CiYuVo> ciYuVoList;
 }

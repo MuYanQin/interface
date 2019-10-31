@@ -17,6 +17,19 @@
         and idiom.idiom_id = #{idiomId}
 
     </select>
+    <select id="findDetailByIdiom" resultType="cn.qin.vo.idiomVo.IdiomVo">
+
+        select
+            idiom.*,
+            cdata.collection_id as collectionId
+        from idiom
+        left  join collection_data cdata on  cdata.object_id = idiom.idiom_id and  cdata.del_flag = 0
+        and cdata.user_id = #{usrId}
+        where idiom.del_flag = 0
+        and idiom.idiom = #{idiom}
+
+    </select>
+
     <select id="findIdiomBySearchText"  resultType="cn.qin.vo.idiomVo.IdiomSearchVo">
         select
             idiom.idiom_id,
@@ -74,6 +87,41 @@
         from idiom
         left  join collection_data cdata on  cdata.object_id = idiom.idiom_id and  cdata.del_flag = 0
         ORDER BY RAND() LIMIT 1
+    </select>
+
+
+    <select id="selectIdiomByType" resultType="cn.qin.vo.idiomVo.IdiomSearchVo">
+        SELECT
+            idiom.idiom_id,
+            idiom.idiom,
+            idiom.spell
+        FROM idiom
+        WHERE CHAR_LENGTH(idiom.idiom)=4
+        <if test="idiomSearchVo.idiomType == 'AABB'">
+            AND substring(idiom.idiom, 1, 1) = substring(idiom.idiom, 2, 1)
+            AND substring(idiom.idiom, 3, 1)= substring(idiom.idiom, 4, 1)
+        </if>
+        <if test="idiomSearchVo.idiomType == 'AABC'">
+            AND  substring(idiom.idiom, 3, 1) &lt;&gt; substring(idiom.idiom, 4, 1)
+            AND substring(idiom.idiom, 1, 1) = substring(idiom.idiom, 2, 1)
+        </if>
+        <if test="idiomSearchVo.idiomType == 'ABAB'">
+            AND  substring(idiom.idiom, 1, 1) = substring(idiom.idiom, 3, 1)
+            AND substring(idiom.idiom, 2, 1)= substring(idiom.idiom, 4, 1)
+        </if>
+        <if test="idiomSearchVo.idiomType == 'ABAC'">
+            AND substring(idiom.idiom, 1, 1) = substring(idiom.idiom, 3, 1)
+            AND  substring(idiom.idiom, 2, 1) &lt;&gt; substring(idiom.idiom, 4, 1)
+        </if>
+        <if test="idiomSearchVo.idiomType == 'ABBC'">
+            AND substring(idiom.idiom, 2, 1) = substring(idiom.idiom, 3, 1)
+            AND  substring(idiom.idiom, 1, 1) &lt;&gt; substring(idiom.idiom, 4, 1)
+        </if>
+        <if test="idiomSearchVo.idiomType == 'ABCC'">
+            AND substring(idiom.idiom, 3, 1) = substring(idiom.idiom, 4, 1)
+            AND substring(idiom.idiom, 1, 1) &lt;&gt; substring(idiom.idiom, 2, 1)
+        </if>
+
     </select>
 
 </mapper>

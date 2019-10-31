@@ -145,10 +145,11 @@ public class WordService {
                     }
                 }
             }
+
             wordInfoVo.setIdiomList(list);
+            List<CiYuVo> ciYuVoList = new ArrayList<>();
 
             if (ArrayUtils.isNotNullAndLengthNotZero(wordInfoVo.getCiYuVos())){
-                List<CiYuVo> ciYuVoList = new ArrayList<>();
 
                 for (CiYuVo ciYuVo:wordInfoVo.getCiYuVos()) {
                     int index = ciYuVo.getCi().replace("，","").indexOf(word);
@@ -157,8 +158,9 @@ public class WordService {
                         ciYuVoList.add(ciYuVo);
                     }
                 }
-                wordInfoVo.setCiyuList(ciYuVoList);
             }
+            wordInfoVo.setCiyuList(ciYuVoList);
+
         }
 
         map.put("wordInfoVoList",wordInfoVoList);

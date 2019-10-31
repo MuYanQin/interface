@@ -115,9 +115,10 @@
     </select>
 
     <select id="findWordInfoByWord" resultMap="findWordInfoByWordMap">
-        select word.*
+        select word.*,
+        collection_data.collection_id
         from word
-        left join collection_data on collection_data.object_id = word.word_id
+        left join collection_data on collection_data.object_id = word.word
         and  collection_data.del_flag = 0
         and collection_data.user_id = #{userId}
         where word.del_flag = 0
@@ -125,6 +126,7 @@
     </select>
     <resultMap id="findWordInfoByWordMap" type="cn.qin.vo.wordVo.WordInfoVo">
         <result property="wordId" column="word_id" javaType="java.lang.String"/>
+        <result property="collectionId" column="collection_id" javaType="java.lang.String"/>
         <result property="word" column="word" javaType="java.lang.String"/>
         <result property="bushou" column="bushou" javaType="java.lang.String"/>
         <result property="bihua" column="bihua" javaType="java.lang.Integer"/>
@@ -150,11 +152,12 @@
         and  ci_yu.spell like CONCAT('%', #{pinyin}, '%')
         and ci_yu.ci like CONCAT('%', #{word}, '%')
         order by instr(ci_yu.ci,#{word})
-        LIMIT 7
+        LIMIT 6
     </select>
 
     <select id="selectIdiomByWord" resultType="cn.qin.vo.idiomVo.IdiomVo">
         select
+        idiom.idiom_id,
         idiom.idiom,
         idiom.spell,
         idiom.decipher
