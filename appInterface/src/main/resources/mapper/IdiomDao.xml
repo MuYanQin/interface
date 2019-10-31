@@ -124,4 +124,26 @@
 
     </select>
 
+    <select id="selectCiYuByType" resultType="cn.qin.vo.ciYuvo.CiYuVo">
+        SELECT
+        ci_yu.ci,
+        ci_yu.expl,
+        ci_yu.spell,
+        ci_yu.id
+        FROM ci_yu
+        WHERE  CHAR_LENGTH(ci)=3
+        <if test="ciYuVo.ciYuType == 'AAB'">
+            AND substring(ci, 1, 1) = substring(ci, 2, 1)
+
+        </if>
+        <if test="ciYuVo.ciYuType == 'ABB'">
+            AND substring(ci, 3, 1) = substring(ci, 2, 1)
+        </if>
+        <if test="ciYuVo.ciYuType == 'ABA'">
+            AND substring(ci, 1, 1) = substring(ci, 3, 1)
+        </if>
+
+
+    </select>
+
 </mapper>

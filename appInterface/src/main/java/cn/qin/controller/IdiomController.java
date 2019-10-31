@@ -4,6 +4,7 @@ import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.entity.Idiom;
 import cn.qin.service.IdiomService;
+import cn.qin.vo.ciYuvo.CiYuVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
 import cn.qin.vo.idiomVo.IdiomVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("idiom")
@@ -86,5 +88,17 @@ public class IdiomController {
     @RequestMapping(value = "selectIdiomByType",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> selectIdiomByType(@RequestBody IdiomSearchVo idiomSearchVo){
         return new ResponseEntity<RestResponse>(idiomService.selectIdiomByType(idiomSearchVo), HttpStatus.OK);
+    }
+
+
+
+    /**
+     * @Title:根据类型获取词语
+     * @param
+     */
+
+    @RequestMapping(value = "selectCiYuByType",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> selectCiYuByType(@RequestBody CiYuVo ciYuVo){
+        return new ResponseEntity<RestResponse>(idiomService.selectCiYuByType(ciYuVo), HttpStatus.OK);
     }
 }

@@ -3,6 +3,7 @@ package cn.qin.dao.repository;
 import cn.qin.base.repository.AbstractBaseRepository;
 import cn.qin.dao.IdiomDao;
 import cn.qin.entity.Idiom;
+import cn.qin.vo.ciYuvo.CiYuVo;
 import cn.qin.vo.idiomVo.IdiomListVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
 import cn.qin.vo.idiomVo.IdiomVo;
@@ -68,4 +69,11 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
         return idiomDao.selectIdiomByType(idiomSearchVo);
     }
 
+    /**
+     * @Title:根据类型获取词语
+     * @param
+     */
+    public List<CiYuVo> selectCiYuByType(CiYuVo ciYuVo){
+        return idiomDao.selectCiYuByType(ciYuVo);
+    }
 }

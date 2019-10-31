@@ -2,6 +2,7 @@ package cn.qin.dao;
 
 import cn.qin.base.dao.BaseDao;
 import cn.qin.entity.Idiom;
+import cn.qin.vo.ciYuvo.CiYuVo;
 import cn.qin.vo.idiomVo.IdiomListVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
 import cn.qin.vo.idiomVo.IdiomVo;
@@ -27,4 +28,7 @@ public interface IdiomDao extends BaseDao<Idiom> {
     IdiomVo findIdiomDaily();
 
     List<IdiomSearchVo> selectIdiomByType(@Param("idiomSearchVo") IdiomSearchVo idiomSearchVo);
+
+    List<CiYuVo> selectCiYuByType(@Param("ciYuVo") CiYuVo ciYuVo);
+
 }

@@ -8,6 +8,7 @@ import cn.qin.dao.repository.IdiomRepository;
 import cn.qin.entity.Idiom;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
+import cn.qin.vo.ciYuvo.CiYuVo;
 import cn.qin.vo.idiomVo.IdiomListVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
 import cn.qin.vo.idiomVo.IdiomVo;
@@ -86,6 +87,9 @@ public class IdiomService {
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
         String userId = request.getHeader(SystemConstants.DEUSERID);
         IdiomVo idiomVo = idiomRepository.findDetailByIdiom(idiom, userId);
+        if (idiomVo==null){
+            return RestResponseGenerator.genFailResponse("暂未收录此成语");
+        }
         return RestResponseGenerator.genSuccessResponse(idiomVo);
     }
 
@@ -137,6 +141,22 @@ public class IdiomService {
         Map map = new HashMap();
 
         PageInfo pageInfo = idiomRepository.selectListVoByPage("selectIdiomByType",idiomSearchVo,idiomSearchVo.getPageQuery());
+        map.put("list", pageInfo.getList());
+        map.put("totalCount", pageInfo.getTotal());
+        map.put("totalPage", pageInfo.getPages());
+        return RestResponseGenerator.genSuccessResponse(map);
+    }
+
+    /**
+     * @Title:根据类型获取词语
+     * @param
+     */
+    public RestResponse<Map> selectCiYuByType(CiYuVo ciYuVo){
+        if (StringUtils.isTrimBlank(ciYuVo.getCiYuType())){
+            return RestResponseGenerator.genFailResponse("类型不能为空");
+        }
+        Map map = new HashMap();
+        PageInfo pageInfo = idiomRepository.selectListVoByPage("selectCiYuByType",ciYuVo,ciYuVo.getPageQuery());
         map.put("list", pageInfo.getList());
         map.put("totalCount", pageInfo.getTotal());
         map.put("totalPage", pageInfo.getPages());
