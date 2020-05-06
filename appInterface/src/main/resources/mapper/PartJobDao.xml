@@ -61,7 +61,7 @@
         part_job_det.job_time,
         part_job_det.settle_type,
         part_job_det.salary,
-        part_job_det. part_job_det_id
+        part_job_det.part_job_det_id
         from part_job_det
         left join part_job on part_job.part_job_id = part_job_det.part_job_id and part_job.del_flag =  ${delete_exist}
         WHERE del_flag = ${delete_exist}

@@ -27,19 +27,6 @@ public class ParameterFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         BodyReaderHttpServletRequestWrapper requestWrapper = new BodyReaderHttpServletRequestWrapper(req);
-        String deviceType = req.getHeader("deviceType");
-
-        if (StringUtils.isExits(deviceType)){
-            String userId = req.getHeader(SystemConstants.USERID);
-            if (StringUtils.isNotTrimBlank(userId)){
-                try {
-                    userId = AESCipher.aesDecryptString(userId);
-                    requestWrapper.addHeader(SystemConstants.DEUSERID, userId);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }
 
         filterChain.doFilter(requestWrapper,servletResponse);
 

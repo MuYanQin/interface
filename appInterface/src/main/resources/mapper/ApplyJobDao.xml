@@ -4,5 +4,17 @@
 
 <mapper namespace="cn.qin.dao.ApplyJobDao">
 
-
+    <select id="findApplyJobList" resultType="cn.qin.vo.applyJob.ApplyJobVo">
+        select
+            part_job.job_name,
+            part_job.company_name,
+            apply_job.part_job_det_id,
+            part_job_det.job_time,
+            part_job_det.settle_type,
+            part_job_det.salary
+        from apply_job
+        left join  part_job_det on part_job_det.part_job_det_id = apply_job.part_job_det_id and part_job_det.del_flag = ${delete_exist}
+        left join  part_job on part_job_det.part_job_id = part_job.part_job_id and part_job.del_flag = ${delete_exist}
+        where apply_job.del_flag = ${delete_exist}
+    </select>
 </mapper>

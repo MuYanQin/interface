@@ -21,6 +21,13 @@ public class User  extends BaseEntity {
     private String pwd;//密码
     private String bundleId;//包名
     private String email;//邮箱
+    private String address;//地址
+    private String birthDay;//生日
+    private String gender;//性别
+    private String education;//学历
+    private String salaryRang;//薪资范围
+    private String major;//专业
+
 
 
     @JsonIgnore

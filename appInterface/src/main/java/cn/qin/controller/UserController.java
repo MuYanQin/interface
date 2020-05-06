@@ -34,6 +34,16 @@ public class UserController {
     }
 
     /**
+     * @Title:修改用户信息
+     * @param user
+     */
+    @RequestMapping(value = "updateInfo",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> updateInfo(@RequestBody User user){
+        return new ResponseEntity<RestResponse>(userService.updateInfo(user), HttpStatus.OK);
+    }
+
+
+    /**
      * @Title:注册接口
      * @param user
      */

@@ -10,4 +10,12 @@ public class ApplyJobVo extends BaseVo<ApplyJob> {
     private String applyJobId;
     private String partJobDetId;
     private String userId;
+
+    private String salary;
+    private String settleType;
+    private String jobTime;
+    private String companyName;
+    private String jobName;
+
+
 }

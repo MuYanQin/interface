@@ -33,11 +33,6 @@ public class UserService {
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
         String userId = request.getHeader(SystemConstants.DEUSERID);
         User user = userRepository.selectByPrimaryKey(userId);
-        try {
-            user.setUserId(AESCipher.aesEncryptString(user.getUserId()));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         return RestResponseGenerator.genSuccessResponse(user);
 
     }
@@ -47,20 +42,37 @@ public class UserService {
      * @param user
      */
     public RestResponse<User> login(User user){
-        User user1 = findUserInfo(user.getAccount());
+        User user1 = findUserInfoByAccounnt(user.getAccount());
         if (user1 == null){
             return RestResponseGenerator.genFailResponse("账号不存在！");
         }
         if (!user1.getPwd().equals(user.getPwd())){
             return RestResponseGenerator.genFailResponse("密码错误！");
         }
-        try {
-            user1.setUserId(AESCipher.aesEncryptString(user1.getUserId()));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
         return RestResponseGenerator.genSuccessResponse(user1);
     }
+
+    /**
+     * @Title:修改信息接口
+     * @param user
+     */
+    public RestResponse<User> updateInfo(User user){
+        if (StringUtils.isTrimBlank(user.getUserId()) || StringUtils.isTrimBlank(user.getBundleId())){
+            return RestResponseGenerator.genFailResponse("用户ID不能为空");
+        }
+        Example example = SqlUtil.newExample(User.class);
+        example.createCriteria().andEqualTo("userId",user.getUserId()).andEqualTo("bundleId",user.getBundleId());
+        User user1 = userRepository.selectOneByExample(example);
+        if (user1 == null){
+            return RestResponseGenerator.genFailResponse("找不到该用户");
+        }
+        user.setPwd(user1.getPwd());
+        user.setAccount(user1.getAccount());
+        userRepository.updateByPrimaryKeyData(user);
+        return RestResponseGenerator.genSuccessResponse(user);
+    }
+
 
     /**
      * @Title:重置密码
@@ -81,11 +93,7 @@ public class UserService {
         if (!user1.getPwd().equals(user.getPwd())){
             return RestResponseGenerator.genFailResponse("密码错误！");
         }
-        try {
-            user1.setUserId(AESCipher.aesEncryptString(user1.getUserId()));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
         user1.setPwd(user.getPwd());
         userRepository.updateByPrimaryKeyData(user1);
         return RestResponseGenerator.genSuccessResponse(user1);
@@ -106,7 +114,7 @@ public class UserService {
         if (StringUtils.isTrimBlank(user.getPwd())){
             return RestResponseGenerator.genFailResponse("密码不能为空！");
         }
-        User user1 = findUserInfo(user.getAccount());
+        User user1 = findUserInfoByAccounnt(user.getAccount());
 
         if (user1 != null){
             return RestResponseGenerator.genFailResponse("手机号已存在！");
@@ -117,15 +125,11 @@ public class UserService {
         user.setBundleId(bundleId);
         user.setPhone(user.getAccount());
         userRepository.insertData(user);
-        try {
-            user.setUserId(AESCipher.aesEncryptString(user.getUserId()));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
         return RestResponseGenerator.genSuccessResponse(user);
     }
 
-    private User findUserInfo(String account){
+    private User findUserInfoByAccounnt(String account){
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
         String bundleId = request.getHeader("bundleId");

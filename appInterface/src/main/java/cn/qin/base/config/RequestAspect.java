@@ -1,10 +1,7 @@
 package cn.qin.base.config;
 
 import cn.qin.base.response.RestResponseGenerator;
-import cn.qin.constancts.SystemConstants;
-import cn.qin.entity.User;
 import cn.qin.service.UserService;
-import cn.qin.util.AESCipher;
 import cn.qin.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import org.aspectj.lang.ProceedingJoinPoint;
