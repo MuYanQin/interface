@@ -55,13 +55,4 @@ public class IdCardUtils {
         return sGender;
     }
 
-    public static  void  main(String [] a){
-        String idcard="460200199209275127";
-        String sex= getGenderByIdCard(idcard);
-        System.out.println("性别:" + sex);
-        int age= getAgeByIdCard(idcard);
-        System.out.println("年龄:" + age);
-        String sr=getBirthByIdCard(idcard);
-        System.out.println("生日:" + sr);
-    }
 }

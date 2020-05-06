@@ -317,7 +317,7 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/01/09 04:49:17
 	 */
-	public PageInfo<K> selectListVoByPage(Example example,PageQuery pageQuery){
+	public PageInfo selectListVoByPage(Example example,PageQuery pageQuery){
 		PageInfo pageInfo = new PageInfo();
 		if (PageFlagEnums.NOT_PAGE.getFlag().equals(pageQuery.getPageFlag())) {
 
@@ -352,46 +352,46 @@ public abstract class AbstractBaseRepository<T extends BaseDao, K extends BaseEn
 	 * @author qiaomengnan
 	 * @date 2018/02/12 04:40:51
 	 */
-	public  PageInfo<K> selectListVoByPage(String methodName, Object param, PageQuery pageQuery){
-		PageInfo pageInfo = new PageInfo();
+	public 	PageInfo selectListVoByPage(String methodName, Object param, PageQuery pageQuery){
+			PageInfo pageInfo = new PageInfo();
 
-		if (PageFlagEnums.NOT_PAGE.getFlag().equals(pageQuery.getPageFlag())){
-			try {
-				Method method = baseDao.getClass().getDeclaredMethod(methodName, param.getClass());
-				Object result = method.invoke(baseDao, param);
+			if (PageFlagEnums.NOT_PAGE.getFlag().equals(pageQuery.getPageFlag())){
+				try {
+					Method method = baseDao.getClass().getDeclaredMethod(methodName, param.getClass());
+					Object result = method.invoke(baseDao, param);
 
-				if(result != null) {
-					List results = (List) result;
-					pageInfo.setList(results);
+					if(result != null) {
+						List results = (List) result;
+						pageInfo.setList(results);
+					}
+				}catch (Exception ex){
+					log.error(ex.getMessage());
+					ex.printStackTrace();
+					throw  new RuntimeException("查询失败");
 				}
-			}catch (Exception ex){
-				log.error(ex.getMessage());
-				ex.printStackTrace();
-				throw  new RuntimeException("查询失败");
-			}
-		}else {
-			if (StringUtils.isTrimBlank(pageQuery.getPageSize())){
-				pageQuery.setPageSize("15");
-			}
-			if(StringUtils.isTrimBlank(pageQuery.getPageIndex())){
-				pageQuery.setPageIndex("1");
-			}
-			pageInfo = PageHelper.startPage(new Integer(pageQuery.getPageIndex()),new Integer(pageQuery.getPageSize()))
-					.doSelectPageInfo(new ISelect() {
-						@Override
-						public void doSelect() {
-							try {
-								Method method = baseDao.getClass().getDeclaredMethod(methodName, param.getClass());
-								method.invoke(baseDao, param);
-							}catch (Exception ex){
-								log.error(ex.getMessage());
-								ex.printStackTrace();
-								throw  new RuntimeException("查询失败");
+			}else {
+				if (StringUtils.isTrimBlank(pageQuery.getPageSize())){
+					pageQuery.setPageSize("15");
+				}
+				if(StringUtils.isTrimBlank(pageQuery.getPageIndex())){
+					pageQuery.setPageIndex("1");
+				}
+				pageInfo = PageHelper.startPage(new Integer(pageQuery.getPageIndex()),new Integer(pageQuery.getPageSize()))
+						.doSelectPageInfo(new ISelect() {
+							@Override
+							public void doSelect() {
+								try {
+									Method method = baseDao.getClass().getDeclaredMethod(methodName, param.getClass());
+									method.invoke(baseDao, param);
+								}catch (Exception ex){
+									log.error(ex.getMessage());
+									ex.printStackTrace();
+									throw  new RuntimeException("查询失败");
+								}
 							}
-						}
-					});
-		}
-		return pageInfo;
+						});
+			}
+			return pageInfo;
 	}
 
 	private void checkUpdateExampleNullOrTrim(Example example){

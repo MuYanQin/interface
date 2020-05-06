@@ -138,15 +138,6 @@ public class HttpClientUtil {
         return resultString;
     }
 
-    public static void main(String[] args) {
-        Map<String, String> params = new HashMap<String, String>();
-        String string = "https://api.jisuapi.com/tangshi/detail?";
-        String param = "appkey=a8d949a2591c8d0f&detailid=" + "3";
-        String text = string + param;
-        String  respon =  HttpClientUtil.doGet(text);
-        JSONObject jsonObject = JSONObject.parseObject(respon);
 
-        System.out.println(respon);
-    }
 
 }

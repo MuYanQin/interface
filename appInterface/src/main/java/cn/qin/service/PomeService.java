@@ -4,16 +4,27 @@ import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.dao.repository.AuthorRepository;
 import cn.qin.dao.repository.PomeRepository;
+import cn.qin.dao.repository.RhesisRepository;
 import cn.qin.entity.Author;
+import cn.qin.entity.CiYu;
 import cn.qin.entity.Pome;
+import cn.qin.entity.Rhesis;
+import cn.qin.util.ArrayUtils;
+import cn.qin.util.HttpClientUtil;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
 import cn.qin.vo.authorVo.AuthorVo;
 import cn.qin.vo.pomeVo.PomeSearchVo;
 import cn.qin.vo.pomeVo.PomeSerachList;
 import cn.qin.vo.pomeVo.PomeVo;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +40,9 @@ public class PomeService {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private RhesisRepository rhesisRepository;
 
 
     /**

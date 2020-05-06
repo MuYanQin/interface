@@ -142,8 +142,6 @@
         <if test="ciYuVo.ciYuType == 'ABA'">
             AND substring(ci, 1, 1) = substring(ci, 3, 1)
         </if>
-
-
     </select>
 
 </mapper>

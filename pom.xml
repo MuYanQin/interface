@@ -8,6 +8,7 @@
     <artifactId>interface</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
+
     <modules>
         <module>appInterface</module>
     </modules>
@@ -47,25 +48,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>docker-maven-plugin</artifactId>
-                    <version>0.4.12</version>
-                    <configuration>
-                        <imageName>${project.name}:${project.version}</imageName>
-                        <imageTags>
-                            <imageTag>${project.version}</imageTag>
-                            <imageTag>latest</imageTag>
-                        </imageTags>
-                        <skipDockerBuild>true</skipDockerBuild>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

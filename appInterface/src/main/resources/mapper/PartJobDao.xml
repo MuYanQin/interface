@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.qin.dao.PartJobDao">
+    <select id="selectPartJobVoByPage" resultType="cn.qin.vo.partJob.PartJobVo">
+        select
+        job.company_name,
+        job.job_name,
+        job.company_icon,
+        det.work_time,
+        det.job_addr,
+        det.settle_type,
+        det.salary,
+        det.part_job_det_id,
+        det.person_num
+        from part_job job
+        left join part_job_det det on  job.part_job_id = det.part_job_id and det.del_flag = ${delete_exist}
+        where job.del_flag = ${delete_exist}
+        ORDER BY job.update_time DESC
+    </select>
+
+    <select id="selectPartJobVoByRand" resultType="cn.qin.vo.partJob.PartJobVo">
+        select
+        job.company_name,
+        job.job_name,
+        job.company_icon,
+        det.work_time,
+        det.job_addr,
+        det.settle_type,
+        det.salary,
+        det.part_job_det_id,
+        det.person_num
+        from part_job job
+        left join part_job_det det on  job.part_job_id = det.part_job_id and det.del_flag = ${delete_exist}
+        where job.del_flag = ${delete_exist}
+        <if test="partJobVo.size != null">
+            ORDER BY RAND() LIMIT #{partJobVo.size}
+        </if>
+        <if test="partJobVo.size == null">
+            ORDER BY RAND() LIMIT 10
+        </if>
+
+    </select>
+
+    <select id="findCompanyList" resultType="cn.qin.vo.partJob.PartJobVo">
+        SELECT
+            COUNT(*) as total,
+            company_name,
+            company_icon,
+            GROUP_CONCAT(part_job_id)
+        from part_job
+        WHERE del_flag = ${delete_exist}
+        GROUP BY company_name
+        ORDER BY COUNT(*) DESC
+    </select>
+
+    <select id="findPartJobByCompany" resultType="cn.qin.vo.partJob.PartJobVo">
+        SELECT
+        part_job.job_name,
+        part_job_det.job_time,
+        part_job_det.settle_type,
+        part_job_det.salary,
+        part_job_det. part_job_det_id
+        from part_job_det
+        left join part_job on part_job.part_job_id = part_job_det.part_job_id and part_job.del_flag =  ${delete_exist}
+        WHERE del_flag = ${delete_exist}
+        <if test="partJobIds != null">
+            AND part_job_det.part_job_id IN
+            <foreach collection="partJobIds" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>

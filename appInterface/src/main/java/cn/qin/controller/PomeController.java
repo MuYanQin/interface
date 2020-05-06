@@ -1,24 +1,18 @@
 package cn.qin.controller;
 
 import cn.qin.base.response.RestResponse;
-import cn.qin.base.response.RestResponseGenerator;
-import cn.qin.entity.Author;
 import cn.qin.service.PomeService;
-import cn.qin.vo.authorVo.AuthorVo;
 import cn.qin.vo.pomeVo.PomeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("pome")
 public class PomeController {
     @Autowired
     private PomeService pomeService;
-
 
     /**
      * @Title:搜索诗词
