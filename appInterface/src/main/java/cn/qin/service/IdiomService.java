@@ -74,7 +74,7 @@ public class IdiomService {
     public RestResponse<IdiomVo> findDetailById(String idiomId) {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        String userId = request.getHeader(SystemConstants.DEUSERID);
+        String userId = request.getHeader(SystemConstants.USERID);
         IdiomVo idiomVo = idiomRepository.findDetailById(idiomId, userId);
         return RestResponseGenerator.genSuccessResponse(idiomVo);
     }
@@ -85,7 +85,7 @@ public class IdiomService {
     public RestResponse<IdiomVo> findDetailByIdiom(String idiom) {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        String userId = request.getHeader(SystemConstants.DEUSERID);
+        String userId = request.getHeader(SystemConstants.USERID);
         IdiomVo idiomVo = idiomRepository.findDetailByIdiom(idiom, userId);
         if (idiomVo==null){
             return RestResponseGenerator.genFailResponse("暂未收录此成语");

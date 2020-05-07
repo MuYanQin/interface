@@ -31,7 +31,7 @@ public class UserService {
     public RestResponse<User> findUserInfo() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-        String userId = request.getHeader(SystemConstants.DEUSERID);
+        String userId = request.getHeader(SystemConstants.USERID);
         User user = userRepository.selectByPrimaryKey(userId);
         return RestResponseGenerator.genSuccessResponse(user);
 

@@ -29,14 +29,11 @@ public class PartJobService {
         return RestResponseGenerator.genSuccessResponse(map);
     }
 
-    public RestResponse<Map> findPartJobByRandSize(PartJobVo partJobVo){
+    public RestResponse<List<PartJobVo>> findPartJobByRandSize(PartJobVo partJobVo){
         Map map = new HashMap();
 
-        PageInfo<List<PartJobVo>> pageInfo = partJobRepository.selectListVoByPage("selectPartJobVoByRand",partJobVo,partJobVo.getPageQuery());
-        map.put("list", pageInfo.getList());
-        map.put("totalCount", pageInfo.getTotal());
-        map.put("totalPage", pageInfo.getPages());
-        return RestResponseGenerator.genSuccessResponse(map);
+        List<PartJobVo>  partJobVoList = partJobRepository.selectPartJobVoByRand(partJobVo);
+        return RestResponseGenerator.genSuccessResponse(partJobVoList);
     }
 
     public RestResponse<List<PartJobVo>> findCompanyList(){

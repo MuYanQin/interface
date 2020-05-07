@@ -2,30 +2,21 @@ package cn.qin.service;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
-import cn.qin.base.vo.PageQuery;
 import cn.qin.constancts.SystemConstants;
 import cn.qin.dao.repository.CiYuRepository;
 import cn.qin.dao.repository.SpellRepository;
 import cn.qin.dao.repository.WordRepository;
 import cn.qin.entity.CiYu;
 import cn.qin.entity.Word;
-import cn.qin.enums.DeleteFlags;
-import cn.qin.util.*;
+import cn.qin.util.ArrayUtils;
+import cn.qin.util.SqlUtil;
 import cn.qin.vo.ciYuvo.CiYuVo;
 import cn.qin.vo.idiomVo.IdiomVo;
 import cn.qin.vo.spellVo.RadicalsVo;
 import cn.qin.vo.spellVo.SpellVo;
 import cn.qin.vo.wordVo.WordInfoVo;
 import cn.qin.vo.wordVo.WordVo;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
@@ -34,7 +25,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Response;
 import java.util.*;
 
 @Slf4j
@@ -114,6 +104,7 @@ public class WordService {
         return buildWordList(wordVos);
     }
 
+
     private RestResponse<LinkedHashMap<String,Object>> buildWordList(List<WordVo> wordVos){
         LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<>();
         if (ArrayUtils.isNotNullAndLengthNotZero(wordVos)){
@@ -123,6 +114,22 @@ public class WordService {
         }
         return RestResponseGenerator.genSuccessResponse(linkedHashMap);
     }
+
+    /**
+     * @Title:根据汉字获取汉字、词语、成语列表
+     * @param
+     */
+    public RestResponse<Map> findWordListByWord(String word){
+        Map map = new HashMap();
+        List<WordVo> wordList = wordRepository.findWordListByWord(word);
+        List<CiYuVo> ciYuVoList = wordRepository.selectciyiByWord(word,null);
+        List<IdiomVo> idiomVoList = wordRepository.selectIdiomByWord(word,null);
+
+        map.put("wordList",wordList);
+        map.put("ciYuList",ciYuVoList);
+        map.put("idiomList",idiomVoList);
+        return RestResponseGenerator.genSuccessResponse(map);
+    }
     /**
      * @Title:根据文字获取相关文字信息
      * @param
@@ -130,7 +137,7 @@ public class WordService {
     public RestResponse<Map> findWordInfoByWord(String word){
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-        String userId = request.getHeader(SystemConstants.DEUSERID);
+        String userId = request.getHeader(SystemConstants.USERID);
         Map map = new HashMap();
         List<WordInfoVo> wordInfoVoList = wordRepository.findWordInfoByWord(word,userId);
 

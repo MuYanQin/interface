@@ -4,8 +4,10 @@ import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.constancts.SystemConstants;
 import cn.qin.dao.repository.CollectionDataRepository;
+import cn.qin.entity.ApplyJob;
 import cn.qin.entity.CollectionData;
 import cn.qin.enums.CollectionDataEnums;
+import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
 import cn.qin.util.UUIDUtils;
 import cn.qin.vo.collectionData.CollectionDataVo;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -34,10 +37,19 @@ public class CollectionDataService {
     public RestResponse<String> saveCollection(CollectionData collectionData){
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-        String userId = request.getHeader(SystemConstants.DEUSERID);
+        String userId = request.getHeader(SystemConstants.USERID);
         if (StringUtils.isTrimBlank(collectionData.getObjectId())){
             return  RestResponseGenerator.genFailResponse("参数有误！");
         }
+
+        Example example = SqlUtil.newExample(CollectionData.class);
+        example.createCriteria().andEqualTo("userId",userId).andEqualTo("objectId",collectionData.getObjectId());
+        CollectionData newData = collectionDataRepository.selectOneByExample(example);
+        if (newData != null){
+            collectionDataRepository.updateByPrimaryKeyData(newData);
+            return RestResponseGenerator.genSuccessResponse(newData.getCollectionId());
+        }
+
         collectionData.setUserId(userId);
         String uuid = UUIDUtils.get20UUID();
         collectionData.setCollectionId(uuid);
@@ -56,7 +68,7 @@ public class CollectionDataService {
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-        String userId = request.getHeader(SystemConstants.DEUSERID);
+        String userId = request.getHeader(SystemConstants.USERID);
         collectionDataVo.setUserId(userId);
         String mothedStr = "";
         if (CollectionDataEnums.WORD.getFlag().equals(collectionDataVo.getType())){

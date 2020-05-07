@@ -95,6 +95,7 @@
         GROUP BY  word.bihua
 	    order by word.bihua asc
     </select>
+
     <resultMap id="selectWordListBySpellMap" type="cn.qin.vo.wordVo.WordVo">
         <result property="bushou" column="bushou" javaType="java.lang.String"/>
         <result property="bihua" column="bihua" javaType="java.lang.Integer"/>
@@ -144,29 +145,57 @@
     </resultMap>
     <select id="selectciyiByWord" resultType="cn.qin.vo.ciYuvo.CiYuVo">
         select
-        ci_yu.ci,
-        ci_yu.expl,
-        ci_yu.spell
+            ci_yu.ci,
+            ci_yu.expl,
+            ci_yu.spell
         from ci_yu
         where ci_yu.del_flag = 0
-        and  ci_yu.spell like CONCAT('%', #{pinyin}, '%')
+        <if test="pinyin != null">
+            and  ci_yu.spell like CONCAT('%', #{pinyin}, '%')
+        </if>
         and ci_yu.ci like CONCAT('%', #{word}, '%')
         order by instr(ci_yu.ci,#{word})
-        LIMIT 6
+        <if test="size != null">
+            LIMIT ${size}
+        </if>
+
+        <if test="size == null">
+            LIMIT 5
+        </if>
     </select>
 
     <select id="selectIdiomByWord" resultType="cn.qin.vo.idiomVo.IdiomVo">
         select
-        idiom.idiom_id,
-        idiom.idiom,
-        idiom.spell,
-        idiom.decipher
+            idiom.idiom_id,
+            idiom.idiom,
+            idiom.spell,
+            idiom.decipher
         from idiom
         where idiom.del_flag = 0
         and idiom.idiom like CONCAT('%', #{word}, '%')
-        and  instr(idiom.spell,#{pinyin})>0
+        <if test="pinyin != null">
+            and  instr(idiom.spell,#{pinyin})>0
+        </if>
         order by instr(idiom.idiom,#{word})
-        LIMIT 5
+        <if test="size != null">
+             LIMIT ${size}
+        </if>
+        <if test="size == null">
+            LIMIT 5
+        </if>
+
+    </select>
+
+    <select id="findWordListByWord" resultType="cn.qin.vo.wordVo.WordVo">
+        SELECT
+            word.word_id,
+            word.word,
+            word.pinyin,
+            word.bihusn
+        FROM
+	        word
+	    WHERE word.word = #{word}
+	    and  word.del_flag = 0
     </select>
 
 

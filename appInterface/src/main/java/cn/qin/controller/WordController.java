@@ -63,6 +63,15 @@ public class WordController {
     }
 
     /**
+     * @Title:根据汉字获取汉字、词语、成语列表
+     * @param
+     */
+    @RequestMapping(value = "findWordListByWord",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findWordListByWord(@RequestParam("word") String word){
+        return new ResponseEntity<RestResponse>(wordService.findWordListByWord(word), HttpStatus.OK);
+    }
+
+    /**
      * @Title:根据文字获取相关文字信息
      * @param
      */

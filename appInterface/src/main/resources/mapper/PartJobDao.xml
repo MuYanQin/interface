@@ -35,7 +35,7 @@
         left join part_job_det det on  job.part_job_id = det.part_job_id and det.del_flag = ${delete_exist}
         where job.del_flag = ${delete_exist}
         <if test="partJobVo.size != null">
-            ORDER BY RAND() LIMIT #{partJobVo.size}
+            ORDER BY RAND() LIMIT ${partJobVo.size}
         </if>
         <if test="partJobVo.size == null">
             ORDER BY RAND() LIMIT 10
@@ -48,7 +48,7 @@
             COUNT(*) as total,
             company_name,
             company_icon,
-            GROUP_CONCAT(part_job_id)
+            GROUP_CONCAT(part_job_id) as partJobIdJoins
         from part_job
         WHERE del_flag = ${delete_exist}
         GROUP BY company_name
@@ -58,13 +58,14 @@
     <select id="findPartJobByCompany" resultType="cn.qin.vo.partJob.PartJobVo">
         SELECT
         part_job.job_name,
+        part_job.company_name,
         part_job_det.job_time,
         part_job_det.settle_type,
         part_job_det.salary,
         part_job_det.part_job_det_id
         from part_job_det
         left join part_job on part_job.part_job_id = part_job_det.part_job_id and part_job.del_flag =  ${delete_exist}
-        WHERE del_flag = ${delete_exist}
+        WHERE part_job_det.del_flag = ${delete_exist}
         <if test="partJobIds != null">
             AND part_job_det.part_job_id IN
             <foreach collection="partJobIds" item="item" index="index" open="(" separator="," close=")">

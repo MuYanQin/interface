@@ -14,5 +14,5 @@ public class CollectionData extends BaseEntity {
     private String collectionId;
     private String objectId;
     private String userId;
-    private String type;//1成语2诗文3名句4文字
+    private String type;//1成语2诗文3名句4文字 5兼职
 }
