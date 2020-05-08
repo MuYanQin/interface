@@ -13,6 +13,8 @@ public class WordVo extends BaseVo<Word> {
     private String word;
     private String pinyin;
 
+    private String bishun;
+
     @JsonIgnore
     private String bushou;
     @JsonIgnore

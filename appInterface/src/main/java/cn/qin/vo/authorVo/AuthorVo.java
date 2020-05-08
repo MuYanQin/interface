@@ -6,6 +6,8 @@ import lombok.Data;
 public class AuthorVo {
     private String authorId;
     private String name;
+    private String tag;
     private String intro;
+
     private String count;//文章个数
 }

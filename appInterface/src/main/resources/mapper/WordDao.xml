@@ -155,13 +155,7 @@
         </if>
         and ci_yu.ci like CONCAT('%', #{word}, '%')
         order by instr(ci_yu.ci,#{word})
-        <if test="size != null">
-            LIMIT ${size}
-        </if>
-
-        <if test="size == null">
-            LIMIT 5
-        </if>
+        LIMIT 5
     </select>
 
     <select id="selectIdiomByWord" resultType="cn.qin.vo.idiomVo.IdiomVo">
@@ -177,12 +171,8 @@
             and  instr(idiom.spell,#{pinyin})>0
         </if>
         order by instr(idiom.idiom,#{word})
-        <if test="size != null">
-             LIMIT ${size}
-        </if>
-        <if test="size == null">
-            LIMIT 5
-        </if>
+        LIMIT 5
+
 
     </select>
 
@@ -191,7 +181,7 @@
             word.word_id,
             word.word,
             word.pinyin,
-            word.bihusn
+            word.bishun
         FROM
 	        word
 	    WHERE word.word = #{word}

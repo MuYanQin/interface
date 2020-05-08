@@ -14,4 +14,5 @@ public class Author extends BaseEntity {
     private String authorId;
     private String name;
     private String intro;
+    private String tag;
 }

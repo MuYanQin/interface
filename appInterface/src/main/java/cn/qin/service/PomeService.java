@@ -5,10 +5,8 @@ import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.dao.repository.AuthorRepository;
 import cn.qin.dao.repository.PomeRepository;
 import cn.qin.dao.repository.RhesisRepository;
-import cn.qin.entity.Author;
-import cn.qin.entity.CiYu;
-import cn.qin.entity.Pome;
-import cn.qin.entity.Rhesis;
+import cn.qin.dao.repository.WordRepository;
+import cn.qin.entity.*;
 import cn.qin.util.ArrayUtils;
 import cn.qin.util.HttpClientUtil;
 import cn.qin.util.SqlUtil;
@@ -27,6 +25,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +42,9 @@ public class PomeService {
 
     @Autowired
     private RhesisRepository rhesisRepository;
+
+    @Autowired
+    private WordRepository wordRepository;
 
 
     /**
@@ -126,4 +128,6 @@ public class PomeService {
         Author author = authorRepository.selectByPrimaryKey(authorId);
         return RestResponseGenerator.genSuccessResponse(author);
     }
+
+
 }
