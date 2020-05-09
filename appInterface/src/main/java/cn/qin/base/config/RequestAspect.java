@@ -12,6 +12,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,9 @@ public class RequestAspect {
     @Autowired
     private UserService userService;
 
+    @Value("${spring.profiles.cheack}")
+    private String cheack;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestAspect.class);
 
     // 定义切点Pointcut
@@ -65,9 +69,7 @@ public class RequestAspect {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
             String requestUri = request.getRequestURI().toString();//方法返回客户端发出请求时的完整URL。
-            String deviceType = request.getHeader("deviceType");
-
-            if (StringUtils.isExits(deviceType)){
+            if (StringUtils.equals(cheack,"true")){
                 Map map = getFieldsName(joinPoint,request);
                 String signature = request.getHeader("signature");
                 String base64 =  Base64.getEncoder().encodeToString(JSON.toJSONString(map).getBytes("UTF-8"));
@@ -88,7 +90,7 @@ public class RequestAspect {
 
     private static Map<String, Object> getFieldsName(ProceedingJoinPoint joinPoint,HttpServletRequest request) {
         Map<String, Object> paramMap = new HashMap<>(32);
-        if("POST".equals(request.getMethod())){
+        /*if("POST".equals(request.getMethod())){
             String result = "";
             try {
                 request.setCharacterEncoding("UTF-8");
@@ -118,6 +120,7 @@ public class RequestAspect {
                 paramMap.put(parameterNames[i], args[i]);
             }
         }
+         */
         //包名
         String bundleId = request.getHeader("bundleId");
         paramMap.put("bundleId",bundleId);

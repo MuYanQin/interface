@@ -2,8 +2,10 @@ package cn.qin.service;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.base.response.RestResponseGenerator;
+import cn.qin.dao.repository.AuthorRepository;
 import cn.qin.dao.repository.PartJobDetRepository;
 import cn.qin.dao.repository.PartJobRepository;
+import cn.qin.entity.Author;
 import cn.qin.entity.PartJob;
 import cn.qin.entity.PartJobDet;
 import cn.qin.entity.Rhesis;
@@ -21,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 @Slf4j
@@ -31,6 +36,8 @@ public class JsoupService {
     private PartJobRepository partJobRepository;
     @Autowired
     private PartJobDetRepository partJobDetRepository;
+    @Autowired
+    private AuthorRepository authorRepository;
     /*抓取新安人才网的兼职界面*/
     public RestResponse insertPartJob(){
         //358
@@ -150,4 +157,73 @@ public class JsoupService {
         return RestResponseGenerator.genSuccessResponse();
 
     }
+
+    public RestResponse getAuthorIconImg(){
+        List<Author> authorList =  authorRepository.selectAll();
+
+        for (Author author:authorList) {
+            String text = "https://so.gushiwen.org/search.aspx?value=" + author.getName();
+            String  respon =  HttpClientUtil.doGet(text);
+            Document doc = Jsoup.parse(respon);//解析HTML字符串返回一个Document实现
+            Elements divimgs = doc.getElementsByClass("divimg");
+
+            if (ArrayUtils.isNotNullAndLengthNotZero(divimgs)){
+                Element element = divimgs.get(0);
+                Element img = element.getElementsByTag("img").get(0);
+
+                String url =  img.attr("src");
+                downloadPicture(url,author.getAuthorId());
+            }
+
+
+        }
+        return RestResponseGenerator.genSuccessResponse();
+
+    }
+
+
+    private static void downloadPicture(String urlList,String imageS) {
+        URL url =null;
+        try {
+
+             url =new URL(urlList);
+
+            DataInputStream dataInputStream =new DataInputStream(url.openStream());
+
+            String imageName = "/Users/leaduadmin/Desktop/authorImage/" + imageS +".jpg";
+
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(imageName));
+
+            ByteArrayOutputStream output =new ByteArrayOutputStream();
+
+            byte[] buffer =new byte[1024];
+
+            int length;
+
+            while((length = dataInputStream.read(buffer)) > 0) {
+
+                output.write(buffer, 0, length);
+
+             }
+
+            byte[] context =output.toByteArray();
+
+            fileOutputStream.write(output.toByteArray());
+
+            dataInputStream.close();
+
+            fileOutputStream.close();
+
+        } catch (MalformedURLException e) {
+
+            e.printStackTrace();
+
+        } catch (IOException e) {
+
+             e.printStackTrace();
+
+        }
+
+    }
+
 }

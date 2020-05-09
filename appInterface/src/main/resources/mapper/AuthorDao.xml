@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.qin.dao.AuthorDao">
+
+    <select id="findAuthorBySort" resultType="cn.qin.vo.authorVo.AuthorVo">
+        select
+            author.author_id,
+            author.tag,
+            count(*) as count,
+            author.`name`
+        from author
+        left join pome on  author.author_id = pome.author_id and pome.del_flag = ${delete_exist}
+        where author.del_flag = ${delete_exist}
+        and pome.`name` IS NOT null
+        group by author.author_id
+    </select>
+</mapper>

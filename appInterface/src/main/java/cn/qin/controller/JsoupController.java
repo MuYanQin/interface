@@ -27,5 +27,9 @@ public class JsoupController {
         return new ResponseEntity<RestResponse>(jsoupService.getPartDetail(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "getAuthorIconImg",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> getAuthorIconImg(){
+        return new ResponseEntity<RestResponse>(jsoupService.getAuthorIconImg(), HttpStatus.OK);
+    }
 
 }

@@ -6,23 +6,16 @@ import cn.qin.dao.repository.AuthorRepository;
 import cn.qin.dao.repository.PomeRepository;
 import cn.qin.dao.repository.RhesisRepository;
 import cn.qin.dao.repository.WordRepository;
-import cn.qin.entity.*;
-import cn.qin.util.ArrayUtils;
-import cn.qin.util.HttpClientUtil;
+import cn.qin.entity.Author;
+import cn.qin.entity.Rhesis;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
 import cn.qin.vo.authorVo.AuthorVo;
 import cn.qin.vo.pomeVo.PomeSearchVo;
 import cn.qin.vo.pomeVo.PomeSerachList;
 import cn.qin.vo.pomeVo.PomeVo;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -30,6 +23,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -43,8 +37,6 @@ public class PomeService {
     @Autowired
     private RhesisRepository rhesisRepository;
 
-    @Autowired
-    private WordRepository wordRepository;
 
 
     /**
@@ -72,7 +64,7 @@ public class PomeService {
     }
 
     /**
-     * @Title:分页获取诗词
+     * @Title:获取某个作者的诗文列表
      * @param pomeVo 参数 authorName 作者
      */
     public RestResponse<Map> findPomeListByPage(PomeVo pomeVo) {
@@ -81,6 +73,13 @@ public class PomeService {
         } else {
             pomeVo.setAuthorName(null);
         }
+
+        if (StringUtils.isNotTrimBlank(pomeVo.getAuthorId())) {
+            pomeVo.setAuthorId(pomeVo.getAuthorId());
+        } else {
+            pomeVo.setAuthorId(null);
+        }
+
         Map map = new HashMap();
         PageInfo pageInfo = pomeRepository.selectListVoByPage("findPomeListByPage", pomeVo, pomeVo.getPageQuery());
 
@@ -121,6 +120,17 @@ public class PomeService {
     }
 
     /**
+     * @Title:获取全部的诗人根据姓名首字母分组
+     * @param
+     */
+    public RestResponse<Map> findAuthorBySort(){
+        List<AuthorVo> authorVos = authorRepository.findAuthorBySort();
+        Map<String, List<AuthorVo>> map = authorVos.stream()
+                .collect(Collectors.groupingBy(AuthorVo::getTag));
+        return RestResponseGenerator.genSuccessResponse(map);
+    }
+
+    /**
      * @Title:获取诗人介绍
      * @param
      */
@@ -128,6 +138,10 @@ public class PomeService {
         Author author = authorRepository.selectByPrimaryKey(authorId);
         return RestResponseGenerator.genSuccessResponse(author);
     }
+
+
+
+
 
 
 }

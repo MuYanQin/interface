@@ -35,13 +35,35 @@
         order by INSTR(pome.name,#{text}) asc
     </select>
 
-    <select id="findPomeDetailById"  resultType="cn.qin.vo.pomeVo.PomeVo">
+    <select id="findPomeDetailById"  resultMap="findPomeDetailByIdMap">
         select
             pome.*,
             author.name as authorName
         from pome
         left join author on author.author_id = pome.author_id
         where  pome.pome_id = #{pomeId};
+    </select>
+    <resultMap id="findPomeDetailByIdMap" type="cn.qin.vo.pomeVo.PomeVo">
+        <result property="pomeId" column="pome_id" javaType="java.lang.String"/>
+        <result property="name" column="name" javaType="java.lang.String"/>
+        <result property="type" column="type" javaType="java.lang.String"/>
+        <result property="content" column="content" javaType="java.lang.String"/>
+        <result property="explanation" column="explanation" javaType="java.lang.String"/>
+        <result property="appreciation" column="appreciation" javaType="java.lang.String"/>
+        <result property="translation" column="translation" javaType="java.lang.String"/>
+        <result property="authorId" column="author_id" javaType="java.lang.String"/>
+        <result property="authorName" column="authorName" javaType="java.lang.String"/>
+        <collection property="rhesisVoList"  ofType="cn.qin.vo.rhesisVo.RhesisVo"
+                    javaType="java.util.ArrayList" select="findPomeDetailByIdMapData"
+                    column="pome_id"/>
+    </resultMap>
+    <select id="findPomeDetailByIdMapData" resultType="cn.qin.vo.rhesisVo.RhesisVo">
+        select
+            rhesis.rhesis_id,
+            rhesis.quote
+        from  rhesis
+        where rhesis.del_flag = ${delete_exist}
+        and  rhesis.pome_id = #{pomeId}
     </select>
 
     <select id="findPomeListByPage"  parameterType="java.lang.String" resultType="cn.qin.vo.pomeVo.PomeVo">
@@ -52,9 +74,12 @@
             author.name as authorName
         from pome
         left join author on author.author_id = pome.author_id
-        where  1=1
+        where  pome.del_flag = ${delete_exist}
         <if test="pomeVo.authorName != null">
             AND author.name like #{pomeVo.authorName}
+        </if>
+        <if test="pomeVo.authorId != null">
+            AND pome.author_id = #{pomeVo.authorId}
         </if>
     </select>
 

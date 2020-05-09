@@ -5,8 +5,15 @@ import cn.qin.service.PomeService;
 import cn.qin.vo.pomeVo.PomeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("pome")
@@ -33,11 +40,11 @@ public class PomeController {
     }
 
     /**
-     * @Title:获取诗文列表
+     * @Title:获取某个作者的诗文列表
      * @param
      */
     @RequestMapping(value = "findPomeListByPage",method = RequestMethod.POST)
-    public ResponseEntity<RestResponse> findPomeByPage(@RequestBody PomeVo pomeVo){
+    public ResponseEntity<RestResponse> findPomeByPage(@RequestBody  PomeVo pomeVo){
         return new ResponseEntity<RestResponse>(pomeService.findPomeListByPage(pomeVo), HttpStatus.OK);
     }
 
@@ -70,6 +77,15 @@ public class PomeController {
     }
 
     /**
+     * @Title:获取全部的诗人根据姓名首字母分组
+     * @param
+     */
+    @RequestMapping(value = "findAuthorBySort",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findAuthorBySort(){
+        return new ResponseEntity<RestResponse>(pomeService.findAuthorBySort(), HttpStatus.OK);
+    }
+
+    /**
      * @Title:获取诗人介绍
      * @param
      */
@@ -78,5 +94,17 @@ public class PomeController {
         return new ResponseEntity<RestResponse>(pomeService.findAuthorById(authorId), HttpStatus.OK);
     }
 
+
+    @GetMapping(value = "/image",produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public ResponseEntity<byte[]> test(String userId) throws Exception {
+
+        File file = new File("/Users/leaduadmin/Desktop/authorIcon/" + userId +".jpg");
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return new ResponseEntity(bytes, HttpStatus.OK);
+
+    }
 
 }

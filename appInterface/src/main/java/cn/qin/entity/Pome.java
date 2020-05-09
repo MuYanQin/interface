@@ -17,6 +17,6 @@ public class Pome extends BaseEntity {
     private String explanation;//名词解释
     private String appreciation;//赏析
     private String authorId;
-    private String author;
     private String translation;//翻译
+
 }
