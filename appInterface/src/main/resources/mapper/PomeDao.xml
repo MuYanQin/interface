@@ -7,7 +7,11 @@
     <select id="findPomeBySearchText"  resultMap="findSearchMap">
         select
         #{searchText} as searchText,
-        #{text} as text
+        #{text} as text,
+        (SELECT COUNT(*) FROM rhesis WHERE rhesis.quote LIKE #{searchText}) AS rhesisCount,
+    	(SELECT COUNT(*) FROM author WHERE author.name LIKE #{searchText}) AS authorCount,
+    	(SELECT COUNT(*) FROM pome WHERE pome.name LIKE #{searchText}) AS pomeCount
+
     </select>
     <resultMap id="findSearchMap" type="cn.qin.vo.pomeVo.PomeSerachList">
 
@@ -17,22 +21,75 @@
         <collection property="pomeList"  ofType="cn.qin.vo.pomeVo.PomeSearchVo"
                     javaType="java.util.ArrayList" select="fildSearchPomeList"
                     column="{searchText=searchText,text=text}"/>
+        <collection property="rhesisList"  ofType="cn.qin.vo.pomeVo.PomeSearchVo"
+                    javaType="java.util.ArrayList" select="fildSearchRhesisList"
+                    column="{searchText=searchText,text=text}"/>
     </resultMap>
     <select id="fildSearchAuthorList" resultType="cn.qin.vo.pomeVo.PomeSearchVo">
         select
-        author.name as itemName,
-        author.author_id as itemId
+            author.name as authorName,
+            author.author_id as itemId
         from author
         where  author.name like #{searchText}
         order by INSTR(author.name,#{text}) asc
+        limit 5
     </select>
     <select id="fildSearchPomeList" resultType="cn.qin.vo.pomeVo.PomeSearchVo">
         select
-        pome.name as itemName,
-        pome.pome_id as itemId
+            pome.name as pomeName,
+            author.name as authorName,
+            pome.pome_id as itemId
         from pome
+        LEFT join author on  author.author_id = pome.author_id
         where  pome.name like #{searchText}
         order by INSTR(pome.name,#{text}) asc
+        limit 5
+    </select>
+    <select id="fildSearchRhesisList" resultType="cn.qin.vo.pomeVo.PomeSearchVo">
+        SELECT
+	        rhesis.quote AS quote,
+	        rhesis.author as authorName,
+	        rhesis.rhesis_id AS itemId
+        FROM
+	        rhesis
+        WHERE
+	        rhesis.quote LIKE #{searchText}
+        ORDER BY
+	        INSTR(
+	            rhesis.quote,#{text}) asc
+        LIMIT 5
+    </select>
+
+    <select id="searchabountAuthor" resultType="cn.qin.vo.pomeVo.PomeAboutVo">
+        select
+            author.name as author,
+            author.author_id as itemId
+        from author
+        where  author.name like #{pomeAboutVo.searchText}
+        order by INSTR(author.name,#{pomeAboutVo.text}) asc
+    </select>
+    <select id="searchabountPome" resultType="cn.qin.vo.pomeVo.PomeAboutVo">
+        select
+            pome.name as content,
+            author.name as author,
+            pome.pome_id as itemId
+        from pome
+        LEFT join author on  author.author_id = pome.author_id
+        where  pome.name like #{pomeAboutVo.searchText}
+        order by INSTR(pome.name,#{pomeAboutVo.text}) asc
+    </select>
+    <select id="searchabountrhesis" resultType="cn.qin.vo.pomeVo.PomeAboutVo">
+        SELECT
+	        rhesis.quote AS content,
+	        rhesis.author as author,
+	        rhesis.rhesis_id AS itemId
+        FROM
+	        rhesis
+        WHERE
+	        rhesis.quote LIKE #{pomeAboutVo.searchText}
+        ORDER BY
+	        INSTR(
+	            rhesis.quote,#{pomeAboutVo.text}) asc
     </select>
 
     <select id="findPomeDetailById"  resultMap="findPomeDetailByIdMap">
@@ -66,7 +123,7 @@
         and  rhesis.pome_id = #{pomeId}
     </select>
 
-    <select id="findPomeListByPage"  parameterType="java.lang.String" resultType="cn.qin.vo.pomeVo.PomeVo">
+    <select id="findPomeListPageByAuthor"  parameterType="java.lang.String" resultType="cn.qin.vo.pomeVo.PomeVo">
         select
             pome.name,
             pome.pome_id,
@@ -83,6 +140,52 @@
         </if>
     </select>
 
+    <select id="findPomeListByPage"  parameterType="java.lang.String" resultType="cn.qin.vo.pomeVo.PomeVo">
+        select
+             pome.name,
+             pome.pome_id,
+             pome.type,
+             author.name as authorName
+        from pome
+        left join author on author.author_id = pome.author_id
+        where  pome.del_flag = ${delete_exist}
+        <if test="pomeVo.type != null">
+            AND pome.type = #{pomeVo.type}
+        </if>
+    </select>
+
+
+    <select id="findRhesisListByPage"  parameterType="java.lang.String" resultType="cn.qin.vo.rhesisVo.RhesisVo">
+        select
+            rhesis.rhesis_id,
+            rhesis.quote,
+            rhesis.author,
+            pome.name as pomeName,
+            pome.pome_id
+        from rhesis
+        left join pome on rhesis.pome_id = pome.pome_id and pome.del_flag = ${delete_exist}
+        where  rhesis.del_flag = ${delete_exist}
+
+    </select>
+
+
+    <select id="findRhesisListByPageRand"  parameterType="java.lang.String" resultType="cn.qin.vo.rhesisVo.RhesisVo">
+        select
+            rhesis.rhesis_id,
+            rhesis.quote,
+            rhesis.author,
+            pome.name as pomeName,
+            pome.pome_id
+        from rhesis
+        left join pome on rhesis.pome_id = pome.pome_id and pome.del_flag = ${delete_exist}
+        where  rhesis.del_flag = ${delete_exist}
+        ORDER BY RAND() LIMIT 15
+    </select>
+
+
+
+
+
 
 
     <select id="findRandomPomeForSize"  resultType="cn.qin.vo.pomeVo.PomeVo">
@@ -93,16 +196,26 @@
         pome.type,
         author.name as authorName
         from pome
-        left join author on author.author_id = pome.author_id
+        left join author on author.author_id = pome.author_id and author.del_flag = ${delete_exist}
+        where  pome.del_flag = ${delete_exist}
+        <if test="type != null">
+            and  pome.type = #{type}
+        </if>
         ORDER BY RAND() LIMIT #{size}
+
     </select>
 
     <select id="findPomeDaily"  resultType="cn.qin.vo.pomeVo.PomeVo">
         select
             pome.*,
-            author.name as authorName
+            author.name as authorName,
+            cdata.collection_id as collectionId
+
         from pome
         left join author on author.author_id = pome.author_id
+        left  join collection_data cdata on  cdata.object_id = pome.pome_id and  cdata.del_flag = 0
+        and   cdata.user_id = #{userId}
+        where  pome.type = 1
         ORDER BY RAND() LIMIT 1
     </select>
 

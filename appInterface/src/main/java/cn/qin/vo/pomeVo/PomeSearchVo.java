@@ -5,7 +5,9 @@ import lombok.Data;
 @Data
 public class PomeSearchVo {
     private String itemId;
-    private String itemName;
+    private String authorName;
+    private String pomeName;
+    private String quote;
 
 
 }

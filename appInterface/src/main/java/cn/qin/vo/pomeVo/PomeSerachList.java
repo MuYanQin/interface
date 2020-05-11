@@ -10,4 +10,8 @@ import java.util.List;
 public class PomeSerachList  extends BaseVo<Pome> {
     private List<PomeSearchVo> authorList;
     private List<PomeSearchVo> pomeList;
+    private List<PomeSearchVo> rhesisList;
+    private String authorCount;
+    private String pomeCount;
+    private String rhesisCount;
 }

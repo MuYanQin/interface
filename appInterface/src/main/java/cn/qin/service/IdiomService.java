@@ -126,7 +126,10 @@ public class IdiomService {
      * @Title:每日一首
      */
     public RestResponse<IdiomVo> findIdiomDaily() {
-        IdiomVo idiomVo = idiomRepository.findIdiomDaily();
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
+        String userId = request.getHeader(SystemConstants.USERID);
+        IdiomVo idiomVo = idiomRepository.findIdiomDaily(userId);
         return RestResponseGenerator.genSuccessResponse(idiomVo);
     }
 

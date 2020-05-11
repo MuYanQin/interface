@@ -19,5 +19,8 @@ public class PomeVo extends BaseVo<Pome> {
     private String translation;//翻译
     private String authorId;
     private String authorName;
+
+    private String collectionId;
+
     private List<RhesisVo> rhesisVoList;
 }

@@ -2,18 +2,17 @@ package cn.qin.controller;
 
 import cn.qin.base.response.RestResponse;
 import cn.qin.service.PomeService;
+import cn.qin.vo.pomeVo.PomeAboutVo;
 import cn.qin.vo.pomeVo.PomeVo;
+import cn.qin.vo.rhesisVo.RhesisVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("pome")
@@ -22,8 +21,9 @@ public class PomeController {
     private PomeService pomeService;
 
     /**
-     * @Title:搜索诗词
-     * @param searchText 参数
+     * @Description  搜索信息包括作者、诗词、名句--> 每个获取5条
+     * @param searchText 搜做的内容 添加通配符
+     * @return
      */
     @RequestMapping(value = "findPomeBySearchText",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findPomeBySearchText(@RequestParam("searchText") String searchText){
@@ -31,8 +31,19 @@ public class PomeController {
     }
 
     /**
-     * @Title:根据id获取古诗
-     * @Description:
+     * @Description  搜索信息包括作者、诗词、名句 单独获取全部的相关信息
+     * @param pomeAboutVo searchType（pome、author、rhesis） 搜索类型 text搜索的内容
+     * @return
+     */
+    @RequestMapping(value = "findInfoAboutSearchText",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> findInfoAboutSearchText(@RequestBody PomeAboutVo pomeAboutVo){
+        return new ResponseEntity<RestResponse>(pomeService.findInfoAboutSearchText(pomeAboutVo), HttpStatus.OK);
+    }
+
+
+
+    /**
+     * @Description:根据pomeid获取古诗详情
      */
     @RequestMapping(value = "findPomeDetailById",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findPomeById(@RequestParam("pomeId") String pomeId){
@@ -40,26 +51,46 @@ public class PomeController {
     }
 
     /**
-     * @Title:获取某个作者的诗文列表
+     * @Description:获取某个作者的诗文列表
+     * @param pomeVo authorId或者authorName
+     */
+    @RequestMapping(value = "findPomeListPageByAuthor",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> findPomeListPageByAuthor(@RequestBody  PomeVo pomeVo){
+        return new ResponseEntity<RestResponse>(pomeService.findPomeListPageByAuthor(pomeVo), HttpStatus.OK);
+    }
+
+
+    /**
+     * @Title:按类型随机获取一定条数诗文
+     * @param size 默认15条数 type类型
+     */
+    @RequestMapping(value = "findRandomPomeForSize",method = RequestMethod.GET)
+    public ResponseEntity<RestResponse> findRandomPomeForSize(String size,String type){
+        return new ResponseEntity<RestResponse>(pomeService.findRandomPomeForSize(size,type), HttpStatus.OK);
+    }
+
+
+    /**
+     * @Title:分页获取诗文列表
      * @param
      */
     @RequestMapping(value = "findPomeListByPage",method = RequestMethod.POST)
-    public ResponseEntity<RestResponse> findPomeByPage(@RequestBody  PomeVo pomeVo){
+    public ResponseEntity<RestResponse> findPomeListByPage(@RequestBody  PomeVo pomeVo){
         return new ResponseEntity<RestResponse>(pomeService.findPomeListByPage(pomeVo), HttpStatus.OK);
     }
 
-
     /**
-     * @Title:随机获取诗文
-     * @param
+     * @Title:分页获取名句列表
+     * @param rhesisVo rand 空 分页获取 。 不为空  则不分页随机获取15条
      */
-    @RequestMapping(value = "findRandomPomeForSize",method = RequestMethod.GET)
-    public ResponseEntity<RestResponse> findRandomPomeForSize(String size){
-        return new ResponseEntity<RestResponse>(pomeService.findRandomPomeForSize(size), HttpStatus.OK);
+    @RequestMapping(value = "findRhesisListByPage",method = RequestMethod.POST)
+    public ResponseEntity<RestResponse> findRhesisListByPage(@RequestBody RhesisVo rhesisVo){
+        return new ResponseEntity<RestResponse>(pomeService.findRhesisListByPage(rhesisVo), HttpStatus.OK);
     }
 
+
     /**
-     * @Title:每日一首
+     * @Title:每日一首唐诗词
      * @param
      */
     @RequestMapping(value = "findPomeDaily",method = RequestMethod.GET)
@@ -68,7 +99,7 @@ public class PomeController {
     }
 
     /**
-     * @Title:获取有作品的诗人
+     * @Title:获取有作品的诗人列表
      * @param
      */
     @RequestMapping(value = "selectAuthorHasPome",method = RequestMethod.GET)
@@ -77,7 +108,7 @@ public class PomeController {
     }
 
     /**
-     * @Title:获取全部的诗人根据姓名首字母分组
+     * @Title:获取有作品的诗人根据姓名首字母分组
      * @param
      */
     @RequestMapping(value = "findAuthorBySort",method = RequestMethod.GET)
@@ -95,6 +126,10 @@ public class PomeController {
     }
 
 
+    /**
+     * @Title:通过接口获取 图片数据
+     * @param
+     */
     @GetMapping(value = "/image",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public ResponseEntity<byte[]> test(String userId) throws Exception {

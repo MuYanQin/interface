@@ -57,8 +57,8 @@ public class IdiomRepository extends AbstractBaseRepository<IdiomDao, Idiom> {
      * @Title:每日一首
      * @param
      */
-    public IdiomVo findIdiomDaily(){
-        return idiomDao.findIdiomDaily();
+    public IdiomVo findIdiomDaily(String userId){
+        return idiomDao.findIdiomDaily(userId);
     };
 
     /**
