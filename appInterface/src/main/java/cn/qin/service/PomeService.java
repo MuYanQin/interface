@@ -6,9 +6,7 @@ import cn.qin.constancts.SystemConstants;
 import cn.qin.dao.repository.AuthorRepository;
 import cn.qin.dao.repository.PomeRepository;
 import cn.qin.dao.repository.RhesisRepository;
-import cn.qin.dao.repository.WordRepository;
 import cn.qin.entity.Author;
-import cn.qin.entity.Rhesis;
 import cn.qin.enums.PomeSearchEnums;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
@@ -25,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -166,7 +163,7 @@ public class PomeService {
     public RestResponse<Map> findRhesisListByPage(RhesisVo rhesisVo) {
 
         Map map = new HashMap();
-        PageInfo pageInfo = new PageInfo();
+        PageInfo pageInfo = null;
         if (StringUtils.isTrimBlank(rhesisVo.getRand())){
             pageInfo = pomeRepository.selectListVoByPage("findRhesisListByPage", rhesisVo, rhesisVo.getPageQuery());
         }else {

@@ -5,26 +5,21 @@ import cn.qin.base.response.RestResponseGenerator;
 import cn.qin.constancts.SystemConstants;
 import cn.qin.dao.repository.CollectionDataRepository;
 import cn.qin.dao.repository.IdiomRepository;
-import cn.qin.entity.Idiom;
 import cn.qin.util.SqlUtil;
 import cn.qin.util.StringUtils;
 import cn.qin.vo.ciYuvo.CiYuVo;
 import cn.qin.vo.idiomVo.IdiomListVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
 import cn.qin.vo.idiomVo.IdiomVo;
-import cn.qin.vo.pomeVo.PomeVo;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +35,8 @@ public class IdiomService {
     private CollectionDataRepository collectionDataRepository;
 
     /**
-     * @param searchText 搜索文字
-     * @Title:搜索成语
+     * @Description:搜索成语（匹配成语首字母和成语文字）
+     * @param searchText 搜索内容
      */
     public RestResponse<List<IdiomSearchVo>> findIdiomBySearchText(String searchText) {
 
@@ -93,9 +88,10 @@ public class IdiomService {
         return RestResponseGenerator.genSuccessResponse(idiomVo);
     }
 
+
     /**
-     * @param idiomVo
-     * @Title:获取列表 全部获取内容太多 影响速度故默认100条
+     * @Title:获取全部成语列表按照首字母分类
+     * @param idiomVo  pageSize判断 全部获取内容太多 影响速度故默认100条
      */
     public RestResponse<List<IdiomListVo>> findAllIdiomList(IdiomVo idiomVo) {
         if (StringUtils.isTrimBlank(idiomVo.getPageSize())) {
@@ -135,7 +131,7 @@ public class IdiomService {
 
     /**
      * @param
-     * @Title:根据类型获取成语
+     * @Title:根据类型获取成语 如 AABB。ABBC等
      */
     public RestResponse<Map> selectIdiomByType(IdiomSearchVo idiomSearchVo) {
         if (StringUtils.isTrimBlank(idiomSearchVo.getIdiomType())){
@@ -151,8 +147,8 @@ public class IdiomService {
     }
 
     /**
-     * @Title:根据类型获取词语
-     * @param
+     * @Title:根据类型获取词语 如ABB AAB
+     * @param ciYuVo
      */
     public RestResponse<Map> selectCiYuByType(CiYuVo ciYuVo){
         if (StringUtils.isTrimBlank(ciYuVo.getCiYuType())){

@@ -1,8 +1,6 @@
 package cn.qin.controller;
 
 import cn.qin.base.response.RestResponse;
-import cn.qin.base.response.RestResponseGenerator;
-import cn.qin.entity.Idiom;
 import cn.qin.service.IdiomService;
 import cn.qin.vo.ciYuvo.CiYuVo;
 import cn.qin.vo.idiomVo.IdiomSearchVo;
@@ -12,16 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-
 @RestController
 @RequestMapping("idiom")
 public class IdiomController {
     @Autowired
     private IdiomService idiomService;
+
     /**
-     * @Title:搜索成语
+     * @Description:搜索成语（匹配成语首字母和成语文字）
+     * @param searchText 搜索内容
      */
     @RequestMapping(value = "findIdiomBySearchText",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findIdiomBySearchText(@RequestParam("searchText") String searchText){
@@ -29,12 +26,13 @@ public class IdiomController {
     }
 
     /**
-     * @Title:随机获取成语
+     * @Title:随机获取多少条成语
      */
     @RequestMapping(value = "findRandomForSize",method = RequestMethod.GET)
     public ResponseEntity<RestResponse> findRandomForSize(String size){
         return new ResponseEntity<RestResponse>(idiomService.findRandomForSize(size), HttpStatus.OK);
     }
+
     /**
      * @Title:获取详情
      * @param idiomId ID
@@ -43,6 +41,7 @@ public class IdiomController {
     public ResponseEntity<RestResponse> findDetailById(@RequestParam("idiomId") String idiomId){
         return new ResponseEntity<RestResponse>(idiomService.findDetailById(idiomId), HttpStatus.OK);
     }
+
     /**
      * @Title:获取详情
      * @param idiom 文字
@@ -54,7 +53,7 @@ public class IdiomController {
 
 
     /**
-     * @Title:获取全部列表
+     * @Title:获取全部成语列表按照首字母分类
      * @param idiomVo
      */
     @RequestMapping(value = "findAllIdiomList",method = RequestMethod.POST)
@@ -64,7 +63,7 @@ public class IdiomController {
 
 
     /**
-     * @Title:根据Tag获取列表
+     * @Title:根据Tag分页获取列表
      * @param idiomVo
      */
     @RequestMapping(value = "findIdiomListByTag",method = RequestMethod.POST)
@@ -83,7 +82,7 @@ public class IdiomController {
 
     /**
      * @param
-     * @Title:根据类型获取成语
+     * @Title:根据类型获分页取成语 如 AABB。ABBC等
      */
     @RequestMapping(value = "selectIdiomByType",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> selectIdiomByType(@RequestBody IdiomSearchVo idiomSearchVo){
@@ -93,10 +92,9 @@ public class IdiomController {
 
 
     /**
-     * @Title:根据类型获取词语
-     * @param
+     * @Title:根据类型分页获取词语 如ABB AAB
+     * @param ciYuVo
      */
-
     @RequestMapping(value = "selectCiYuByType",method = RequestMethod.POST)
     public ResponseEntity<RestResponse> selectCiYuByType(@RequestBody CiYuVo ciYuVo){
         return new ResponseEntity<RestResponse>(idiomService.selectCiYuByType(ciYuVo), HttpStatus.OK);
